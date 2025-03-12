@@ -32,6 +32,7 @@ build
 .DS_Store
 .vercel
 .netlify
-.vscode
 tsconfig.tsbuildinfo
 .ncurc.js
+*.rar
+*.zip
