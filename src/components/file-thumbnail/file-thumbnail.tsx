@@ -4,6 +4,8 @@ import { mergeClasses } from 'minimal-shared/utils';
 import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 
+import { attachServerUrl } from 'src/utils/attach-server-url';
+
 import { fileThumbnailClasses } from './classes';
 import { fileData, fileThumb, fileFormat } from './utils';
 import { RemoveButton, DownloadButton } from './action-buttons';
@@ -20,7 +22,7 @@ export const FileThumbnail = forwardRef<HTMLDivElement, FileThumbnailProps>((pro
 
   const { name, path } = fileData(file);
 
-  const previewUrl = typeof file === 'string' ? file : URL.createObjectURL(file);
+  const previewUrl = typeof file === 'string' ? attachServerUrl(file) : URL.createObjectURL(file);
 
   const format = fileFormat(path ?? previewUrl);
 
