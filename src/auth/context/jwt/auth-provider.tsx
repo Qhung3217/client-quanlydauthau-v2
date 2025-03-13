@@ -1,5 +1,7 @@
 'use client';
 
+import type { PermissionInRole } from 'src/types/permission';
+
 import { useSetState } from 'minimal-shared/hooks';
 import { useMemo, useEffect, useCallback } from 'react';
 
@@ -35,9 +37,13 @@ export function AuthProvider({ children }: Props) {
 
         const res = await axios.get(endpoints.auth.me);
 
-        const { user } = res.data;
+        const { user } = res.data.response;
 
-        setState({ user: { ...user, accessToken }, loading: false });
+        const permissions = user?.role?.permissions
+          ? user.role.permissions.map((permission: PermissionInRole) => permission.code)
+          : [];
+
+        setState({ user: { ...user, accessToken, permissions }, loading: false });
       } else {
         setState({ user: null, loading: false });
       }

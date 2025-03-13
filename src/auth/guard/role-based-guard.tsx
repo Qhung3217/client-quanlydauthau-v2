@@ -15,7 +15,7 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 
 export type RoleBasedGuardProp = {
   sx?: SxProps<Theme>;
-  currentRole: string;
+  currentRole?: string[];
   hasContent?: boolean;
   acceptRoles: string[];
   children: React.ReactNode;
@@ -28,7 +28,10 @@ export function RoleBasedGuard({
   currentRole,
   acceptRoles,
 }: RoleBasedGuardProp) {
-  if (typeof acceptRoles !== 'undefined' && !acceptRoles.includes(currentRole)) {
+  if (
+    typeof acceptRoles !== 'undefined' &&
+    !acceptRoles.some((role) => currentRole?.includes(role))
+  ) {
     return hasContent ? (
       <Container
         component={MotionContainer}
@@ -36,13 +39,13 @@ export function RoleBasedGuard({
       >
         <m.div variants={varBounce('in')}>
           <Typography variant="h3" sx={{ mb: 2 }}>
-            Permission denied
+            Hạn chế truy cập
           </Typography>
         </m.div>
 
         <m.div variants={varBounce('in')}>
           <Typography sx={{ color: 'text.secondary' }}>
-            You do not have permission to access this page.
+            Bạn chưa quyền truy cập trang này.
           </Typography>
         </m.div>
 

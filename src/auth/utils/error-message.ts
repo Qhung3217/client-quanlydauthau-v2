@@ -2,7 +2,7 @@
 
 export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
-    return error.message || error.name || 'An error occurred';
+    return error.message || error.name || 'Đã có lỗi xảy ra!';
   }
 
   if (typeof error === 'string') {

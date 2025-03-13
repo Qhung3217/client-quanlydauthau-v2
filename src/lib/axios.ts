@@ -6,7 +6,12 @@ import { CONFIG } from 'src/global-config';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: CONFIG.serverUrl });
+const axiosInstance = axios.create({
+  baseURL: CONFIG.serverUrl,
+  headers: {
+    'X-Api-Key': CONFIG.xApiKey,
+  },
+});
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -33,28 +38,50 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
-  chat: '/api/chat',
-  kanban: '/api/kanban',
-  calendar: '/api/calendar',
   auth: {
-    me: '/api/auth/me',
-    signIn: '/api/auth/sign-in',
-    signUp: '/api/auth/sign-up',
+    me: '/auth/get-me',
+    login: '/auth/login',
+    refreshToken: '/auth/refresh-token',
   },
-  mail: {
-    list: '/api/mail/list',
-    details: '/api/mail/details',
-    labels: '/api/mail/labels',
-  },
-  post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
+  company: {
+    list: '/company',
+    create: '/company',
+    update: (id: any) => `/company/${id}`,
+    details: (id: any) => `/company/${id}`,
+    delete_one: (id: any) => `/company/${id}`,
+    delete_many: '/company',
   },
   product: {
-    list: '/api/product/list',
-    details: '/api/product/details',
-    search: '/api/product/search',
+    list: '/product',
+    create: '/product',
+    update: (id: any) => `/product/${id}`,
+    details: (id: any) => `/product/${id}`,
+    delete_one: (id: any) => `/product/${id}`,
+    delete_many: '/product',
+  },
+  user: {
+    list: '/user',
+    create: '/user',
+    update: (id: any) => `/user/${id}`,
+    details: (id: any) => `/user/${id}`,
+    delete_one: (id: any) => `/user/${id}`,
+    delete_many: '/user',
+    reset_password: (id: any) => `/user/change-password/${id}`,
+  },
+  media: {
+    upload_one: '/media/upload-file',
+    upload_many: '/media/upload-files',
+  },
+  permission: {
+    get_all: '/permission',
+    get_all_by_group: '/permission-group',
+  },
+  role: {
+    list: '/role',
+    create: '/role',
+    update: (id: any) => `/role/${id}`,
+    details: (id: any) => `/role/${id}`,
+    delete_one: (id: any) => `/role/${id}`,
+    delete_many: '/role',
   },
 };

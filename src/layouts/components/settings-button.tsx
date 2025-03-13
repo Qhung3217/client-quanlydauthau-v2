@@ -1,3 +1,5 @@
+'use client';
+
 import type { IconButtonProps } from '@mui/material/IconButton';
 
 import { m } from 'framer-motion';
