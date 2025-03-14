@@ -4,7 +4,7 @@ import { usePopover } from 'minimal-shared/hooks';
 
 import { Box, Card, Menu, MenuItem, IconButton, Typography } from '@mui/material';
 
-import getPriorityColorConfig from 'src/utils/get-priority-color-config';
+import getPriorityColorConfig from 'src/helpers/get-priority-color-config';
 
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
