@@ -92,4 +92,14 @@ export const endpoints = {
     delete_one: (id: any) => `/priority/${id}`,
     delete_many: '/priority',
   },
+  project: {
+    list: '/project',
+    create: '/project',
+    update: (id: any) => `/project/${id}`,
+    details: (id: any) => `/project/${id}`,
+    delete_one: (id: any) => `/project/${id}`,
+    delete_many: '/project',
+    approve: (id: any) => `/project/${id}/approve`,
+    request_edit: (id: any) => `/project/${id}/request-edit`,
+  },
 };

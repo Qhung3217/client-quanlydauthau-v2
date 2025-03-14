@@ -36,6 +36,11 @@ export const paths = {
     new: `/product/new`,
     edit: (id: string) => `/product/${id}/edit`,
   },
+  project: {
+    root: `/project`,
+    new: `/project/new`,
+    edit: (id: string) => `/project/${id}/edit`,
+  },
   priority: {
     root: `/priority`,
   },
