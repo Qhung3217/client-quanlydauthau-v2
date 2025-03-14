@@ -84,4 +84,12 @@ export const endpoints = {
     delete_one: (id: any) => `/role/${id}`,
     delete_many: '/role',
   },
+  priority: {
+    list: '/priority',
+    create: '/priority',
+    update: (id: any) => `/priority/${id}`,
+    details: (id: any) => `/priority/${id}`,
+    delete_one: (id: any) => `/priority/${id}`,
+    delete_many: '/priority',
+  },
 };
