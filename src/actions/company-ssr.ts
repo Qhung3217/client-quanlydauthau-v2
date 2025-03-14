@@ -34,7 +34,7 @@ export async function createCompany(payload: CreatePayload) {
   /**
    * Revalidate cache
    */
-  mutate((key) => Array.isArray(key) && key[0] === ENDPOINT.list, undefined, false);
+  mutate((key) => Array.isArray(key) && key[0] === ENDPOINT.list, undefined, true);
 }
 
 // ----------------------------------------------------------------------

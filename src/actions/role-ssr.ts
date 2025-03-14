@@ -22,7 +22,7 @@ export async function createRole(payload: CreatePayload) {
   /**
    * Work in local
    */
-  mutate((key) => Array.isArray(key) && key[0] === ENDPOINT.list, undefined, false);
+  mutate((key) => Array.isArray(key) && key[0] === ENDPOINT.list, undefined, true);
 }
 
 // ----------------------------------------------------------------------
