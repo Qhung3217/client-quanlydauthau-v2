@@ -36,4 +36,7 @@ export const paths = {
     new: `/product/new`,
     edit: (id: string) => `/product/${id}/edit`,
   },
+  priority: {
+    root: `/priority`,
+  },
 };

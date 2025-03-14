@@ -84,6 +84,12 @@ export const mainNavData: NavSectionProps['data'] = [
         roles: [PERMISSION_ENUM.VIEW_PRODUCT],
         icon: ICONS.product,
       },
+      {
+        title: 'Độ ưu tiên',
+        path: paths.priority.root,
+        roles: [PERMISSION_ENUM.VIEW_PRIORITY],
+        icon: ICONS.parameter,
+      },
     ],
   },
   /**

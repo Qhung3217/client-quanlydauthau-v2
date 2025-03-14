@@ -1,5 +1,7 @@
 'use client';
 
+import type { SxProps } from '@mui/material';
+
 import { useState, useEffect } from 'react';
 import { useDebounce } from 'minimal-shared/hooks';
 
@@ -11,8 +13,16 @@ export type TableQuickFilterProps = {
   value: string;
   onChange: (value: string) => void;
   onReset: () => void;
+  slotProps?: {
+    container?: SxProps;
+  };
 };
-export default function TableQuickFilter({ value, onChange, onReset }: TableQuickFilterProps) {
+export default function TableQuickFilter({
+  value,
+  onChange,
+  onReset,
+  slotProps,
+}: TableQuickFilterProps) {
   const [inputValue, setInputValue] = useState(() => value || '');
   const debounceValue = useDebounce(inputValue, 500);
 
@@ -23,13 +33,16 @@ export default function TableQuickFilter({ value, onChange, onReset }: TableQuic
 
   return (
     <Box
-      sx={{
-        maxWidth: {
-          xs: 1,
-          md: 300,
+      sx={[
+        {
+          maxWidth: {
+            xs: 1,
+            md: 300,
+          },
+          width: 1,
         },
-        width: 1,
-      }}
+        ...(Array.isArray(slotProps?.container) ? slotProps.container : [slotProps?.container]),
+      ]}
     >
       <OutlinedInput
         fullWidth

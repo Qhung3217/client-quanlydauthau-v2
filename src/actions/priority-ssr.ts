@@ -2,17 +2,17 @@ import { mutate } from 'swr';
 
 import axios, { endpoints } from 'src/lib/axios';
 
-import type { IRolesRes } from './role';
+import type { IPrioritiesRes } from './priority';
 
 // ----------------------------------------------------------------------
 
-const ENDPOINT = endpoints.role;
+const ENDPOINT = endpoints.priority;
 // ----------------------------------------------------------------------
 type CreatePayload = {
   name: string;
-  permissionCodes: string[];
+  color: string;
 };
-export async function createRole(payload: CreatePayload) {
+export async function createPriority(payload: CreatePayload) {
   /**
    * Work on server
    */
@@ -28,7 +28,7 @@ export async function createRole(payload: CreatePayload) {
 // ----------------------------------------------------------------------
 type UpdatePayload = Partial<CreatePayload>;
 
-export async function updateRole(id: string, payload: UpdatePayload) {
+export async function updatePriority(id: string, payload: UpdatePayload) {
   /**
    * Work on server
    */
@@ -47,7 +47,7 @@ export async function updateRole(id: string, payload: UpdatePayload) {
 
 // ----------------------------------------------------------------------
 
-export async function deleteRole(id: string) {
+export async function deletePriority(id: string) {
   /**
    * Work on server
    */
@@ -57,9 +57,10 @@ export async function deleteRole(id: string) {
   /**
    * Work in local
    */
+
   mutate(
     (key) => Array.isArray(key) && key[0] === ENDPOINT.list,
-    (resCache: IRolesRes | any) => {
+    (resCache: IPrioritiesRes | any) => {
       const currentData = resCache.response.data;
 
       return {
@@ -75,7 +76,7 @@ export async function deleteRole(id: string) {
 }
 // ----------------------------------------------------------------------
 
-export async function deleteRoles(ids: string[]) {
+export async function deletePriorities(ids: string[]) {
   /**
    * Work on server
    */
@@ -84,9 +85,10 @@ export async function deleteRoles(ids: string[]) {
   /**
    * Work in local
    */
+
   mutate(
     (key) => Array.isArray(key) && key[0] === ENDPOINT.list,
-    (resCache: IRolesRes | any) => {
+    (resCache: IPrioritiesRes | any) => {
       const currentData = resCache.response.data;
 
       return {
