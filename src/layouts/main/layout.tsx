@@ -9,16 +9,12 @@ import { useBoolean } from 'minimal-shared/hooks';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
-import { iconButtonClasses } from '@mui/material/IconButton';
 
-import { Logo } from 'src/components/logo';
 import { useSettingsContext } from 'src/components/settings';
 
 import { NavMobile } from './nav-mobile';
-import { VerticalDivider } from './content';
 import { NavVertical } from './nav-vertical';
 import { layoutClasses } from '../core/classes';
-import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../nav-config-account';
 import { mainNavData } from '../nav-config-main';
 import { MainSection } from '../core/main-section';
@@ -66,7 +62,6 @@ export function MainLayout({
   const navData = slotProps?.nav?.data ?? mainNavData;
 
   const isNavMini = settings.state.navLayout === 'mini';
-  const isNavHorizontal = settings.state.navLayout === 'horizontal';
   const isNavVertical = isNavMini || settings.state.navLayout === 'vertical';
 
   const renderHeader = () => {
@@ -75,11 +70,6 @@ export function MainLayout({
         maxWidth: false,
         sx: {
           ...(isNavVertical && { px: { [layoutQuery]: 5 } }),
-          ...(isNavHorizontal && {
-            bgcolor: 'var(--layout-nav-bg)',
-            height: { [layoutQuery]: 'var(--layout-nav-horizontal-height)' },
-            [`& .${iconButtonClasses.root}`]: { color: 'var(--layout-nav-text-secondary-color)' },
-          }),
         },
       },
     };
@@ -90,9 +80,6 @@ export function MainLayout({
           This is an info Alert.
         </Alert>
       ),
-      bottomArea: isNavHorizontal ? (
-        <NavHorizontal data={navData} layoutQuery={layoutQuery} cssVars={navVars.section} />
-      ) : null,
       leftArea: (
         <>
           {/** @slot Nav mobile */}
@@ -100,22 +87,15 @@ export function MainLayout({
             onClick={onOpen}
             sx={{ mr: 1, ml: -1, [theme.breakpoints.up(layoutQuery)]: { display: 'none' } }}
           />
-          <NavMobile data={navData} open={open} onClose={onClose} cssVars={navVars.section} />
-
-          {/** @slot Logo */}
-          {isNavHorizontal && (
-            <Logo
-              sx={{
-                display: 'none',
-                [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
-              }}
-            />
-          )}
-
-          {/** @slot Divider */}
-          {isNavHorizontal && (
-            <VerticalDivider sx={{ [theme.breakpoints.up(layoutQuery)]: { display: 'flex' } }} />
-          )}
+          <NavMobile
+            data={navData}
+            open={open}
+            onClose={onClose}
+            cssVars={navVars.section}
+            sx={{
+              backgroundColor: '#fbfcfe',
+            }}
+          />
         </>
       ),
       rightArea: (
@@ -147,6 +127,9 @@ export function MainLayout({
       isNavMini={isNavMini}
       layoutQuery={layoutQuery}
       cssVars={navVars.section}
+      sx={{
+        backgroundColor: '#fbfcfe',
+      }}
       onToggleNav={() =>
         settings.setField(
           'navLayout',
@@ -169,7 +152,7 @@ export function MainLayout({
       /** **************************************
        * @Sidebar
        *************************************** */
-      sidebarSection={isNavHorizontal ? null : renderSidebar()}
+      sidebarSection={renderSidebar()}
       /** **************************************
        * @Footer
        *************************************** */
