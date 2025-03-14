@@ -148,11 +148,6 @@ export default function ProductList({ onSelected, resetSelected }: Props) {
           product={rowView as any}
         />
       )}
-      <ProductDetailsDialog
-        open={!!rowView}
-        onClose={() => setRowView(null)}
-        product={rowView as any}
-      />
     </Box>
   );
 }
