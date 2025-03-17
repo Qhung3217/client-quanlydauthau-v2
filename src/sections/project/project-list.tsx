@@ -13,27 +13,28 @@ import { EmptyContent } from 'src/components/empty-content';
 import TableQuickFilter from 'src/components/data-table/table-quick-filter';
 import DeleteConfirmDialog from 'src/components/data-table/delete-confirm-dialog';
 
+import ProjectItem from './project-item';
 import ProjectStatusTab from './project-status-tab';
 import { ProjectListSkeleton } from './project-skeleton';
+import ProjectPreviewDialog from './project-preview-dialog';
+import useProjectActions from './hooks/use-project-actions';
 
 export default function ProjectList() {
   const [query, setQuery] = useState('');
 
+  const [projectView, setProjectView] = useState<Project | null>(null);
+
   const [selectedRowId, setSelectedRowId] = useState<string>('');
-
-  const confirmDialog = useBoolean();
-
-  const cancelDialog = useBoolean();
-
-  const deleting = useBoolean();
-
-  const canceling = useBoolean();
 
   const [page, setPage] = useState(1);
 
   const [status, setStatus] = useState<ProjectStatus | 'ALL'>('ALL');
 
-  const [rowView, setRowView] = useState<Project | null>(null);
+  const confirmDialog = useBoolean();
+
+  const deleting = useBoolean();
+
+  const { onApprove, onReject, onRequestEdit, renderConfirmDialog } = useProjectActions();
 
   const { projects, projectsMeta, projectsEmpty, projectsLoading } = useGetProjects({
     page,
@@ -64,14 +65,21 @@ export default function ProjectList() {
 
   const renderList = () =>
     projects.map((project) => (
-      <ProjectListItem
+      <ProjectItem
         key={project.id}
         project={project}
-        detailsClick={onDetailsClick}
-        cancelClick={onCancelClick}
-        deleteClick={onDeleteClick}
-        editClick={onEditClick}
-        itemNotLink={itemNotLink}
+        detailsClick={(row) => {
+          setProjectView(row);
+        }}
+        deleteClick={(id) => {
+          confirmDialog.onTrue();
+          setSelectedRowId(id);
+        }}
+        editClick={() => {}}
+        approveClick={() => onApprove(project)}
+        rejectClick={() => onReject(project)}
+        requestEditClick={() => onRequestEdit(project)}
+        // itemNotLink={itemNotLink}
       />
     ));
 
@@ -90,18 +98,16 @@ export default function ProjectList() {
         <TableQuickFilter value={query} onChange={setQuery} onReset={() => setQuery('')} />
       </Box>
       <ProjectStatusTab status={status} onChange={setStatus} />
-
       <Box
         sx={{
           gap: 3,
           display: 'grid',
-          gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
+          gridTemplateColumns: 'repeat(1, 1fr)',
         }}
       >
         {projectsLoading && !projectsEmpty ? renderLoading() : renderList()}
       </Box>
-      {!projectsLoading && !projectsEmpty && <EmptyContent title="Bạn chưa tạo dự án nào" />}
-
+      {!projectsLoading && projectsEmpty && <EmptyContent title="Bạn chưa tạo dự án nào" />}
       {!projectsEmpty && (
         <Pagination
           count={projectsMeta?.totalPages || 0}
@@ -120,6 +126,14 @@ export default function ProjectList() {
         confirming={deleting.value}
         onConfirm={handleDeleteRow}
       />
+
+      <ProjectPreviewDialog
+        open={!!projectView}
+        onClose={() => setProjectView(null)}
+        project={projectView as any}
+      />
+
+      {renderConfirmDialog()}
     </Box>
   );
 }

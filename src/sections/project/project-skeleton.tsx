@@ -41,17 +41,12 @@ export function ProjectListSkeleton({
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Skeleton variant="circular" sx={{ width: 40, height: 40 }} />
             <Skeleton sx={{ width: 24, height: 12 }} />
           </Box>
 
           <Skeleton sx={{ width: 1, height: 10 }} />
           <Skeleton sx={{ width: `calc(100% - 40px)`, height: 10 }} />
           <Skeleton sx={{ width: `calc(100% - 80px)`, height: 10 }} />
-        </Box>
-
-        <Box sx={{ p: 1, display: { xs: 'none', sm: 'block' } }}>
-          <Skeleton sx={{ width: 170, height: 240, flexShrink: 0 }} />
         </Box>
       </Box>
     ));

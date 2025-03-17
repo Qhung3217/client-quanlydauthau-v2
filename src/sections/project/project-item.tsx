@@ -10,20 +10,23 @@ import { RouterLink } from 'src/routes/components';
 
 import { fDate } from 'src/utils/format-time';
 
-import { PERMISSION_ENUM } from 'src/constants/permission';
 import { getProjectStatusConfig } from 'src/helpers/get-project-status-label';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
 
-import { useCheckPermission } from 'src/auth/hooks';
+import PriorityTag from '../priority/priority-tag';
+import useProjectActionPermit from './hooks/use-project-action-permit';
 
 type Props = CardProps & {
   project: Project;
   detailsClick?: (project: Project) => void;
   editClick?: (id: string) => void;
   deleteClick?: (id: string) => void;
+  approveClick?: (id: string) => void;
+  rejectClick?: (id: string) => void;
+  requestEditClick?: (id: string) => void;
   itemNotLink?: boolean;
 };
 export default function ProjectItem({
@@ -32,25 +35,22 @@ export default function ProjectItem({
   deleteClick,
   detailsClick,
   editClick,
+  approveClick,
+  rejectClick,
+  requestEditClick,
   sx,
   ...other
 }: Props) {
   const menuActions = usePopover();
 
-  const { DELETE_PERMIT, EDIT_PERMIT } = useCheckPermission({
-    EDIT_PERMIT: PERMISSION_ENUM.UPDATE_PROJECT,
-    DELETE_PERMIT: PERMISSION_ENUM.DELETE_PROJECT,
-  });
+  const { editPermit, deletePermit, approvePermit, rejectPermit, requestEditPermit } =
+    useProjectActionPermit(project.status);
 
   const labelConfig = getProjectStatusConfig(project.status);
 
-  const editPermit = EDIT_PERMIT && project.status === 'EDIT_REQUESTED';
-
-  const deletePermit = DELETE_PERMIT && project.status === 'PENDING';
-
   const renderMenuActions = () =>
-    (editClick || deleteClick) &&
-    (editPermit || deletePermit) && (
+    (editClick || deleteClick || approveClick || rejectClick) &&
+    (editPermit || deletePermit || approvePermit || rejectPermit) && (
       <CustomPopover
         open={menuActions.open}
         anchorEl={menuActions.anchorEl}
@@ -58,6 +58,39 @@ export default function ProjectItem({
         slotProps={{ arrow: { placement: 'bottom-center' } }}
       >
         <MenuList>
+          {approvePermit && approveClick && (
+            <MenuItem
+              onClick={() => {
+                approveClick(project.id);
+                menuActions.onClose();
+              }}
+            >
+              <Iconify icon="mdi:approve" sx={{ color: 'success.main' }} />
+              Duyệt dự án
+            </MenuItem>
+          )}
+          {rejectPermit && rejectClick && (
+            <MenuItem
+              onClick={() => {
+                rejectClick(project.id);
+                menuActions.onClose();
+              }}
+            >
+              <Iconify icon="mdi:cancel-octagon-outline" />
+              Hủy dự án
+            </MenuItem>
+          )}
+          {requestEditPermit && requestEditClick && (
+            <MenuItem
+              onClick={() => {
+                requestEditClick(project.id);
+                menuActions.onClose();
+              }}
+            >
+              <Iconify icon="carbon:request-quote" sx={{ color: 'info.main' }} />
+              Yêu cầu điều chỉnh
+            </MenuItem>
+          )}
           {editPermit && editClick && (
             <MenuItem
               component={RouterLink}
@@ -89,101 +122,138 @@ export default function ProjectItem({
 
   return (
     <>
-      <Card sx={[{ display: 'flex' }, ...(Array.isArray(sx) ? sx : [sx])]} {...other}>
-        <Stack
-          spacing={1}
-          sx={[
-            (theme) => ({
-              flexGrow: 1,
-              p: theme.spacing(3, 3, 2, 3),
-              position: 'relative',
-            }),
-          ]}
+      <Card
+        sx={[
+          {
+            borderRadius: 1,
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            p: 2,
+            boxShadow: 'none',
+            position: 'relative',
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+        {...other}
+      >
+        {!!project?.priority && <PriorityTag priority={project.priority} />}
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
         >
+          <Box component="span" sx={{ typography: 'caption', color: 'text.secondary' }}>
+            #{project.code}
+          </Box>
+          <Box>
+            <Label variant="soft" color={labelConfig.color} {...labelConfig?.otherProps}>
+              {labelConfig.label}
+            </Label>
+            {editPermit && (
+              <Label color="warning" variant="filled" sx={{ ml: 1 }}>
+                Yêu cầu điều chỉnh
+              </Label>
+            )}
+          </Box>
+        </Box>
+
+        <Box sx={{ mb: 1 }}>
+          {itemNotLink ? (
+            <Typography
+              variant="h6"
+              sx={[
+                (theme) => ({
+                  ...theme.mixins.maxLine({ line: 2 }),
+                  color: 'primary.main',
+                }),
+              ]}
+            >
+              {project.name}
+            </Typography>
+          ) : (
+            <Link
+              component={RouterLink}
+              href="." // CHUA GẮN Link
+              variant="h6"
+              sx={[
+                (theme) => ({
+                  ...theme.mixins.maxLine({ line: 2 }),
+                  color: 'primary.darker',
+                  width: 'fit-content',
+                }),
+              ]}
+            >
+              {project.name}
+            </Link>
+          )}
+        </Box>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent="space-between"
+          sx={{
+            maxWidth: {
+              xs: 1,
+              md: 800,
+            },
+          }}
+        >
+          <Stack spacing={1}>
+            <Typography variant="body2">
+              <strong>Bên mời thầu:</strong> {project.inviter.name}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Chủ đầu tư:</strong> {project.investor.name}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Ngày đăng tải thông báo:</strong> {fDate(project.createdAt)}
+            </Typography>
+          </Stack>
+          <Stack spacing={1}>
+            <Typography variant="body2">
+              <strong>Địa điểm:</strong> {project.address}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Thời điểm đóng thầu:</strong> {fDate(project.estDeadline)}
+            </Typography>
+          </Stack>
+        </Stack>
+        {(detailsClick || editClick || deleteClick || approveClick || rejectClick) && (
           <Box
             sx={{
-              mb: 2,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
+              position: 'absolute',
+              bottom: 4,
+              right: 8,
             }}
           >
-            <Box>
-              <Label variant="soft" color={labelConfig.color} {...labelConfig?.otherProps}>
-                {labelConfig.label}
-              </Label>
-              {editPermit && (
-                <Label color="warning" variant="filled" sx={{ ml: 1 }}>
-                  Yêu cầu điều chỉnh
-                </Label>
-              )}
-            </Box>
-            <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {fDate(project.updatedAt)}
-            </Box>
-          </Box>
-
-          <Stack spacing={1} sx={{ flexGrow: 1 }}>
-            {itemNotLink ? (
-              <Typography
-                variant="subtitle2"
-                sx={[
-                  (theme) => ({
-                    ...theme.mixins.maxLine({ line: 2 }),
-                    color: 'primary.main',
-                  }),
-                ]}
+            {detailsClick && (
+              <IconButton
+                onClick={() => {
+                  detailsClick(project);
+                  menuActions.onClose();
+                }}
+                color="info"
+                size="small"
               >
-                #{project.code} - {project.name}
-              </Typography>
-            ) : (
-              <Link
-                component={RouterLink}
-                href="." // CHUA GẮN Link
-                variant="subtitle2"
-                sx={[
-                  (theme) => ({
-                    ...theme.mixins.maxLine({ line: 2 }),
-                  }),
-                ]}
-              >
-                #{project.code} - {project.name}
-              </Link>
+                <Iconify icon="mdi:eye" />
+              </IconButton>
             )}
-          </Stack>
-          {(detailsClick || editClick || deleteClick) && (
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                position: 'absolute',
-                bottom: 8,
-                right: 8,
-              }}
-            >
-              {detailsClick && (
-                <IconButton
-                  onClick={() => {
-                    detailsClick(project);
-                    menuActions.onClose();
-                  }}
-                  color="info"
-                >
-                  <Iconify icon="mdi:eye" />
-                </IconButton>
-              )}
-              {(editClick || deleteClick) && (editPermit || deletePermit) && (
+            {(editClick || deleteClick || approveClick || rejectClick) &&
+              (editPermit || deletePermit || approvePermit || rejectPermit) && (
                 <IconButton
                   color={menuActions.open ? 'inherit' : 'default'}
                   onClick={menuActions.onOpen}
+                  size="small"
                 >
                   <Iconify icon="eva:more-horizontal-fill" />
                 </IconButton>
               )}
-            </Box>
-          )}
-        </Stack>
+          </Box>
+        )}
       </Card>
 
       {renderMenuActions()}

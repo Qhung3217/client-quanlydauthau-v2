@@ -23,6 +23,6 @@ export type Project = {
   inviter: Company;
   investor: Company;
   estimators: Creator[];
-  priority: Priority;
+  priority?: Priority;
   creator: Creator;
 };

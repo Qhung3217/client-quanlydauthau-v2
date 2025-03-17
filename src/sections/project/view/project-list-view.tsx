@@ -1,9 +1,11 @@
-import { Box, Button } from '@mui/material';
+'use client';
+
+import { Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Iconify } from 'src/components/iconify';
@@ -11,15 +13,17 @@ import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 import { useCheckPermission } from 'src/auth/hooks';
 
+import ProjectList from '../project-list';
+
 export default function ProjectListView() {
   const { CREATE_PERMIT } = useCheckPermission({
     CREATE_PERMIT: PERMISSION_ENUM.CREATE_PROJECT,
   });
   return (
-    <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+    <MainContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
       <CustomBreadcrumbs
-        heading="Dự án công khai"
-        links={[{ name: 'Dự án công khai', href: paths.project.root }, { name: 'Danh sách' }]}
+        heading="Tất cả dự án"
+        links={[{ name: 'Tất cả dự án', href: paths.project.root }, { name: 'Danh sách' }]}
         action={
           CREATE_PERMIT && (
             <Button
@@ -34,21 +38,8 @@ export default function ProjectListView() {
         }
         sx={{ mb: { xs: 3, md: 5 } }}
       />
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: 'repeat(1,1fr)',
-            md: 'repeat(2,1fr)',
-          },
-          gap: 2,
-        }}
-      >
-        <ProductList
-          onSelected={setProductSelected}
-          resetSelected={() => setProductSelected(null)}
-        />
-      </Box>
-    </DashboardContent>
+
+      <ProjectList />
+    </MainContent>
   );
 }

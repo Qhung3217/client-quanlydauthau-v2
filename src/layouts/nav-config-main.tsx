@@ -46,32 +46,17 @@ const ICONS = {
 
 export const mainNavData: NavSectionProps['data'] = [
   /**
-   * Home
-   */
-  // {
-  //   subheader: 'Trang chủ',
-
-  //   items: [
-  //     {
-  //       title: 'Dự án công khai',
-  //       path: paths.dashboard.public_project.root,
-  //       icon: ICONS.folder,
-  //       roles: [PERMISSION_ENUM.VIEW_PUBLIC_PROJECT],
-  //     },
-  //   ],
-  // },
-  /**
    * PROJECT
    */
   {
     subheader: 'Dự án',
     items: [
-      // {
-      //   title: 'Dự án của tôi',
-      //   path: paths.dashboard.my_project.root,
-      //   icon: ICONS.folder,
-      //   roles: [PERMISSION_ENUM.VIEW_PROJECT],
-      // },
+      {
+        title: 'Tất cả dự án',
+        path: paths.project.root,
+        icon: ICONS.folder,
+        roles: [PERMISSION_ENUM.VIEW_PROJECT],
+      },
       // {
       //   title: 'Báo giá của tôi',
       //   path: paths.dashboard.quotation.root,

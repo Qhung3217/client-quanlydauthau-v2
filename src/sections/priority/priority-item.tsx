@@ -4,13 +4,13 @@ import { usePopover } from 'minimal-shared/hooks';
 
 import { Box, Card, Menu, MenuItem, IconButton, Typography } from '@mui/material';
 
-import getPriorityColorConfig from 'src/helpers/get-priority-color-config';
-
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Iconify } from 'src/components/iconify';
 
 import { useCheckPermission } from 'src/auth/hooks';
+
+import PriorityTag from './priority-tag';
 
 type Props = {
   priority: Priority;
@@ -20,7 +20,6 @@ type Props = {
 };
 
 export default function PriorityItem({ priority, onEdit, onDelete }: Props) {
-  const { color, bgColor } = getPriorityColorConfig(priority.color);
   const popover = usePopover();
   const { UPDATE_PERMIT, DELETE_PERMIT } = useCheckPermission({
     UPDATE_PERMIT: PERMISSION_ENUM.UPDATE_PRIORITY,
@@ -28,17 +27,7 @@ export default function PriorityItem({ priority, onEdit, onDelete }: Props) {
   });
   return (
     <Card sx={{ height: 80, borderRadius: 1, py: 1, px: 2, position: 'relative' }}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 6,
-          height: 1,
-          backgroundColor: color,
-          boxShadow: `0px 0px 4px 8px ${bgColor}`,
-        }}
-      />
+      <PriorityTag priority={priority.color} />
       <Typography>{priority.name}</Typography>
       <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
         <IconButton

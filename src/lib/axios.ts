@@ -100,6 +100,7 @@ export const endpoints = {
     delete_one: (id: any) => `/project/${id}`,
     delete_many: '/project',
     approve: (id: any) => `/project/${id}/approve`,
+    reject: (id: any) => `/project/${id}/cancel`,
     request_edit: (id: any) => `/project/${id}/request-edit`,
   },
 };

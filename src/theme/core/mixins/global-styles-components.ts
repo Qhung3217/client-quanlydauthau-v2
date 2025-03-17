@@ -79,12 +79,6 @@ const redShape =
 export function paperStyles(theme: Theme, options?: PaperStyleOptions): CSSObject {
   const { blur = 20, color, dropdown } = options ?? {};
   return {
-    ...theme.mixins.bgGradient({
-      images: [`url(${cyanShape})`, `url(${redShape})`],
-      sizes: ['50%', '50%'],
-      positions:
-        theme.direction === 'rtl' ? ['top left', 'right bottom'] : ['top right', 'left bottom'],
-    }),
     backdropFilter: `blur(${blur}px)`,
     WebkitBackdropFilter: `blur(${blur}px)`,
     backgroundColor: color ?? varAlpha(theme.vars.palette.background.paperChannel, 0.9),

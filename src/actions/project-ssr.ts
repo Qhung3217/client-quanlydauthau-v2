@@ -125,6 +125,24 @@ export async function approveProject(id: string) {
 }
 // ----------------------------------------------------------------------
 
+export async function rejectProject(id: string) {
+  /**
+   * Work on server
+   */
+
+  await axios.patch(ENDPOINT.reject(id));
+
+  /**
+   * Work in local
+   */
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    undefined,
+    true
+  );
+}
+// ----------------------------------------------------------------------
+
 export async function requestEditProject(id: string) {
   /**
    * Work on server

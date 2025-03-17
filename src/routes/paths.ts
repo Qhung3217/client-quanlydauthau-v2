@@ -16,6 +16,7 @@ export const paths = {
   },
   // MAIN
   root: '/',
+
   role: {
     root: `/role`,
     new: `/role/new`,
