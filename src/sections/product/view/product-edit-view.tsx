@@ -2,7 +2,7 @@ import type { Product } from 'src/types/product';
 
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -14,7 +14,7 @@ type Props = {
 };
 export default function ProductEditView({ record, loading }: Props) {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Cập nhật sản phẩm"
         links={[
@@ -25,6 +25,6 @@ export default function ProductEditView({ record, loading }: Props) {
       />
 
       <ProductNewEditForm currentRecord={record} loading={loading} />
-    </DashboardContent>
+    </MainContent>
   );
 }

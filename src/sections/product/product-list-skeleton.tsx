@@ -1,10 +1,10 @@
 import { Box, Paper, Skeleton } from '@mui/material';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 export default function ProductListSkeleton() {
   return (
-    <DashboardContent sx={{}}>
+    <MainContent sx={{}}>
       {/* Skeleton cho Grid sản phẩm */}
       <Box
         sx={{
@@ -42,6 +42,6 @@ export default function ProductListSkeleton() {
       <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
         <Skeleton variant="rounded" width={200} height={36} />
       </Box>
-    </DashboardContent>
+    </MainContent>
   );
 }

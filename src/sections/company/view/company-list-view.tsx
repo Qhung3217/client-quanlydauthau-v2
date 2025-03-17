@@ -14,8 +14,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { attachServerUrl } from 'src/utils/attach-server-url';
 
+import { MainContent } from 'src/layouts/main';
 import { useGetCompanies } from 'src/actions/company';
-import { DashboardContent } from 'src/layouts/dashboard';
 import { deleteCompanies } from 'src/actions/company-ssr';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
@@ -169,7 +169,7 @@ export default function CompanyListView() {
       .map((column) => column.field);
   return (
     <>
-      <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <MainContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <CustomBreadcrumbs
           heading="Danh sách đơn vị"
           links={[{ name: 'Đơn vị', href: paths.organization.root }, { name: 'Danh sách' }]}
@@ -213,7 +213,7 @@ export default function CompanyListView() {
             },
           }}
         />
-      </DashboardContent>
+      </MainContent>
 
       <DeleteConfirmDialog
         open={confirmDialog.value}

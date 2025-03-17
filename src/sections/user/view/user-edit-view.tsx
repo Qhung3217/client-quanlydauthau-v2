@@ -2,7 +2,7 @@ import type { User } from 'src/types/user';
 
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -14,7 +14,7 @@ type Props = {
 };
 export default function UserEditView({ record, loading }: Props) {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Cập nhật tài khoản"
         links={[
@@ -25,6 +25,6 @@ export default function UserEditView({ record, loading }: Props) {
       />
 
       <UserNewEditForm currentRecord={record} loading={loading} />
-    </DashboardContent>
+    </MainContent>
   );
 }

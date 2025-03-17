@@ -2,7 +2,7 @@ import type { Role } from 'src/types/role';
 
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -14,7 +14,7 @@ type Props = {
 };
 export default function RoleEditView({ record, loading }: Props) {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Cập nhật nhóm quyền"
         links={[
@@ -25,6 +25,6 @@ export default function RoleEditView({ record, loading }: Props) {
       />
 
       <RoleNewEditForm currentRecord={record} loading={loading} />
-    </DashboardContent>
+    </MainContent>
   );
 }

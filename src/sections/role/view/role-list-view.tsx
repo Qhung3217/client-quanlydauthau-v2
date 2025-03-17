@@ -23,8 +23,8 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { useGetRoles } from 'src/actions/role';
+import { MainContent } from 'src/layouts/main';
 import { deleteRoles } from 'src/actions/role-ssr';
-import { DashboardContent } from 'src/layouts/dashboard';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Iconify } from 'src/components/iconify';
@@ -135,7 +135,7 @@ export default function RoleListView() {
       .map((column) => column.field);
   return (
     <>
-      <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <MainContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <CustomBreadcrumbs
           heading="Danh sách nhóm quyền"
           links={[{ name: 'Nhóm quyền', href: paths.role.root }, { name: 'Danh sách' }]}
@@ -179,7 +179,7 @@ export default function RoleListView() {
             },
           }}
         />
-      </DashboardContent>
+      </MainContent>
 
       <Popover
         open={permissionPopover.open}

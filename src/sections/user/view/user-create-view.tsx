@@ -1,6 +1,6 @@
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -8,7 +8,7 @@ import { UserNewEditForm } from '../user-new-edit-form';
 
 export default function UserCreateView() {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Thêm tài khoản mới"
         links={[{ name: 'Tài khoản', href: paths.user.root }, { name: 'Tài khoản mới' }]}
@@ -16,6 +16,6 @@ export default function UserCreateView() {
       />
 
       <UserNewEditForm />
-    </DashboardContent>
+    </MainContent>
   );
 }

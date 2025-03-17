@@ -9,7 +9,7 @@ import { Box, Button } from '@mui/material';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Iconify } from 'src/components/iconify';
@@ -28,7 +28,7 @@ export default function ProductListView() {
   });
 
   return (
-    <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+    <MainContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
       <CustomBreadcrumbs
         heading="Danh sách sản phẩm"
         links={[{ name: 'Sản phẩm', href: paths.product.root }, { name: 'Danh sách' }]}
@@ -62,6 +62,6 @@ export default function ProductListView() {
         />
         <ProductDetailsPanel product={productSelected} />
       </Box>
-    </DashboardContent>
+    </MainContent>
   );
 }

@@ -1,6 +1,6 @@
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -8,7 +8,7 @@ import { ProductNewEditForm } from '../product-new-edit-form';
 
 export default function ProductCreateView() {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Thêm sản phẩm mới"
         links={[{ name: 'Sản phẩm', href: paths.product.root }, { name: 'Sản phẩm mới' }]}
@@ -16,6 +16,6 @@ export default function ProductCreateView() {
       />
 
       <ProductNewEditForm />
-    </DashboardContent>
+    </MainContent>
   );
 }

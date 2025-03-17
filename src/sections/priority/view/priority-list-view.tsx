@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Iconify } from 'src/components/iconify';
@@ -25,7 +25,7 @@ export default function PriorityListView() {
   const openCreate = useBoolean();
 
   return (
-    <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+    <MainContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
       <CustomBreadcrumbs
         heading="Danh sách độ ưu tiên"
         links={[{ name: 'Độ ưu tiên', href: paths.product.root }, { name: 'Danh sách' }]}
@@ -44,6 +44,6 @@ export default function PriorityListView() {
       />
       <PriorityList />
       <PriorityCreateDialog open={openCreate.value} onClose={openCreate.onFalse} />
-    </DashboardContent>
+    </MainContent>
   );
 }
