@@ -84,6 +84,15 @@ export const endpoints = {
     delete_one: (id: any) => `/role/${id}`,
     delete_many: '/role',
   },
+  ticket: {
+    list: '/ticket',
+    get_comments: (id: any) =>
+      `/ticket/${id}/comment?perPage=${Number.MAX_SAFE_INTEGER}&orderKey=createdAt&orderValue=asc`,
+    create: '/ticket',
+    create_comment: (id: any) => `/ticket/${id}/comment`,
+    update: (id: any) => `/ticket/${id}`,
+    details: (id: any) => `/ticket/${id}`,
+  },
   priority: {
     list: '/priority',
     create: '/priority',
