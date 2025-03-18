@@ -11,7 +11,7 @@ import { Button, Pagination } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import useDebounceCallback from 'src/routes/hooks/use-debounce-callback';
+import useDebounceCallback from 'src/hooks/use-debounce-callback';
 
 import { CONFIG } from 'src/global-config';
 
