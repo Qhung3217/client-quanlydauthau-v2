@@ -2,8 +2,8 @@ import type { ProjectStatus } from 'src/types/project';
 
 export const PROJECT_STATUS: ProjectStatus[] = [
   'PENDING',
-  'APPROVED',
   'EDIT_REQUESTED',
+  'APPROVED',
   'BUDGET_APPROVED',
   'QUOTED',
   'CANCELED',

@@ -5,5 +5,5 @@ import { paths } from 'src/routes/paths';
 // ----------------------------------------------------------------------
 
 export default function Page() {
-  redirect(paths.product.root);
+  redirect(paths.project.root);
 }

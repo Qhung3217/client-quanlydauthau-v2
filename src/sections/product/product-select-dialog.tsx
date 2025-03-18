@@ -4,7 +4,7 @@ import type { DialogProps } from '@mui/material';
 import type { Product } from 'src/types/product';
 
 import { useState } from 'react';
-import { useDebounce } from 'minimal-shared/hooks';
+import { useBoolean, useDebounce } from 'minimal-shared/hooks';
 
 import {
   Box,
@@ -22,6 +22,8 @@ import {
 
 import { useGetProducts } from 'src/actions/product';
 
+import ProductCreateDialog from './product-create-dialog';
+
 type Props = Omit<DialogProps, 'children' | 'onClose'> & {
   onClose: () => void;
   onSelected: (value: Product) => void;
@@ -33,6 +35,8 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
   const [inputText, setInputValue] = useState('');
 
   const inputValueDebounce = useDebounce(inputText, 500);
+
+  const openForm = useBoolean();
 
   const { products, productsLoading, productsMeta, productsEmpty } = useGetProducts({
     perPage: 20,
@@ -49,7 +53,12 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
       }}
       {...dialogProps}
     >
-      <DialogTitle>Chọn sản phẩm</DialogTitle>
+      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="inherit"> Chọn sản phẩm</Typography>
+        <Button onClick={openForm.onTrue} variant="soft" color="info">
+          Thêm sản phẩm
+        </Button>
+      </DialogTitle>
       <DialogContent>
         <Box sx={{ mb: 2 }}>
           <OutlinedInput
@@ -69,12 +78,9 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
           <>
             <Stack>
               {products.map((product) => (
-                <Stack
+                <Box
                   key={product.id}
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  minWidth={0}
-                  minHeight={0}
+                  width={1}
                   sx={{
                     '&:hover': {
                       backgroundColor: 'background.neutral',
@@ -83,19 +89,18 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
                     px: 1,
                     borderRadius: 1,
                     cursor: 'pointer',
+                    border: `1px solid #f4f4f4`,
                   }}
                   onClick={() => onSelected(product)}
                 >
-                  <Box>
-                    <Typography variant="subtitle1">{product.name}</Typography>
-                    <Box
-                      dangerouslySetInnerHTML={{
-                        __html: product.desc,
-                      }}
-                      sx={{ maxHeight: 200, overflow: 'auto' }}
-                    />
-                  </Box>
-                </Stack>
+                  <Typography variant="subtitle1">{product.name}</Typography>
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: product.desc,
+                    }}
+                    sx={{ maxHeight: 200, overflow: 'auto' }}
+                  />
+                </Box>
               ))}
             </Stack>
             <Pagination
@@ -111,6 +116,7 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
             />
           </>
         )}
+        <ProductCreateDialog open={openForm.value} onClose={openForm.onFalse} />
       </DialogContent>
       <DialogActions>
         <Button onClick={dialogProps.onClose}>Hủy</Button>

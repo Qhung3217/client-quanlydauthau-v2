@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
-import { Box, Pagination, paginationClasses } from '@mui/material';
+import { Box, Switch, Pagination, FormControlLabel, paginationClasses } from '@mui/material';
 
 import { useGetProjects } from 'src/actions/project';
 import { deleteProject } from 'src/actions/project-ssr';
@@ -16,7 +16,6 @@ import DeleteConfirmDialog from 'src/components/data-table/delete-confirm-dialog
 import ProjectItem from './project-item';
 import ProjectStatusTab from './project-status-tab';
 import { ProjectListSkeleton } from './project-skeleton';
-import ProjectPreviewDialog from './project-preview-dialog';
 import useProjectActions from './hooks/use-project-actions';
 
 export default function ProjectList() {
@@ -32,6 +31,8 @@ export default function ProjectList() {
 
   const confirmDialog = useBoolean();
 
+  const showMine = useBoolean();
+
   const deleting = useBoolean();
 
   const { onApprove, onReject, onRequestEdit, renderConfirmDialog } = useProjectActions();
@@ -42,6 +43,7 @@ export default function ProjectList() {
     ...(status !== 'ALL' && {
       statuses: status,
     }),
+    isMyProjects: showMine.value,
   });
 
   const handleDeleteRow = async () => {
@@ -68,9 +70,6 @@ export default function ProjectList() {
       <ProjectItem
         key={project.id}
         project={project}
-        detailsClick={(row) => {
-          setProjectView(row);
-        }}
         deleteClick={(id) => {
           confirmDialog.onTrue();
           setSelectedRowId(id);
@@ -96,6 +95,17 @@ export default function ProjectList() {
         }}
       >
         <TableQuickFilter value={query} onChange={setQuery} onReset={() => setQuery('')} />
+        <Box>
+          <FormControlLabel
+            control={<Switch />}
+            label="Chỉ hiện đã tạo"
+            value={showMine.value}
+            onChange={showMine.onToggle}
+            sx={{
+              userSelect: 'none',
+            }}
+          />
+        </Box>
       </Box>
       <ProjectStatusTab status={status} onChange={setStatus} />
       <Box
@@ -125,12 +135,6 @@ export default function ProjectList() {
         count={1}
         confirming={deleting.value}
         onConfirm={handleDeleteRow}
-      />
-
-      <ProjectPreviewDialog
-        open={!!projectView}
-        onClose={() => setProjectView(null)}
-        project={projectView as any}
       />
 
       {renderConfirmDialog()}

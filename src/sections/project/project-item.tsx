@@ -21,7 +21,6 @@ import useProjectActionPermit from './hooks/use-project-action-permit';
 
 type Props = CardProps & {
   project: Project;
-  detailsClick?: (project: Project) => void;
   editClick?: (id: string) => void;
   deleteClick?: (id: string) => void;
   approveClick?: (id: string) => void;
@@ -33,7 +32,6 @@ export default function ProjectItem({
   project,
   itemNotLink,
   deleteClick,
-  detailsClick,
   editClick,
   approveClick,
   rejectClick,
@@ -43,8 +41,14 @@ export default function ProjectItem({
 }: Props) {
   const menuActions = usePopover();
 
-  const { editPermit, deletePermit, approvePermit, rejectPermit, requestEditPermit } =
-    useProjectActionPermit(project.status);
+  const {
+    editPermit,
+    deletePermit,
+    approvePermit,
+    rejectPermit,
+    requestEditPermit,
+    createEstimatePermit,
+  } = useProjectActionPermit(project.status);
 
   const labelConfig = getProjectStatusConfig(project.status);
 
@@ -78,6 +82,18 @@ export default function ProjectItem({
             >
               <Iconify icon="mdi:cancel-octagon-outline" />
               Hủy dự án
+            </MenuItem>
+          )}
+          {createEstimatePermit && (
+            <MenuItem
+              onClick={() => {
+                menuActions.onClose();
+              }}
+              component={RouterLink}
+              href={paths.project.estimate(project.id)}
+            >
+              <Iconify icon="mdi:paper-edit-outline" sx={{ color: 'info.darker' }} />
+              Nhập dự toán
             </MenuItem>
           )}
           {requestEditPermit && requestEditClick && (
@@ -135,7 +151,7 @@ export default function ProjectItem({
         ]}
         {...other}
       >
-        {!!project?.priority && <PriorityTag priority={project.priority} />}
+        {!!project?.priority && <PriorityTag priority={project.priority} showText />}
 
         <Box
           sx={{
@@ -175,7 +191,7 @@ export default function ProjectItem({
           ) : (
             <Link
               component={RouterLink}
-              href="." // CHUA GẮN Link
+              href={paths.project.details(project.id)}
               variant="h6"
               sx={[
                 (theme) => ({
@@ -219,7 +235,7 @@ export default function ProjectItem({
             </Typography>
           </Stack>
         </Stack>
-        {(detailsClick || editClick || deleteClick || approveClick || rejectClick) && (
+        {(editClick || deleteClick || approveClick || rejectClick) && (
           <Box
             sx={{
               display: 'flex',
@@ -230,20 +246,12 @@ export default function ProjectItem({
               right: 8,
             }}
           >
-            {detailsClick && (
-              <IconButton
-                onClick={() => {
-                  detailsClick(project);
-                  menuActions.onClose();
-                }}
-                color="info"
-                size="small"
-              >
-                <Iconify icon="mdi:eye" />
-              </IconButton>
-            )}
             {(editClick || deleteClick || approveClick || rejectClick) &&
-              (editPermit || deletePermit || approvePermit || rejectPermit) && (
+              (editPermit ||
+                deletePermit ||
+                approvePermit ||
+                rejectPermit ||
+                createEstimatePermit) && (
                 <IconButton
                   color={menuActions.open ? 'inherit' : 'default'}
                   onClick={menuActions.onOpen}

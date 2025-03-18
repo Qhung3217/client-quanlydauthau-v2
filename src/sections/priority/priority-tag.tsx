@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import getPriorityColorConfig from 'src/helpers/get-priority-color-config';
 
 import { Label } from 'src/components/label';
+import { Iconify } from 'src/components/iconify';
 
 type Props = {
   priority: Priority;
@@ -29,11 +30,14 @@ export default function PriorityTag({ priority, showText, slotProps }: Props) {
             color,
             backgroundColor: bgColor,
             typography: 'subtitle2',
-            px: 2,
-            py: 1,
+            px: 1.5,
+
+            alignContent: 'center',
             ...slotProps?.label,
           }}
+          title={`Ưu tiên: ${priority.name}`}
         >
+          <Iconify icon="mynaui:tag-solid" sx={{ width: 14 }} />
           {priority.name}
         </Label>
       </Box>
@@ -50,6 +54,7 @@ export default function PriorityTag({ priority, showText, slotProps }: Props) {
         boxShadow: `0px 0px 4px 8px ${bgColor}`,
         ...slotProps?.container,
       }}
+      title={`Ưu tiên: ${priority.name}`}
     />
   );
 }

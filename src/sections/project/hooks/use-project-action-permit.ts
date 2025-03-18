@@ -5,14 +5,21 @@ import { PERMISSION_ENUM } from 'src/constants/permission';
 import { useCheckPermission } from 'src/auth/hooks';
 
 export default function useProjectActionPermit(status: string) {
-  const { DELETE_PERMIT, EDIT_PERMIT, APPROVE_PERMIT, REJECT_PERMIT, REQUEST_EDIT_PERMIT } =
-    useCheckPermission({
-      EDIT_PERMIT: PERMISSION_ENUM.UPDATE_PROJECT,
-      DELETE_PERMIT: PERMISSION_ENUM.DELETE_PROJECT,
-      APPROVE_PERMIT: PERMISSION_ENUM.APPROVE_PROJECT,
-      REJECT_PERMIT: PERMISSION_ENUM.CANCEL_PROJECT,
-      REQUEST_EDIT_PERMIT: PERMISSION_ENUM.REQUEST_EDIT_PROJECT,
-    });
+  const {
+    DELETE_PERMIT,
+    EDIT_PERMIT,
+    APPROVE_PERMIT,
+    REJECT_PERMIT,
+    REQUEST_EDIT_PERMIT,
+    CREATE_ESTIMATE_PERMIT,
+  } = useCheckPermission({
+    EDIT_PERMIT: PERMISSION_ENUM.UPDATE_PROJECT,
+    DELETE_PERMIT: PERMISSION_ENUM.DELETE_PROJECT,
+    APPROVE_PERMIT: PERMISSION_ENUM.APPROVE_PROJECT,
+    REJECT_PERMIT: PERMISSION_ENUM.CANCEL_PROJECT,
+    REQUEST_EDIT_PERMIT: PERMISSION_ENUM.REQUEST_EDIT_PROJECT,
+    CREATE_ESTIMATE_PERMIT: PERMISSION_ENUM.CREATE_ESTIMATE,
+  });
 
   const editPermit = EDIT_PERMIT && status === 'EDIT_REQUESTED';
 
@@ -24,11 +31,14 @@ export default function useProjectActionPermit(status: string) {
 
   const requestEditPermit = REQUEST_EDIT_PERMIT && status === 'PENDING';
 
+  const createEstimatePermit = CREATE_ESTIMATE_PERMIT && status === 'APPROVED';
+
   return {
     editPermit,
     deletePermit,
     approvePermit,
     rejectPermit,
     requestEditPermit,
+    createEstimatePermit,
   };
 }
