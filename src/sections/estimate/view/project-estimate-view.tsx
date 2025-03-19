@@ -1,9 +1,6 @@
-import type { Project } from 'src/types/project';
-import type { ProductEstimateSchemaType } from 'src/sections/estimate/product-estimate-create-edit-form';
+import type { EstimateDetails } from 'src/types/estimate';
 
-import { useState } from 'react';
-
-import { Box, Button } from '@mui/material';
+import { Paper, Stack, Alert, Typography, CircularProgress } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -11,90 +8,73 @@ import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
-import ProductEstimateCreateEditForm from 'src/sections/estimate/product-estimate-create-edit-form';
-
+import EstimateAlertEdit from '../estimate-alert-edit';
 import ProductEstimatedList from '../product-estimated-list';
 
 type Props = {
-  project: Project | undefined;
+  estimate: EstimateDetails | undefined;
   loading: boolean;
 };
-export default function ProjectEstimateView({ project, loading }: Props) {
-  const [productEsts, setProductEsts] = useState<ProductEstimateSchemaType[]>([]);
+export default function ProjectEstimateView({ estimate, loading }: Props) {
+  const project = estimate?.project;
 
-  const [productEstSelected, setProductEstSelected] = useState<{
-    record: ProductEstimateSchemaType;
-    index: number;
-  } | null>(null);
+  const isRequestEdit = estimate?.status === 'EDIT_REQUESTED';
 
-  const handleInsertProductEst = (product: ProductEstimateSchemaType) => {
-    setProductEsts([...productEsts, product]);
+  const isPending = estimate?.status === 'PENDING';
+  const isApproved = estimate?.status === 'APPROVED';
+  const isCanceled = estimate?.status === 'CANCELED';
+
+  if (loading)
+    return (
+      <MainContent
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 150 }}
+      >
+        <CircularProgress size={70} />
+      </MainContent>
+    );
+
+  const renderAlert = () => {
+    if (isApproved) return <Alert>Dự toán đã được duyệt</Alert>;
+    if (isCanceled) return <Alert severity="error">Dự toán bị từ chối</Alert>;
+    return <Alert severity="warning">Dự toán đang chờ duyệt</Alert>;
   };
-
-  const handleRemove = (index: number) => {
-    const newArr = [...productEsts];
-    newArr.splice(index, 1);
-
-    setProductEsts(newArr);
-  };
-
-  const handleChangeProductEst = (newValue: ProductEstimateSchemaType) => {
-    if (!productEstSelected) return;
-    const newArr = [...productEsts];
-    newArr[productEstSelected.index] = newValue;
-    setProductEsts(newArr);
-  };
-
   return (
-    <MainContent>
+    <MainContent sx={{ position: 'relative' }}>
       <CustomBreadcrumbs
-        heading="Nhập dự toán"
+        heading="Xem dự toán"
         links={[
           { name: 'Tất cả dự án', href: paths.project.root },
           { name: `#${project?.code}`, href: paths.project.details(project?.id) },
-          { name: 'Nhập dự toán' },
+          { name: estimate?.name },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
-        action={
-          <Button variant="soft" color="primary">
-            Gửi dự toán
-          </Button>
-        }
+        // action={
+        //   <Button variant="soft" color="primary" onClick={openEstimateForm.onTrue}>
+        //     Gửi dự toán
+        //   </Button>
+        // }
       />
+      <Stack direction="column" spacing={2}>
+        {renderAlert()}
+        <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
+          <Typography variant="h5"> Giới thiệu chung về dự án</Typography>
+          <Typography>
+            - <strong>Dự án: </strong> {project?.name}
+          </Typography>
+          <Typography>
+            - <strong>Bên mời thầu: </strong> {project?.inviter?.name}
+          </Typography>
+          <Typography>
+            - <strong>Chủ đầu từ: </strong> {project?.investor?.name}
+          </Typography>
+          <Typography>
+            - <strong>Địa điểm: </strong> {project?.address}
+          </Typography>
+        </Paper>
+        <ProductEstimatedList productEsts={estimate?.productEstimates || []} />
+      </Stack>
 
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: 'repeat(1,1fr)',
-            md: 'repeat(2,1fr)',
-          },
-          gap: 2,
-        }}
-      >
-        <ProductEstimatedList
-          productEsts={productEsts}
-          onSelected={(selected, index) =>
-            productEstSelected
-              ? setProductEstSelected(null)
-              : setProductEstSelected({ record: selected, index })
-          }
-          selectedIndex={productEstSelected?.index as any}
-          onRemove={handleRemove}
-        />
-
-        <ProductEstimateCreateEditForm
-          onSubmit={(newP) => {
-            console.log(newP, productEstSelected);
-            if (!productEstSelected) {
-              handleInsertProductEst(newP);
-            } else {
-              handleChangeProductEst(newP);
-            }
-          }}
-          currentRecord={productEstSelected?.record}
-        />
-      </Box>
+      {isRequestEdit && <EstimateAlertEdit id={estimate.id} />}
     </MainContent>
   );
 }

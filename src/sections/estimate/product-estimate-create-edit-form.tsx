@@ -6,7 +6,7 @@ import { useBoolean } from 'minimal-shared/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Card, Stack, Button, Typography, CardContent } from '@mui/material';
+import { Card, Stack, Button, Portal, Typography, CardContent } from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
@@ -25,16 +25,17 @@ export const ProductEstimateSchema = zod.object({
 type Props = {
   currentRecord?: ProductEstimateSchemaType;
   onSubmit: (value: ProductEstimateSchemaType) => void;
+  btnRef?: React.RefObject<HTMLButtonElement>;
 };
 
 export default function ProductEstimateCreateEditForm({
   onSubmit: onPassSubmit,
   currentRecord,
+  btnRef,
 }: Props) {
-  const showDialogSelectProduct = useBoolean();
+  const isEdit = !!currentRecord;
 
-  const uploadingThumb = useBoolean();
-  const uploadingAttachFiles = useBoolean();
+  const showDialogSelectProduct = useBoolean();
 
   const defaultValues: ProductEstimateSchemaType = {
     name: '',
@@ -47,31 +48,26 @@ export default function ProductEstimateCreateEditForm({
     values: currentRecord,
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit, reset, setValue } = methods;
 
   useEffect(() => {
     reset(currentRecord ? currentRecord : { name: '', desc: '' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentRecord]);
 
   const onSubmit = handleSubmit(async (data) => {
     onPassSubmit({ ...data });
-    window.scrollTo({
-      behavior: 'smooth',
-      top: 0,
-    });
     reset({ name: '', desc: '' });
     toast.success('Lưu thành công.');
   });
 
   return (
     <Form methods={methods} onSubmit={onSubmit}>
-      <Typography
-        variant="h6"
-        sx={{ color: 'primary.darker', textDecoration: 'underline' }}
-        gutterBottom
-      >
-        Sản phẩm dự toán
-      </Typography>
+      {!btnRef && (
+        <Typography variant="h5" gutterBottom>
+          Thêm hàng hóa
+        </Typography>
+      )}
 
       <Stack spacing={2}>
         <Stack spacing={2}>
@@ -105,30 +101,40 @@ export default function ProductEstimateCreateEditForm({
             </CardContent>
           </Card>
         </Stack>
-
-        <LoadingButton
-          loading={uploadingAttachFiles.value || uploadingThumb.value}
-          variant="contained"
-          type="submit"
-          color="primary"
-          sx={{ ml: 'auto', minWidth: 200 }}
-        >
-          Lưu
-        </LoadingButton>
+        {btnRef !== undefined ? (
+          <button ref={btnRef} type="submit" style={{ display: 'none' }}>
+            submit
+          </button>
+        ) : (
+          <LoadingButton
+            variant="contained"
+            type="submit"
+            color="primary"
+            sx={{ ml: 'auto', minWidth: 200 }}
+          >
+            {isEdit ? 'Lưu' : 'Thêm'}
+          </LoadingButton>
+        )}
       </Stack>
+      <Portal>
+        <ProductSelectDialog
+          open={showDialogSelectProduct.value}
+          onClose={showDialogSelectProduct.onFalse}
+          onSelected={(product) => {
+            reset({
+              name: product.name,
+              desc: product.desc,
+            });
+            setValue('desc', product.desc);
 
-      <ProductSelectDialog
-        open={showDialogSelectProduct.value}
-        onClose={showDialogSelectProduct.onFalse}
-        onSelected={(product) => {
-          reset({
-            name: product.name,
-            desc: product.desc,
-          });
+            setTimeout(() => {
+              document.body.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
 
-          showDialogSelectProduct.onFalse();
-        }}
-      />
+            showDialogSelectProduct.onFalse();
+          }}
+        />
+      </Portal>
     </Form>
   );
 }

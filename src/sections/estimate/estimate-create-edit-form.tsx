@@ -1,36 +1,27 @@
-eimport type { IProjectDetails } from 'src/types/project';
+import type { EstimateDetails } from 'src/types/estimate';
 
 import { z as zod } from 'zod';
 import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useBoolean } from 'minimal-shared/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useFieldArray } from 'react-hook-form';
 
-import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import CardHeader from '@mui/material/CardHeader';
+import { Box, Paper } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Paper, Button, IconButton, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import useInputCurrency from 'src/hooks/use-input-currency';
-
-import { httpErrorHandler } from 'src/utils/http-error-handle';
-
-import { createProject, updateProject } from 'src/actions/project';
+import { createEstimate, updateEstimate } from 'src/actions/estimate-ssr';
 
 import { toast } from 'src/components/snackbar';
-import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
 import BlockField from 'src/components/hook-form/block-field';
 
-import ProjectPriceField from './_partials/forms/project-price-field';
-import ProjectProductField from './_partials/forms/project-product-field';
-import ProjectCompanyField from './_partials/forms/project-company-field';
 import { ProductEstimateSchema } from './product-estimate-create-edit-form';
+
+import type { ProductEstimateSchemaType } from './product-estimate-create-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -40,21 +31,32 @@ export const EstimateSchema = zod.object({
   name: zod.string().min(1, 'Tên dự án là bắt buộc!'),
   projectId: zod.string().min(1),
 
-  productEstimates: zod.array(ProductEstimateSchema)
+  productEstimates: zod
+    .array(ProductEstimateSchema)
     .min(1, 'Danh mục hàng hóa phải có ít nhất 1 sản phẩm!'),
-
 });
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentRecord?: EstimateSchemaType;
+  currentRecord?: EstimateDetails;
+  projectId: string;
+  productEstimates: ProductEstimateSchemaType[];
   loading?: boolean;
+  btnRef?: React.RefObject<HTMLButtonElement>;
+  onLoading?: (loading: boolean) => void;
+  onSubmit?: () => void;
 };
 
-export function EstimateCreateEditForm({ currentRecord, loading }: Props) {
-  const { convertToNumber } = useInputCurrency();
-
+export function EstimateCreateEditForm({
+  currentRecord,
+  loading,
+  projectId,
+  productEstimates,
+  btnRef,
+  onLoading,
+  onSubmit: emitSubmit,
+}: Props) {
   const router = useRouter();
 
   const checkingCode = useBoolean();
@@ -63,15 +65,15 @@ export function EstimateCreateEditForm({ currentRecord, loading }: Props) {
 
   const defaultValues: EstimateSchemaType = {
     name: '',
-    projectId: '',
-    productEstimates: [],
+    projectId: projectId || '',
+    productEstimates: productEstimates || [],
   };
 
   const currentFormValue = useMemo(() => {
     if (isEdit)
       return {
         ...currentRecord,
-     
+        projectId: currentRecord.project.id,
       };
     return undefined;
   }, [currentRecord, isEdit]);
@@ -85,179 +87,45 @@ export function EstimateCreateEditForm({ currentRecord, loading }: Props) {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting, errors },
-    setError,
-    control,
+    formState: { isSubmitting },
   } = methods;
-
-
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
+      onLoading?.(true);
       if (!isEdit) {
-        await createEst({
+        await createEstimate({
           ...data,
-          price: convertToNumber(data.price),
-          companyId: data.companyId.value,
-
-          projectItems: data.projectItems.map((item: any) => ({
-            ...item,
-            productId: item.productId.value,
-          })),
         });
 
-        toast.success('Đã thêm dự án thành công !');
+        toast.success('Đã gửi dự toán thành công !');
       } else {
-        await updateProject(currentRecord.id, {
+        await updateEstimate(currentRecord.id, {
           ...data,
-          price: convertToNumber(data.price),
-          companyId: data.companyId.value,
-          projectItems: data.projectItems.map((item: any) => ({
-            ...item,
-            productId: item.productId.value,
-          })),
         });
 
-        toast.success('Đã cập nhật dự án thành công !');
-        router.push(paths.dashboard.my_project.root);
+        toast.success('Đã điều chỉnh dự toán thành công !');
       }
+      emitSubmit?.();
       reset();
+      router.push(paths.project.root);
     } catch (error: any) {
       console.error(error);
 
       toast.error(error.message);
-
-      httpErrorHandler({
-        err: error,
-        errorKeys: ['name', 'desc', 'projectItems'],
-        setFieldErrors: setError,
-      });
+    } finally {
+      onLoading?.(false);
     }
   });
 
   const renderDetails = () => (
-    <Card>
-      <CardHeader title="Thông tin" subheader="Thông tin về dự án..." sx={{ mb: 3 }} />
-
-      <Divider />
-
-      <Stack spacing={3} sx={{ p: 3 }}>
-        <BlockField label="Tên dự án" required>
+    <Paper>
+      <Stack spacing={3}>
+        <BlockField label="Tên dự toán" required>
           <Field.Text name="name" size="small" disabled={loading} />
         </BlockField>
-        <ProjectPriceField loading={!!loading} />
-        <ProjectCompanyField />
-
-        <BlockField label="Địa chỉ">
-          <Field.Text name="address" size="small" disabled={loading} />
-        </BlockField>
-        <BlockField label="Mô tả">
-          <Field.Text
-            name="desc"
-            multiline
-            minRows={4}
-            maxRows={25}
-            size="small"
-            disabled={loading}
-          />
-        </BlockField>
       </Stack>
-    </Card>
-  );
-  const renderProperties = () => (
-    <Card>
-      <CardHeader
-        title="Danh mục sản phẩm"
-        subheader="Danh sách sản phẩm của dự án"
-        sx={{ mb: 3 }}
-      />
-
-      <Divider />
-
-      <Stack spacing={3} sx={{ p: 3 }}>
-        <BlockField label="Danh mục sản phẩm">
-          {productListField.map((field, index) => (
-            <Stack
-              component={Paper}
-              elevation={1}
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={2}
-              key={field.id}
-              alignItems="flex-start"
-              sx={{
-                width: 1,
-                p: 0.5,
-                '&:hover': {
-                  backgroundColor: 'background.neutral',
-                },
-                position: 'relative',
-              }}
-            >
-              <ProjectProductField formIndex={index} />
-              <BlockField label="Số lượng" required sx={{ flex: 1, minWidth: 0 }}>
-                <Field.Text name={`projectItems.${index}.quantity`} size="small" type="number" />
-              </BlockField>
-              <BlockField label="Đơn vị tính" required sx={{ flex: 1, minWidth: 0 }}>
-                <Field.Text name={`projectItems.${index}.unit`} size="small" />
-              </BlockField>
-              <IconButton
-                onClick={() => {
-                  remove(index);
-                }}
-                sx={{
-                  flexShrink: 0,
-                  color: 'error.main',
-                  alignSelf: 'center',
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                }}
-                size="small"
-                title="Xóa danh mục này"
-              >
-                <Iconify icon="ep:remove" />
-              </IconButton>
-            </Stack>
-          ))}
-          {productListField.length === 0 && (
-            <Box
-              sx={{
-                textAlign: 'center',
-                mt: 3,
-                border: '1px dashed transparent',
-                ...(errors.projectItems && {
-                  borderColor: 'error.main',
-                  backgroundColor: '#fff6f3',
-                }),
-                borderRadius: 1,
-                py: 1.5,
-              }}
-            >
-              <Typography variant="h6">Danh mục hàng hóa rỗng</Typography>
-              <Typography variant="caption">
-                {/*  eslint-disable-next-line react/no-unescaped-entities */}
-                Nhấn nút "Thêm sản phẩm" để thêm sản phẩm
-              </Typography>
-            </Box>
-          )}
-          <Button
-            onClick={() => {
-              append({
-                quantity: 1,
-                unit: '',
-                productId: '',
-              });
-            }}
-            variant="outlined"
-            sx={{ maxWidth: { xs: 1, md: 400 }, mx: 'auto', width: 1, mt: 1 }}
-            color="info"
-          >
-            Thêm sản phẩm
-          </Button>
-        </BlockField>
-      </Stack>
-    </Card>
+    </Paper>
   );
 
   const renderActions = () => (
@@ -269,23 +137,28 @@ export function EstimateCreateEditForm({ currentRecord, loading }: Props) {
         alignItems: 'center',
       }}
     >
-      <LoadingButton
-        type="submit"
-        variant="contained"
-        size="large"
-        loading={isSubmitting || loading}
-        disabled={loading || checkingCode.value}
-        sx={{ ml: 'auto' }}
-      >
-        {!isEdit ? 'Thêm dự án' : 'Lưu thay đổi'}
-      </LoadingButton>
+      {btnRef !== undefined ? (
+        <button ref={btnRef} type="submit" style={{ display: 'none' }}>
+          submit
+        </button>
+      ) : (
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          size="large"
+          loading={isSubmitting || loading}
+          disabled={loading || checkingCode.value}
+          sx={{ ml: 'auto' }}
+        >
+          {!isEdit ? 'Thêm dự án' : 'Lưu thay đổi'}
+        </LoadingButton>
+      )}
     </Box>
   );
   return (
     <Form methods={methods} onSubmit={onSubmit}>
       <Stack spacing={{ xs: 3, md: 5 }} sx={{ mx: 'auto', maxWidth: { xs: 720, xl: 880 } }}>
         {renderDetails()}
-        {renderProperties()}
         {renderActions()}
       </Stack>
     </Form>

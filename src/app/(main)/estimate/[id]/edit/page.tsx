@@ -2,10 +2,10 @@
 
 import { notFound } from 'next/navigation';
 
-import { useGetProject } from 'src/actions/project';
+import { useGetEstimate } from 'src/actions/estimate';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
-import ProjectEstimateCreateView from 'src/sections/estimate/view/project-estimate-create-view';
+import ProjectEstimateEditView from 'src/sections/estimate/view/project-estimate-edit-view';
 
 import { RoleBasedGuard } from 'src/auth/guard';
 import { useAuthContext } from 'src/auth/hooks';
@@ -18,15 +18,15 @@ type Props = {
 export default function Page({ params: { id } }: Props) {
   const { user } = useAuthContext();
 
-  const { project, projectEmpty, projectLoading } = useGetProject(id);
-  if (projectEmpty) return notFound();
+  const { estimate, estimateEmpty, estimateLoading } = useGetEstimate(id);
+  if (estimateEmpty) return notFound();
   return (
     <RoleBasedGuard
-      acceptRoles={[PERMISSION_ENUM.CREATE_ESTIMATE]}
+      acceptRoles={[PERMISSION_ENUM.UPDATE_ESTIMATE]}
       currentRole={user?.permissions}
       hasContent
     >
-      <ProjectEstimateCreateView project={project!} loading={projectLoading} />
+      <ProjectEstimateEditView estimate={estimate!} loading={estimateLoading} />
     </RoleBasedGuard>
   );
 }
