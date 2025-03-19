@@ -42,6 +42,7 @@ type Props = {
   loading?: boolean;
   btnRef?: React.RefObject<HTMLButtonElement>;
   onSubmit?: () => void;
+  onLoading?: (loading: boolean) => void;
 };
 
 export function ProductNewEditForm({
@@ -49,6 +50,7 @@ export function ProductNewEditForm({
   loading,
   btnRef,
   onSubmit: emitSubmit,
+  onLoading,
 }: Props) {
   const router = useRouter();
 
@@ -82,6 +84,7 @@ export function ProductNewEditForm({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      onLoading?.(true);
       if (!isEdit) {
         await createProduct(data);
 
@@ -96,6 +99,8 @@ export function ProductNewEditForm({
       emitSubmit?.();
     } catch (error: any) {
       console.error(error);
+    } finally {
+      onLoading?.(false);
     }
   });
 
@@ -127,7 +132,12 @@ export function ProductNewEditForm({
       }}
     >
       {btnRef !== undefined ? (
-        <button ref={btnRef} type="submit" style={{ display: 'none' }}>
+        <button
+          ref={btnRef}
+          type="submit"
+          onClick={(event) => event.stopPropagation()}
+          style={{ display: 'none' }}
+        >
           submit
         </button>
       ) : (

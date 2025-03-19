@@ -31,16 +31,23 @@ export default function ProductCreateDialog({ onClose, ...dialogProps }: Props) 
       <DialogTitle>Thêm sản phẩm mới</DialogTitle>
 
       <DialogContent>
-        <ProductNewEditForm btnRef={submitRef} onSubmit={loading.onFalse} />
+        <ProductNewEditForm
+          btnRef={submitRef}
+          onSubmit={() => {
+            onClose();
+          }}
+          onLoading={loading.setValue}
+        />
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose}>Đóng</Button>
         <LoadingButton
+          type="button"
           loading={loading.value}
-          onClick={() => {
+          onClick={(event) => {
+            event.stopPropagation();
             submitRef.current?.click();
-            loading.onTrue();
           }}
           variant="contained"
         >

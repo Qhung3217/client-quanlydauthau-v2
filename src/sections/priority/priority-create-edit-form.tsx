@@ -14,8 +14,6 @@ import Stack from '@mui/material/Stack';
 import CardHeader from '@mui/material/CardHeader';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useRouter } from 'src/routes/hooks';
-
 import { PRIORITY_COLOR_OBJ } from 'src/constants/priority';
 import { createPriority, updatePriority } from 'src/actions/priority-ssr';
 
@@ -41,6 +39,7 @@ type Props = {
   loading?: boolean;
   btnRef?: React.RefObject<HTMLButtonElement>;
   onSubmit?: () => void;
+  onLoading?: (loading: boolean) => void;
 };
 
 const PriorityCreateEditForm = ({
@@ -48,9 +47,8 @@ const PriorityCreateEditForm = ({
   loading,
   btnRef,
   onSubmit: emitSubmit,
+  onLoading,
 }: Props) => {
-  const router = useRouter();
-
   const checkingCode = useBoolean();
 
   const isEdit = !!currentRecord;
@@ -79,6 +77,7 @@ const PriorityCreateEditForm = ({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      onLoading?.(true);
       if (!isEdit) {
         await createPriority(data);
 
@@ -93,6 +92,8 @@ const PriorityCreateEditForm = ({
     } catch (error: any) {
       console.error(error);
       toast.error('Đã có lỗi xảy ra.');
+    } finally {
+      onLoading?.(false);
     }
   });
 

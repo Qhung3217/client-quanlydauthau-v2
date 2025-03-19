@@ -9,18 +9,26 @@ import { useBoolean, useDebounce } from 'minimal-shared/hooks';
 import {
   Box,
   Stack,
+  Table,
   Button,
   Dialog,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableBody,
   Typography,
   Pagination,
   DialogTitle,
   DialogActions,
   DialogContent,
   OutlinedInput,
+  TableContainer,
   CircularProgress,
 } from '@mui/material';
 
 import { useGetProducts } from 'src/actions/product';
+
+import { Markdown } from 'src/components/markdown';
 
 import ProductCreateDialog from './product-create-dialog';
 
@@ -76,33 +84,41 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
         )}
         {!productsEmpty && (
           <>
-            <Stack>
-              {products.map((product) => (
-                <Box
-                  key={product.id}
-                  width={1}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'background.neutral',
-                    },
-                    py: 1,
-                    px: 1,
-                    borderRadius: 1,
-                    cursor: 'pointer',
-                    border: `1px solid #f4f4f4`,
-                  }}
-                  onClick={() => onSelected(product)}
-                >
-                  <Typography variant="subtitle1">{product.name}</Typography>
-                  <Box
-                    dangerouslySetInnerHTML={{
-                      __html: product.desc,
-                    }}
-                    sx={{ maxHeight: 200, overflow: 'auto' }}
-                  />
-                </Box>
-              ))}
-            </Stack>
+            <TableContainer>
+              <Table sx={{ minWidth: 300 }} stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell size="small">Sản phẩm</TableCell>
+                    <TableCell size="small">Mô tả</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {products.map((product) => (
+                    <TableRow
+                      key={product.id}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'background.neutral',
+                        },
+                        py: 1,
+                        px: 1,
+                        borderRadius: 1,
+                        cursor: 'pointer',
+                        border: `1px solid #f4f4f4`,
+                      }}
+                      onClick={() => onSelected(product)}
+                    >
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>
+                        <Box width={1}>
+                          <Markdown value={product.desc} />
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
             <Pagination
               count={productsMeta?.totalPages || 0}
               page={page}
@@ -119,8 +135,7 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
         <ProductCreateDialog open={openForm.value} onClose={openForm.onFalse} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={dialogProps.onClose}>Hủy</Button>
-        <Button variant="contained">Chọn</Button>
+        <Button onClick={dialogProps.onClose}>Đóng</Button>
       </DialogActions>
     </Dialog>
   );
