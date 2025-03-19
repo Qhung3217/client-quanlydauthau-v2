@@ -51,4 +51,11 @@ export const paths = {
   priority: {
     root: `/priority`,
   },
+  estimate: {
+    root: `/estimate`,
+    new: `/estimate/new`,
+    edit: (id: any) => `/estimate/${id}/edit`,
+    estimate: (id: any) => `/estimate/${id}/estimate`,
+    details: (id: any) => `/estimate/${id}`,
+  },
 };

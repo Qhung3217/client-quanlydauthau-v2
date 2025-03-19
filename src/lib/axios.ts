@@ -112,4 +112,15 @@ export const endpoints = {
     reject: (id: any) => `/project/${id}/cancel`,
     request_edit: (id: any) => `/project/${id}/request-edit`,
   },
+  estimate: {
+    list: '/estimate',
+    create: '/estimate',
+    update: (id: any) => `/estimate/${id}`,
+    details: (id: any) => `/estimate/${id}`,
+    delete_one: (id: any) => `/estimate/${id}`,
+    delete_many: '/estimate',
+    approve: (id: any) => `/estimate/${id}/approve`,
+    reject: (id: any) => `/estimate/${id}/cancel`,
+    request_edit: (id: any) => `/estimate/${id}/request-edit`,
+  },
 };

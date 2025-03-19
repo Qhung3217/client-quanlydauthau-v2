@@ -2,7 +2,7 @@
 
 import type { SWRConfiguration } from 'swr';
 import type { IReqSearchParams } from 'src/types/request';
-import type { Project, ProjectStatus } from 'src/types/project';
+import type { Estimate, EstimateDetails } from 'src/types/estimate';
 import type { IApiListResponse, IApiGetOneResponse } from 'src/types/response';
 
 import useSWR from 'swr';
@@ -11,7 +11,7 @@ import { useMemo } from 'react';
 import { fetcher, endpoints } from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
-const ENDPOINT = endpoints.project;
+const ENDPOINT = endpoints.estimate;
 
 const swrOptions: SWRConfiguration = {
   revalidateIfStale: false,
@@ -20,12 +20,11 @@ const swrOptions: SWRConfiguration = {
 };
 
 // ----------------------------------------------------------------------
-export type IProjectsRes = IApiListResponse<Project[]>;
+export type EstimatesRes = IApiListResponse<Estimate[]>;
 
-export function useGetProjects(
+export function useGetEstimates(
   params?: IReqSearchParams & {
-    statuses?: ProjectStatus;
-    isMyProjects?: boolean;
+    projectId?: string;
   }
 ) {
   const url = [ENDPOINT.list, { params }];
@@ -36,17 +35,17 @@ export function useGetProjects(
     error,
     isValidating,
     mutate: APIMutate,
-  } = useSWR<IProjectsRes>(url, fetcher, swrOptions);
+  } = useSWR<EstimatesRes>(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      projects: data?.response?.data || [],
-      projectsMeta: data?.response?.meta,
-      projectsLoading: isLoading,
-      projectsError: error,
-      projectsValidating: isValidating,
-      projectsEmpty: !isLoading && !isValidating && !data?.response?.data.length,
-      projectsMutate: APIMutate,
+      estimates: data?.response?.data || [],
+      estimatesMeta: data?.response?.meta,
+      estimatesLoading: isLoading,
+      estimatesError: error,
+      estimatesValidating: isValidating,
+      estimatesEmpty: !isLoading && !isValidating && !data?.response?.data.length,
+      estimatesMutate: APIMutate,
     }),
     [data?.response?.data, data?.response?.meta, error, isLoading, isValidating, APIMutate]
   );
@@ -56,7 +55,7 @@ export function useGetProjects(
 
 // ----------------------------------------------------------------------
 
-export function useGetProject(id: string) {
+export function useGetEstimate(id: string) {
   const url = id ? ENDPOINT.details(id) : '';
 
   const {
@@ -65,19 +64,19 @@ export function useGetProject(id: string) {
     error,
     isValidating,
     mutate: APIMutate,
-  } = useSWR<IApiGetOneResponse<Project>>(url, fetcher, {
+  } = useSWR<IApiGetOneResponse<EstimateDetails>>(url, fetcher, {
     revalidateOnMount: true,
     revalidateIfStale: true,
   });
 
   const memoizedValue = useMemo(
     () => ({
-      project: data?.response,
-      projectLoading: isLoading,
-      projectEmpty: !isLoading && !isValidating && !data?.response?.id,
-      projectError: error,
-      projectValidating: isValidating,
-      projectMutate: APIMutate,
+      estimate: data?.response,
+      estimateLoading: isLoading,
+      estimateEmpty: !isLoading && !isValidating && !data?.response?.id,
+      estimateError: error,
+      estimateValidating: isValidating,
+      estimateMutate: APIMutate,
     }),
     [data?.response, error, isLoading, isValidating, APIMutate]
   );
