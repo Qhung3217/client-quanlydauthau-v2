@@ -4,7 +4,7 @@ import { useAuthContext } from './use-auth-context';
 
 // Define base type for access roles
 type AccessRole = {
-  [K: string]: string;
+  [K: string]: string | string[];
 };
 
 // Create mapped type for the return type based on input keys
@@ -20,7 +20,10 @@ export default function useCheckPermission<T extends AccessRole>(
   const permissionKeys = Object.keys(accessRole);
 
   const result = permissionKeys.reduce((acc, key: keyof T) => {
-    acc[key] = permissions.includes(accessRole[key]);
+    acc[key] = Array.isArray(accessRole[key])
+      ? permissions.some((per) => accessRole[key].includes(per))
+      : permissions.includes(accessRole[key]);
+
     return acc;
   }, {} as PermissionResult<T>);
 
