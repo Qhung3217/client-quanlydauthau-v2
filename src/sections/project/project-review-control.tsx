@@ -6,7 +6,7 @@ import { useBoolean } from 'minimal-shared/hooks';
 
 import { Box, Step, Paper, Button, Stepper, Tooltip, StepLabel, Typography } from '@mui/material';
 
-import { PROJECT_STATUS } from 'src/constants/project';
+import { PUBLIC_PROJECT_STATUS } from 'src/constants/project';
 import { getProjectStatusConfig } from 'src/helpers/get-project-status-label';
 import { rejectProject, approveProject, requestEditProject } from 'src/actions/project-ssr';
 
@@ -64,11 +64,11 @@ export default function ProjectReviewControl({ project }: Props) {
   const projectStatusRender = () => (
     <Box>
       <Stepper
-        activeStep={PROJECT_STATUS.indexOf(project.status)}
+        activeStep={PUBLIC_PROJECT_STATUS.indexOf(project.status)}
         alternativeLabel
         // orientation="vertical"
       >
-        {PROJECT_STATUS.map((status) => {
+        {PUBLIC_PROJECT_STATUS.map((status) => {
           const config = getProjectStatusConfig(status);
           const isActive = project.status === status;
           return (

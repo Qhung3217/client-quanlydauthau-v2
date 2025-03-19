@@ -6,7 +6,7 @@ import { Tab, Tabs } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
-import { PROJECT_STATUS, PUBLIC_PROJECT_STATUS } from 'src/constants/project';
+import { PROJECT_STATUS } from 'src/constants/project';
 
 type ProjectStatusTab = ProjectStatus | 'ALL';
 type Props = {
@@ -54,50 +54,48 @@ export default function ProjectStatusTab({ status, onChange }: Props) {
         },
       }}
     >
-      {(['ALL', ...(isHomePage ? PUBLIC_PROJECT_STATUS : PROJECT_STATUS)] as any).map(
-        (tab: ProjectStatusTab) => {
-          let renderLabel = 'Tất cả';
+      {(['ALL', ...PROJECT_STATUS] as any).map((tab: ProjectStatusTab) => {
+        let renderLabel = 'Tất cả';
 
-          switch (tab) {
-            case 'ALL':
-              renderLabel = 'Tất cả';
-              break;
-            case 'PENDING':
-              renderLabel = 'Chờ duyệt';
-              break;
-            case 'APPROVED':
-              renderLabel = 'Đã duyệt';
-              break;
-            case 'QUOTED':
-              renderLabel = 'Đã duyệt báo giá';
-              break;
-            case 'EDIT_REQUESTED':
-              renderLabel = 'Yêu cầu điều chỉnh';
-              break;
-            case 'BUDGET_APPROVED':
-              renderLabel = 'Đã duyệt dự toán';
-              break;
-            case 'CANCELED':
-              renderLabel = 'Đã hủy';
-              break;
-            case 'COMPLETED':
-              renderLabel = 'Hoàn thành';
-              break;
-            default:
-              renderLabel = 'Tất cả';
-              break;
-          }
-          return (
-            <Tab
-              key={tab}
-              iconPosition="end"
-              value={tab}
-              label={renderLabel}
-              sx={{ textTransform: 'capitalize' }}
-            />
-          );
+        switch (tab) {
+          case 'ALL':
+            renderLabel = 'Tất cả';
+            break;
+          case 'PENDING':
+            renderLabel = 'Chờ duyệt';
+            break;
+          case 'APPROVED':
+            renderLabel = 'Đã duyệt';
+            break;
+          case 'QUOTED':
+            renderLabel = 'Đã duyệt báo giá';
+            break;
+          case 'EDIT_REQUESTED':
+            renderLabel = 'Yêu cầu điều chỉnh';
+            break;
+          case 'BUDGET_APPROVED':
+            renderLabel = 'Đã duyệt dự toán';
+            break;
+          case 'CANCELED':
+            renderLabel = 'Đã hủy';
+            break;
+          case 'COMPLETED':
+            renderLabel = 'Hoàn thành';
+            break;
+          default:
+            renderLabel = 'Tất cả';
+            break;
         }
-      )}
+        return (
+          <Tab
+            key={tab}
+            iconPosition="end"
+            value={tab}
+            label={renderLabel}
+            sx={{ textTransform: 'capitalize' }}
+          />
+        );
+      })}
     </Tabs>
   );
 }
