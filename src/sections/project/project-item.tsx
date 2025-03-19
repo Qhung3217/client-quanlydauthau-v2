@@ -48,13 +48,16 @@ export default function ProjectItem({
     rejectPermit,
     requestEditPermit,
     createEstimatePermit,
+    viewEstimatePermit,
   } = useProjectActionPermit(project.status);
 
   const labelConfig = getProjectStatusConfig(project.status);
 
+  const isEstimated = project._count.estimates > 0;
+
   const renderMenuActions = () =>
     (editClick || deleteClick || approveClick || rejectClick) &&
-    (editPermit || deletePermit || approvePermit || rejectPermit) && (
+    (editPermit || deletePermit || approvePermit || rejectPermit || viewEstimatePermit) && (
       <CustomPopover
         open={menuActions.open}
         anchorEl={menuActions.anchorEl}
@@ -84,16 +87,28 @@ export default function ProjectItem({
               Hủy dự án
             </MenuItem>
           )}
-          {createEstimatePermit && (
+          {!isEstimated && createEstimatePermit && (
             <MenuItem
               onClick={() => {
                 menuActions.onClose();
               }}
               component={RouterLink}
-              href={paths.project.estimate(project.id)}
+              href={paths.estimate.details(project.id)}
             >
               <Iconify icon="mdi:paper-edit-outline" sx={{ color: 'info.darker' }} />
               Nhập dự toán
+            </MenuItem>
+          )}
+          {isEstimated && viewEstimatePermit && (
+            <MenuItem
+              onClick={() => {
+                menuActions.onClose();
+              }}
+              component={RouterLink}
+              href={paths.estimate.details(project.estimates?.at(0)?.id)}
+            >
+              <Iconify icon="mage:file-3" sx={{ color: 'info' }} />
+              Xem dự toán
             </MenuItem>
           )}
           {requestEditPermit && requestEditClick && (

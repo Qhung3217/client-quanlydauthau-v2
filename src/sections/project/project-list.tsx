@@ -8,10 +8,13 @@ import { Box, Switch, Pagination, FormControlLabel, paginationClasses } from '@m
 
 import { useGetProjects } from 'src/actions/project';
 import { deleteProject } from 'src/actions/project-ssr';
+import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { EmptyContent } from 'src/components/empty-content';
 import TableQuickFilter from 'src/components/data-table/table-quick-filter';
 import DeleteConfirmDialog from 'src/components/data-table/delete-confirm-dialog';
+
+import { useCheckPermission } from 'src/auth/hooks';
 
 import ProjectItem from './project-item';
 import ProjectStatusTab from './project-status-tab';
@@ -34,6 +37,14 @@ export default function ProjectList() {
   const showMine = useBoolean();
 
   const deleting = useBoolean();
+
+  const { PROJECT_PERMIT } = useCheckPermission({
+    PROJECT_PERMIT: [
+      PERMISSION_ENUM.CREATE_PROJECT,
+      PERMISSION_ENUM.DELETE_PROJECT,
+      PERMISSION_ENUM.UPDATE_PROJECT,
+    ],
+  });
 
   const { onApprove, onReject, onRequestEdit, renderConfirmDialog } = useProjectActions();
 
@@ -95,17 +106,19 @@ export default function ProjectList() {
         }}
       >
         <TableQuickFilter value={query} onChange={setQuery} onReset={() => setQuery('')} />
-        <Box>
-          <FormControlLabel
-            control={<Switch />}
-            label="Chỉ hiện đã tạo"
-            value={showMine.value}
-            onChange={showMine.onToggle}
-            sx={{
-              userSelect: 'none',
-            }}
-          />
-        </Box>
+        {PROJECT_PERMIT && (
+          <Box>
+            <FormControlLabel
+              control={<Switch />}
+              label="Chỉ hiện đã tạo"
+              value={showMine.value}
+              onChange={showMine.onToggle}
+              sx={{
+                userSelect: 'none',
+              }}
+            />
+          </Box>
+        )}
       </Box>
       <ProjectStatusTab status={status} onChange={setStatus} />
       <Box

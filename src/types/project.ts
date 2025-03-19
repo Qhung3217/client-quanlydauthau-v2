@@ -22,7 +22,20 @@ export type Project = {
   createdAt: string;
   inviter: Company;
   investor: Company;
+  estimates?: Array<{
+    id: string;
+    status: string;
+    projectId: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    creatorId: string;
+    updaterId: any;
+  }>;
   estimators: Creator[];
   priority?: Priority;
   creator: Creator;
+  _count: {
+    estimates: number;
+  };
 };

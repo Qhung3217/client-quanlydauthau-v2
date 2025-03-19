@@ -12,6 +12,7 @@ export default function useProjectActionPermit(status: string) {
     REJECT_PERMIT,
     REQUEST_EDIT_PERMIT,
     CREATE_ESTIMATE_PERMIT,
+    VIEW_ESTIMATE_PERMIT,
   } = useCheckPermission({
     EDIT_PERMIT: PERMISSION_ENUM.UPDATE_PROJECT,
     DELETE_PERMIT: PERMISSION_ENUM.DELETE_PROJECT,
@@ -19,6 +20,7 @@ export default function useProjectActionPermit(status: string) {
     REJECT_PERMIT: PERMISSION_ENUM.CANCEL_PROJECT,
     REQUEST_EDIT_PERMIT: PERMISSION_ENUM.REQUEST_EDIT_PROJECT,
     CREATE_ESTIMATE_PERMIT: PERMISSION_ENUM.CREATE_ESTIMATE,
+    VIEW_ESTIMATE_PERMIT: PERMISSION_ENUM.VIEW_ESTIMATE,
   });
 
   const editPermit = EDIT_PERMIT && status === 'EDIT_REQUESTED';
@@ -33,6 +35,8 @@ export default function useProjectActionPermit(status: string) {
 
   const createEstimatePermit = CREATE_ESTIMATE_PERMIT && status === 'APPROVED';
 
+  const viewEstimatePermit = VIEW_ESTIMATE_PERMIT;
+
   return {
     editPermit,
     deletePermit,
@@ -40,5 +44,6 @@ export default function useProjectActionPermit(status: string) {
     rejectPermit,
     requestEditPermit,
     createEstimatePermit,
+    viewEstimatePermit,
   };
 }
