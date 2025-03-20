@@ -5,7 +5,7 @@ import type { RHFAutocompleteProps } from 'src/components/hook-form';
 
 import { useFormContext } from 'react-hook-form';
 
-import { Box, Avatar, Checkbox, Typography } from '@mui/material';
+import { Box, Avatar, Typography } from '@mui/material';
 
 import { attachServerUrl } from 'src/utils/attach-server-url';
 
@@ -31,16 +31,14 @@ export default function UserAutocomplete({ name, ...others }: Props) {
       size="small"
       getOptionLabel={(option) => option.name}
       options={users}
+      filterOptions={(opts) => {
+        const selectedIds = new Set(selectedValue.map((s: any) => s.id));
+        return opts.filter((opt) => !selectedIds.has(opt.id));
+      }}
       loading={usersLoading}
       disableCloseOnSelect={others.multiple}
-      renderOption={(props, option: User, { selected }) => (
+      renderOption={(props, option: User) => (
         <Box component="li" sx={{ display: 'flex', alignItems: 'center', p: 1 }} {...props}>
-          {others.multiple && (
-            <Checkbox
-              checked={selectedValue.some((value: any) => option.id === value.id)}
-              sx={{ mr: 1 }}
-            />
-          )}
           <Avatar
             src={attachServerUrl(option.avatar)}
             alt={option.name}
