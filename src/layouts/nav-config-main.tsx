@@ -57,6 +57,12 @@ export const mainNavData: NavSectionProps['data'] = [
         icon: ICONS.folder,
         roles: [PERMISSION_ENUM.VIEW_PROJECT],
       },
+      {
+        title: 'Tất cả dự toán',
+        path: paths.estimate.root,
+        icon: ICONS.file,
+        roles: [PERMISSION_ENUM.VIEW_ESTIMATE],
+      },
       // {
       //   title: 'Báo giá của tôi',
       //   path: paths.dashboard.quotation.root,

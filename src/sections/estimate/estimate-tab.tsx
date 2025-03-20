@@ -1,15 +1,15 @@
-import type { ProjectStatus } from 'src/types/project';
+import type { EstimateStatus } from 'src/types/estimate';
 
 import { Tab, Tabs } from '@mui/material';
 
-import { PROJECT_STATUS } from 'src/constants/project';
+import { ESTIMATE_STATUSES } from 'src/constants/estimate';
 
-type ProjectStatusTab = ProjectStatus | 'ALL';
+type ProjectStatusTab = EstimateStatus | 'ALL';
 type Props = {
   status: ProjectStatusTab;
   onChange: (tab: ProjectStatusTab) => void;
 };
-export default function ProjectStatusTab({ status, onChange }: Props) {
+export default function EstimateStatusTab({ status, onChange }: Props) {
   return (
     <Tabs
       value={status}
@@ -49,7 +49,7 @@ export default function ProjectStatusTab({ status, onChange }: Props) {
         },
       }}
     >
-      {(['ALL', ...PROJECT_STATUS] as any).map((tab: ProjectStatusTab) => {
+      {(['ALL', ...ESTIMATE_STATUSES] as any).map((tab: ProjectStatusTab) => {
         let renderLabel = 'Tất cả';
 
         switch (tab) {
@@ -62,21 +62,15 @@ export default function ProjectStatusTab({ status, onChange }: Props) {
           case 'APPROVED':
             renderLabel = 'Đã duyệt';
             break;
-          case 'QUOTED':
-            renderLabel = 'Đã duyệt báo giá';
-            break;
+
           case 'EDIT_REQUESTED':
             renderLabel = 'Yêu cầu điều chỉnh';
             break;
-          case 'BUDGET_APPROVED':
-            renderLabel = 'Đã duyệt dự toán';
-            break;
+
           case 'CANCELED':
             renderLabel = 'Đã hủy';
             break;
-          case 'COMPLETED':
-            renderLabel = 'Hoàn thành';
-            break;
+
           default:
             renderLabel = 'Tất cả';
             break;

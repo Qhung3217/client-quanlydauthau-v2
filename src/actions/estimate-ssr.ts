@@ -114,3 +114,57 @@ export async function deleteEstimates(ids: string[]) {
     false
   );
 }
+// ----------------------------------------------------------------------
+
+export async function approveEstimate(id: string) {
+  /**
+   * Work on server
+   */
+
+  await axios.patch(ENDPOINT.approve(id));
+
+  /**
+   * Work in local
+   */
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    undefined,
+    true
+  );
+}
+// ----------------------------------------------------------------------
+
+export async function rejectEstimate(id: string) {
+  /**
+   * Work on server
+   */
+
+  await axios.patch(ENDPOINT.reject(id));
+
+  /**
+   * Work in local
+   */
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    undefined,
+    true
+  );
+}
+// ----------------------------------------------------------------------
+
+export async function requestEditEstimate(id: string) {
+  /**
+   * Work on server
+   */
+
+  await axios.patch(ENDPOINT.request_edit(id));
+
+  /**
+   * Work in local
+   */
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    undefined,
+    true
+  );
+}

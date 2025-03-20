@@ -35,3 +35,19 @@ export type Project = {
 export type ProjectDetails = Project & {
   estimates: EstimateDetails[];
 };
+
+export type ProjectEstimate = {
+  id: string;
+  name: string;
+  code: string;
+  address: string;
+  status: ProjectStatus;
+  estDeadline: string;
+  updatedAt: string;
+  createdAt: string;
+  inviter: Company;
+  investor: Company;
+
+  priority?: Priority;
+  creator: Creator;
+};

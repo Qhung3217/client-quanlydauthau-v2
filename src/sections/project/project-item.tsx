@@ -192,7 +192,7 @@ export default function ProjectItem({
               sx={[
                 (theme) => ({
                   ...theme.mixins.maxLine({ line: 2 }),
-                  color: 'primary.main',
+                  color: 'primary.darker',
                 }),
               ]}
             >
