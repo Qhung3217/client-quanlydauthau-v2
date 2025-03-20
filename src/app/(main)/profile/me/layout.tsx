@@ -41,13 +41,13 @@ export default function Layout({ children }: Props) {
 
   return (
     <RoleBasedGuard
-      acceptRoles={[PERMISSION_ENUM.CHANGE_MY_PASSWORD]}
+      acceptRoles={[PERMISSION_ENUM.UPDATE_MY_PROFILE]}
       currentRole={user?.permissions}
       hasContent
     >
       <MainContent>
         <Typography variant="h6" sx={{ mb: 3 }}>
-          Đổi mật khẩu
+          Hồ sơ của tôi
         </Typography>
         <Tabs value={removeLastSlash(pathname)} sx={{ mb: { xs: 3, md: 5 } }}>
           {NAV_ITEMS.map((tab) => (

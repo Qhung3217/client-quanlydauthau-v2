@@ -5,7 +5,7 @@ import { m } from 'framer-motion';
 import NoSsr from '@mui/material/NoSsr';
 import Avatar from '@mui/material/Avatar';
 import SvgIcon from '@mui/material/SvgIcon';
-import IconButton from '@mui/material/IconButton';
+import { Box, Typography } from '@mui/material';
 
 import { varTap, varHover, AnimateBorder, transitionTap } from 'src/components/animate';
 
@@ -14,9 +14,11 @@ import { varTap, varHover, AnimateBorder, transitionTap } from 'src/components/a
 export type AccountButtonProps = IconButtonProps & {
   photoURL: string;
   displayName: string;
+  name: string;
+  roleName: string
 };
 
-export function AccountButton({ photoURL, displayName, sx, ...other }: AccountButtonProps) {
+export function AccountButton({ photoURL, displayName, name, roleName, sx, ...other }: AccountButtonProps) {
   const renderFallback = () => (
     <Avatar
       sx={[
@@ -39,13 +41,25 @@ export function AccountButton({ photoURL, displayName, sx, ...other }: AccountBu
   );
 
   return (
-    <IconButton
+    <Box
       component={m.button}
       whileTap={varTap(0.96)}
       whileHover={varHover(1.04)}
       transition={transitionTap()}
       aria-label="Account button"
-      sx={[{ p: 0 }, ...(Array.isArray(sx) ? sx : [sx])]}
+      sx={[
+        {
+          p: 0,
+          display: "flex",
+          border: "none",
+          bgcolor: "#fff",
+          cursor: "pointer",
+          ":hover": { bgcolor: "grey.300" },
+          padding: 1,
+          borderRadius: 1
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
       {...other}
     >
       <NoSsr fallback={renderFallback()}>
@@ -61,6 +75,14 @@ export function AccountButton({ photoURL, displayName, sx, ...other }: AccountBu
           </Avatar>
         </AnimateBorder>
       </NoSsr>
-    </IconButton>
+      <Box display="flex" flexDirection="column" marginLeft={1}>
+        <Typography variant="subtitle2" noWrap>
+          {name}
+        </Typography>
+        <Typography variant="caption">
+          ({roleName})
+        </Typography>
+      </Box>
+    </Box>
   );
 }

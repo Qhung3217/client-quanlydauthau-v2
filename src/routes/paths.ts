@@ -60,7 +60,7 @@ export const paths = {
     details: (id: any) => `/estimate/${id}`,
   },
   profile: {
-    change_password: `/change-password`,
-    me: `/me`,
+    change_password: `/profile/change-password`,
+    me: `/profile/me`,
   },
 };

@@ -14,8 +14,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import { usePathname } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+
+import { attachServerUrl } from 'src/utils/attach-server-url';
 
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
@@ -38,7 +40,6 @@ export type AccountDrawerProps = IconButtonProps & {
 };
 
 export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
-  const pathname = usePathname();
 
   const { user } = useAuthContext();
 
@@ -51,7 +52,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
         primaryBorder: { size: 120, sx: { color: 'primary.main' } },
       }}
     >
-      <Avatar src={user?.avatar} alt={user?.name} sx={{ width: 1, height: 1 }}>
+      <Avatar src={attachServerUrl(user?.avatar)} alt={user?.name} sx={{ width: 1, height: 1 }}>
         {user?.name?.charAt(0).toUpperCase()}
       </Avatar>
     </AnimateBorder>
@@ -73,7 +74,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
       <MenuItem>
         <Link
           component={RouterLink}
-          href="/profile/"
+          href={paths.profile.me}
           color="inherit"
           underline="none"
           onClick={onClose}
@@ -97,7 +98,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
       <MenuItem>
         <Link
           component={RouterLink}
-          href="/profile/change-password"
+          href={paths.profile.change_password}
           color="inherit"
           underline="none"
           onClick={onClose}
@@ -125,8 +126,10 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
     <>
       <AccountButton
         onClick={onOpen}
-        photoURL={user?.avatar}
+        photoURL={attachServerUrl(user?.avatar)}
         displayName={user?.name || ""}
+        name={user?.name || ""}
+        roleName={user?.role?.name || ""}
         sx={sx}
         {...other}
       />
