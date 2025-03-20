@@ -47,7 +47,6 @@ export type ProjectEstimate = {
   createdAt: string;
   inviter: Company;
   investor: Company;
-
   priority?: Priority;
   creator: Creator;
 };

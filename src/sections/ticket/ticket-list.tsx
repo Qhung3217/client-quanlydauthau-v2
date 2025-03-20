@@ -3,12 +3,8 @@ import type { Ticket } from 'src/types/ticket';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
-import { useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import { Button, Pagination } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import useDebounceCallback from 'src/hooks/use-debounce-callback';
@@ -26,12 +22,9 @@ import { TicketItemSkeleton } from './ticket-nav-skeleton';
 type Props = {
   isEmpty: boolean;
   loading: boolean;
-  openTicket: boolean;
   tickets: Ticket[];
   selectedTicketId: string;
-  selectedLabelId: string;
-  onCloseTicket: () => void;
-  onClickTicket: (id: string) => void;
+  onClickTicket: (ticket: Ticket) => void;
   setKeywordSearch: (keyword: string) => void;
   page: number;
   totalPages: number;
@@ -43,20 +36,14 @@ export function TicketList({
   isEmpty,
   loading,
   tickets,
-  openTicket,
-  onCloseTicket,
   onClickTicket,
   selectedTicketId,
-  selectedLabelId,
   setKeywordSearch,
   page,
   totalPages,
   handlePageChange,
   onToggleCompose,
 }: Props) {
-  const theme = useTheme();
-  const mdUp = useMediaQuery(theme.breakpoints.up('md'));
-
   const debouncedSetKeyword = useDebounceCallback((value: string) => setKeywordSearch(value), 500);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +69,7 @@ export function TicketList({
     isEmpty ? (
       renderEmpty()
     ) : (
-      <Box sx={{ flex: '1 1 0' }}>
+      <Box sx={{ flex: '1 1 auto' }}>
         <Box
           component="ul"
           sx={{
@@ -93,8 +80,6 @@ export function TicketList({
             height: {
               xs: 'calc(100vh - 130px)',
               sm: 'calc(100vh - 180px)',
-              md: '600px',
-              lg: '600px',
             },
             scrollbarWidth: 'none',
             '-ms-overflow-style': 'none',
@@ -114,7 +99,7 @@ export function TicketList({
               key={index}
               ticket={ticket}
               selected={selectedTicketId === ticket.id}
-              onClick={() => onClickTicket(ticket.id)}
+              onClick={() => onClickTicket(ticket)}
             />
           ))}
         </Box>
@@ -160,30 +145,10 @@ export function TicketList({
 
   const renderContent = () => (
     <>
-      <Stack sx={{ p: 2 }}>
-        {!mdUp && (
-          <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
-            {selectedLabelId}
-          </Typography>
-        )}
-        {renderSearchBar()}
-      </Stack>
+      <Stack sx={{ p: 2 }}>{renderSearchBar()}</Stack>
 
       {loading ? renderLoading() : renderList()}
     </>
   );
-  return (
-    <>
-      {renderContent()}
-
-      <Drawer
-        open={openTicket}
-        onClose={onCloseTicket}
-        slotProps={{ backdrop: { invisible: true } }}
-        PaperProps={{ sx: { width: 320 } }}
-      >
-        {renderContent()}
-      </Drawer>
-    </>
-  );
+  return <>{renderContent()}</>;
 }

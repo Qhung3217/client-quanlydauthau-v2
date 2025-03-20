@@ -12,7 +12,7 @@ export const getTicketStatusConfig = (value: string) => {
       };
     case 'RESOLVED':
       return {
-        color: 'default',
+        color: 'info',
         label: 'Đã xử lý',
       };
     case 'CLOSED':
