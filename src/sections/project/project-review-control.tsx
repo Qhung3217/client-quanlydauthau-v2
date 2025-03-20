@@ -22,23 +22,18 @@ const getDialogContent = (action: string) => {
     case 'APPROVED':
       return {
         message: 'Bạn có chắc chắn muốn duyệt dự án này?',
-        subtitle: 'Dự án sẽ được công khai và nhận báo giá.',
+        subtitle: 'Sau khi duyệt, dự án sẽ bắt đầu được nhận dự toán.',
       };
     case 'CANCELED':
       return {
         message: 'Bạn có chắc chắn muốn hủy dự án này?',
         subtitle: 'Sau khi hủy dự án sẽ không thể cập nhật lại trạng thái dự án.',
       };
-    case 'REQUESTED_EDIT':
+    case 'EDIT_REQUESTED':
       return {
-        message: 'Bạn có chắc chắn muốn bật yêu cầu chỉnh sửa dự án này?',
+        message: 'Bạn có chắc chắn muốn Yêu cầu điều chỉnh dự án này?',
         subtitle:
-          'Sau khi bật yêu cầu chỉnh sửa, dự án có thể được điều chỉnh khi ở trạng thái chờ duyệt và báo giá có thể được điều chỉnh.',
-      };
-    case 'CANCEL_REQUESTED_EDIT':
-      return {
-        message: 'Bạn có chắc chắn muốn tắt yêu cầu chỉnh sửa dự án này?',
-        subtitle: 'Sau khi tắt yêu cầu chỉnh sửa chủ dự án sẽ không thể cập nhật dự án.',
+          'Sau khi xác nhận, dự án có thể được điều chỉnh.',
       };
     case 'COMPLETED':
       return {
@@ -69,36 +64,15 @@ export default function ProjectReviewControl({ project }: Props) {
       <Stepper
         activeStep={PUBLIC_PROJECT_STATUS.indexOf(project.status)}
         alternativeLabel
-        // orientation="vertical"
       >
         {PUBLIC_PROJECT_STATUS.map((status) => {
           const config = getProjectStatusConfig(status);
-          const isActive = project.status === status;
           return (
             <Step key={status}>
               <Tooltip
-                title={
-                  project.status === 'EDIT_REQUESTED' && isActive
-                    ? `${config.desc} đang đợi điều chỉnh`
-                    : config.desc
-                }
+                title={config.desc}
               >
-                <StepLabel
-                  sx={{
-                    '& .MuiStepIcon-root': {
-                      color:
-                        project.status === 'EDIT_REQUESTED' && isActive
-                          ? 'warning.main'
-                          : 'success',
-                    },
-                    '& .MuiStepLabel-label': {
-                      color:
-                        project.status === 'EDIT_REQUESTED' && isActive
-                          ? 'warning.main'
-                          : 'success',
-                    },
-                  }}
-                >
+                <StepLabel>
                   {config.label}
                 </StepLabel>
               </Tooltip>
@@ -125,7 +99,6 @@ export default function ProjectReviewControl({ project }: Props) {
           await requestEditProject(project.id);
           toast.success('Cập nhật thành công');
           break;
-
         default:
           toast.error('Đã có lỗi xảy ra.');
           break;
@@ -193,56 +166,19 @@ export default function ProjectReviewControl({ project }: Props) {
               Duyệt dự án
             </Button>
           )}
-          {/* {APPROVE_PERMIT && project.status === 'APPROVED' && (
-             <Button
-               variant="contained"
-               color="inherit"
-               startIcon={<Iconify icon="material-symbols:group-outline-rounded" width={24} />}
-               onClick={showApproveForm.onTrue}
-             >
-               Hạn chế đấu thầu
-             </Button>
-           )} */}
-
-          {/* {ADMIN_VIEW_QUOTATION_PERMIT && (
-             <Button
-               variant="contained"
-               color="info"
-               sx={{ color: 'white' }}
-               startIcon={
-                 <Iconify
-                   icon="material-symbols:list-alt-outline-rounded"
-                   width={24}
-                   color="white"
-                 />
-               }
-               onClick={toggleQuotationsDrawer(true)}
-             >
-               Xem danh sách báo giá
-             </Button>
-           )} */}
-
           {requestEditPermit && (
             <Button
               variant="contained"
               color="warning"
               sx={{ color: 'white' }}
               startIcon={
-                project.status === 'EDIT_REQUESTED' ? (
-                  <Iconify icon="material-symbols:edit-off-sharp" width={24} color="white" />
-                ) : (
-                  <Iconify icon="material-symbols:edit-outline-sharp" color="white" width={24} />
-                )
+                <Iconify icon="material-symbols:edit-outline-sharp" width={24} color="white" />
               }
               onClick={() =>
-                handleAction(
-                  project.status === 'EDIT_REQUESTED' ? 'CANCEL_REQUESTED_EDIT' : 'REQUESTED_EDIT'
-                )
+                handleAction('EDIT_REQUESTED')
               }
             >
-              {project.status === 'EDIT_REQUESTED'
-                ? 'Tắt yêu cầu điều chỉnh'
-                : 'Bật yêu cầu điều chỉnh'}
+              Yêu cầu điều chỉnh
             </Button>
           )}
 
@@ -294,7 +230,8 @@ export default function ProjectReviewControl({ project }: Props) {
           </>
         }
         action={
-          <LoadingButton loading={processing.value} variant="contained" onClick={handleConfirmAction}>            Xác nhận
+          <LoadingButton loading={processing.value} variant="contained" onClick={handleConfirmAction}>
+            Xác nhận
           </LoadingButton>
         }
       />

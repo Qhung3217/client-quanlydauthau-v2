@@ -147,7 +147,6 @@ export async function requestEditProject(id: string) {
   /**
    * Work on server
    */
-
   await axios.patch(ENDPOINT.request_edit(id));
 
   /**
