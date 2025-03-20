@@ -1,6 +1,7 @@
 import type { Project } from 'src/types/project';
 
 import {
+  Box,
   List,
   Table,
   styled,
@@ -18,6 +19,9 @@ import { fDate } from 'src/utils/format-time';
 import { attachServerUrl } from 'src/utils/attach-server-url';
 
 import { PERMISSION_ENUM } from 'src/constants/permission';
+import { getProjectStatusConfig } from 'src/helpers/get-project-status-label';
+
+import { Label } from 'src/components/label';
 
 import { useCheckPermission } from 'src/auth/hooks';
 
@@ -40,6 +44,8 @@ export default function ProjectTableInfo({ project }: Props) {
     REJECT_PERMIT: PERMISSION_ENUM.CANCEL_PROJECT,
   });
 
+  const labelConfig = getProjectStatusConfig(project.status);
+
   const isShowEstimator = APPROVE_PERMIT || REJECT_PERMIT;
 
   return (
@@ -55,6 +61,16 @@ export default function ProjectTableInfo({ project }: Props) {
           <StyledTableRow>
             <StyledTableHeaderCell>Mã dự án</StyledTableHeaderCell>
             <TableCell align="left">#{project?.code}</TableCell>
+          </StyledTableRow>
+          <StyledTableRow>
+            <StyledTableHeaderCell>Trạng thái dự án</StyledTableHeaderCell>
+            <TableCell align="left">
+              <Box>
+                <Label variant="soft" color={labelConfig.color} {...labelConfig?.otherProps}>
+                  {labelConfig.label}
+                </Label>
+              </Box>
+            </TableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableHeaderCell>Tên dự án</StyledTableHeaderCell>
@@ -74,11 +90,11 @@ export default function ProjectTableInfo({ project }: Props) {
             <TableCell align="left">{project?.address || 'Không có'}</TableCell>
           </StyledTableRow>
           <StyledTableRow>
-            <StyledTableHeaderCell>Ngày đăng tải thông báo</StyledTableHeaderCell>
+            <StyledTableHeaderCell>Ngày đăng tải</StyledTableHeaderCell>
             <TableCell align="left">{fDate(project?.createdAt, 'DD/MM/YYYY')}</TableCell>
           </StyledTableRow>
           <StyledTableRow>
-            <StyledTableHeaderCell>Thời điểm đóng thầu</StyledTableHeaderCell>
+            <StyledTableHeaderCell>Hạn đóng dự toán</StyledTableHeaderCell>
             <TableCell align="left">{fDate(project?.estDeadline)}</TableCell>
           </StyledTableRow>
           {isShowEstimator && (

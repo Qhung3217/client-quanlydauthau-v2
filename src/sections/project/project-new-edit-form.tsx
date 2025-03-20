@@ -49,10 +49,10 @@ export const ProjectSchema = zod.object({
   priorityId: zod.string(),
   estDeadline: zod
     .string({
-      required_error: 'Hạn chót dự kiến là bắt buộc',
+      required_error: 'Hạn đóng dự toán dự kiến là bắt buộc',
     })
     .refine((date) => new Date(date) > new Date(), {
-      message: 'Hạn chót phải là ngày trong tương lai',
+      message: 'Hạn đóng dự toán phải là ngày trong tương lai',
     }),
   estimatorIds: zod.array(zod.any()).min(1, 'Phải có ít nhất một người dự toán'),
 });
@@ -155,20 +155,6 @@ export function ProjectNewEditForm({ currentRecord, loading }: Props) {
         <BlockField label="Địa chỉ" required>
           <Field.Text name="address" size="small" />
         </BlockField>
-
-        <BlockField label="Hạn chót" required>
-          <Field.DatePicker
-            desktopModeMediaQuery="lg"
-            reduceAnimations
-            disablePast
-            name="estDeadline"
-            slotProps={{
-              textField: {
-                size: 'small',
-              },
-            }}
-          />
-        </BlockField>
       </Stack>
     </Card>
   );
@@ -203,6 +189,20 @@ export function ProjectNewEditForm({ currentRecord, loading }: Props) {
             disabled={!!loading}
             multiple
             filterSelectedOptions
+          />
+        </BlockField>
+
+        <BlockField label="Hạn đóng dự toán" required>
+          <Field.DatePicker
+            desktopModeMediaQuery="lg"
+            reduceAnimations
+            disablePast
+            name="estDeadline"
+            slotProps={{
+              textField: {
+                size: 'small',
+              },
+            }}
           />
         </BlockField>
 

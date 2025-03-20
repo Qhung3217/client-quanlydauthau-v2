@@ -105,7 +105,7 @@ export default function ProjectItem({
                 menuActions.onClose();
               }}
               component={RouterLink}
-              href={paths.estimate.details(project.estimates?.at(0)?.id)}
+              href={paths.project.view_estimate(project.id)}
             >
               <Iconify icon="mage:file-3" sx={{ color: 'info' }} />
               Xem dự toán
@@ -182,11 +182,6 @@ export default function ProjectItem({
             <Label variant="soft" color={labelConfig.color} {...labelConfig?.otherProps}>
               {labelConfig.label}
             </Label>
-            {editPermit && (
-              <Label color="warning" variant="filled" sx={{ ml: 1 }}>
-                Yêu cầu điều chỉnh
-              </Label>
-            )}
           </Box>
         </Box>
 
@@ -238,15 +233,18 @@ export default function ProjectItem({
               <strong>Chủ đầu tư:</strong> {project.investor.name}
             </Typography>
             <Typography variant="body2">
-              <strong>Ngày đăng tải thông báo:</strong> {fDate(project.createdAt)}
+              <strong>Ngày đăng tải:</strong> {fDate(project.createdAt)}
             </Typography>
           </Stack>
           <Stack spacing={1}>
             <Typography variant="body2">
               <strong>Địa điểm:</strong> {project.address}
             </Typography>
-            <Typography variant="body2">
+            {/* <Typography variant="body2">
               <strong>Thời điểm đóng thầu:</strong> {fDate(project.estDeadline)}
+            </Typography> */}
+            <Typography variant="body2">
+              <strong>Hạn đóng dự toán:</strong> {fDate(project.estDeadline)}
             </Typography>
           </Stack>
         </Stack>
