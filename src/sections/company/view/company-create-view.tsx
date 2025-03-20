@@ -1,6 +1,6 @@
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -8,7 +8,7 @@ import { CompanyNewEditForm } from '../company-new-edit-form';
 
 export default function CompanyCreateView() {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Thêm đơn vị mới"
         links={[{ name: 'Đơn vị', href: paths.organization.root }, { name: 'Đơn vị mới' }]}
@@ -16,6 +16,6 @@ export default function CompanyCreateView() {
       />
 
       <CompanyNewEditForm />
-    </DashboardContent>
+    </MainContent>
   );
 }

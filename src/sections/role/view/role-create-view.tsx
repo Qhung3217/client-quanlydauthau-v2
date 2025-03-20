@@ -1,6 +1,6 @@
 import { paths } from 'src/routes/paths';
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
@@ -8,7 +8,7 @@ import { RoleNewEditForm } from '../role-new-edit-form';
 
 export default function RoleCreateView() {
   return (
-    <DashboardContent>
+    <MainContent>
       <CustomBreadcrumbs
         heading="Thêm nhóm quyền mới"
         links={[{ name: 'Nhóm quyền', href: paths.role.root }, { name: 'Nhóm quyền mới' }]}
@@ -16,6 +16,6 @@ export default function RoleCreateView() {
       />
 
       <RoleNewEditForm />
-    </DashboardContent>
+    </MainContent>
   );
 }

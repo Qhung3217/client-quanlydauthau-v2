@@ -16,27 +16,47 @@ export const paths = {
   },
   // MAIN
   root: '/',
+
   role: {
     root: `/role`,
     new: `/role/new`,
-    edit: (id: string) => `/role/${id}/edit`,
+    edit: (id: any) => `/role/${id}/edit`,
   },
   organization: {
     root: `/organization`,
     new: `/organization/new`,
-    edit: (id: string) => `/organization/${id}/edit`,
+    edit: (id: any) => `/organization/${id}/edit`,
+  },
+  ticket: {
+    root: `/ticket`,
+    details: (id: any) => `/ticket/${id}`,
   },
   user: {
     root: `/user`,
     new: `/user/new`,
-    edit: (id: string) => `/user/${id}/edit`,
+    edit: (id: any) => `/user/${id}/edit`,
   },
   product: {
     root: `/product`,
     new: `/product/new`,
-    edit: (id: string) => `/product/${id}/edit`,
+    edit: (id: any) => `/product/${id}/edit`,
+  },
+  project: {
+    root: `/project`,
+    new: `/project/new`,
+    edit: (id: any) => `/project/${id}/edit`,
+    estimate: (id: any) => `/project/${id}/estimate`,
+    view_estimate: (id: any) => `/project/${id}/view`,
+    details: (id: any) => `/project/${id}`,
   },
   priority: {
     root: `/priority`,
+  },
+  estimate: {
+    root: `/estimate`,
+    new: `/estimate/new`,
+    edit: (id: any) => `/estimate/${id}/edit`,
+    estimate: (id: any) => `/estimate/${id}/estimate`,
+    details: (id: any) => `/estimate/${id}`,
   },
 };

@@ -12,8 +12,8 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { useGetUsers } from 'src/actions/user';
+import { MainContent } from 'src/layouts/main';
 import { deleteUsers } from 'src/actions/user-ssr';
-import { DashboardContent } from 'src/layouts/dashboard';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Iconify } from 'src/components/iconify';
@@ -120,7 +120,7 @@ export default function UserListView() {
       .map((column) => column.field);
   return (
     <>
-      <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <MainContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <CustomBreadcrumbs
           heading="Danh sách tài khoản"
           links={[{ name: 'Tài khoản', href: paths.user.root }, { name: 'Danh sách' }]}
@@ -164,7 +164,7 @@ export default function UserListView() {
             },
           }}
         />
-      </DashboardContent>
+      </MainContent>
       <DeleteConfirmDialog
         open={confirmDialog.value}
         onClose={confirmDialog.onFalse}

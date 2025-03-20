@@ -46,7 +46,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiPagination']> = 
   })),
   standardColor: [
     {
-      props: ({ ownerState }) => ownerState.variant === 'soft' && ownerState.color === 'standard',
+      props: ({ ownerState }) => ownerState.variant === 'soft' && ownerState.color === 'primary',
       style: ({ theme }) => ({
         [`& .${paginationItemClasses.root}`]: {
           [`&.${paginationItemClasses.selected}`]: {
@@ -76,6 +76,7 @@ const MuiPagination: Components<Theme>['MuiPagination'] = {
         softVariant.colors,
       ].flat(),
     },
+
     /**
      * @variant text
      */
@@ -110,6 +111,11 @@ const MuiPagination: Components<Theme>['MuiPagination'] = {
         },
       },
     }),
+  },
+  defaultProps: {
+    shape: 'rounded',
+    color: 'primary',
+    variant: 'outlined',
   },
 };
 

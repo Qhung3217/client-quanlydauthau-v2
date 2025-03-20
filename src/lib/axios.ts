@@ -84,6 +84,15 @@ export const endpoints = {
     delete_one: (id: any) => `/role/${id}`,
     delete_many: '/role',
   },
+  ticket: {
+    list: '/ticket',
+    get_comments: (id: any) =>
+      `/ticket/${id}/comment?perPage=${Number.MAX_SAFE_INTEGER}&orderKey=createdAt&orderValue=asc`,
+    create: '/ticket',
+    create_comment: (id: any) => `/ticket/${id}/comment`,
+    update: (id: any) => `/ticket/${id}`,
+    details: (id: any) => `/ticket/${id}`,
+  },
   priority: {
     list: '/priority',
     create: '/priority',
@@ -91,5 +100,27 @@ export const endpoints = {
     details: (id: any) => `/priority/${id}`,
     delete_one: (id: any) => `/priority/${id}`,
     delete_many: '/priority',
+  },
+  project: {
+    list: '/project',
+    create: '/project',
+    update: (id: any) => `/project/${id}`,
+    details: (id: any) => `/project/${id}`,
+    delete_one: (id: any) => `/project/${id}`,
+    delete_many: '/project',
+    approve: (id: any) => `/project/${id}/approve`,
+    reject: (id: any) => `/project/${id}/cancel`,
+    request_edit: (id: any) => `/project/${id}/request-edit`,
+  },
+  estimate: {
+    list: '/estimate',
+    create: '/estimate',
+    update: (id: any) => `/estimate/${id}`,
+    details: (id: any) => `/estimate/${id}`,
+    delete_one: (id: any) => `/estimate/${id}`,
+    delete_many: '/estimate',
+    approve: (id: any) => `/estimate/${id}/approve`,
+    reject: (id: any) => `/estimate/${id}/cancel`,
+    request_edit: (id: any) => `/estimate/${id}/request-edit`,
   },
 };

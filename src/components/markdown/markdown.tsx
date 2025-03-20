@@ -24,6 +24,7 @@ export default function Markdown({ value, slotProps }: Props) {
             p: 0,
             m: 0,
           },
+          width: 1,
         }}
         dangerouslySetInnerHTML={{
           __html: value || 'Chưa có mô tả',

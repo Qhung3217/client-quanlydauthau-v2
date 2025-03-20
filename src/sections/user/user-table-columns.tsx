@@ -6,7 +6,7 @@ import { Box, Avatar, ListItemText } from '@mui/material';
 import { paths } from 'src/routes/paths';
 
 import { attachServerUrl } from 'src/utils/attach-server-url';
-import { getUserStatusConfig } from 'src/utils/get-user-status-config';
+import { getUserStatusConfig } from 'src/helpers/get-user-status-config';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';

@@ -27,15 +27,10 @@ export type User = {
 export type Creator = {
   id: string;
   name: string;
+  username: string;
   avatar: string;
   email: string;
   phone: string;
+  address: string;
   company: CompanyBasic;
-};
-
-export type UserBasic = {
-  id: string;
-  name: string;
-  phone: string;
-  avatar: string;
 };

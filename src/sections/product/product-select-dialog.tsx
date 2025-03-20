@@ -4,23 +4,33 @@ import type { DialogProps } from '@mui/material';
 import type { Product } from 'src/types/product';
 
 import { useState } from 'react';
-import { useDebounce } from 'minimal-shared/hooks';
+import { useBoolean, useDebounce } from 'minimal-shared/hooks';
 
 import {
   Box,
   Stack,
+  Table,
   Button,
   Dialog,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableBody,
   Typography,
   Pagination,
   DialogTitle,
   DialogActions,
   DialogContent,
   OutlinedInput,
+  TableContainer,
   CircularProgress,
 } from '@mui/material';
 
 import { useGetProducts } from 'src/actions/product';
+
+import { Markdown } from 'src/components/markdown';
+
+import ProductCreateDialog from './product-create-dialog';
 
 type Props = Omit<DialogProps, 'children' | 'onClose'> & {
   onClose: () => void;
@@ -33,6 +43,8 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
   const [inputText, setInputValue] = useState('');
 
   const inputValueDebounce = useDebounce(inputText, 500);
+
+  const openForm = useBoolean();
 
   const { products, productsLoading, productsMeta, productsEmpty } = useGetProducts({
     perPage: 20,
@@ -49,7 +61,12 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
       }}
       {...dialogProps}
     >
-      <DialogTitle>Chọn sản phẩm</DialogTitle>
+      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="inherit"> Chọn sản phẩm</Typography>
+        <Button onClick={openForm.onTrue} variant="soft" color="info">
+          Thêm sản phẩm
+        </Button>
+      </DialogTitle>
       <DialogContent>
         <Box sx={{ mb: 2 }}>
           <OutlinedInput
@@ -67,37 +84,41 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
         )}
         {!productsEmpty && (
           <>
-            <Stack>
-              {products.map((product) => (
-                <Stack
-                  key={product.id}
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  minWidth={0}
-                  minHeight={0}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'background.neutral',
-                    },
-                    py: 1,
-                    px: 1,
-                    borderRadius: 1,
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => onSelected(product)}
-                >
-                  <Box>
-                    <Typography variant="subtitle1">{product.name}</Typography>
-                    <Box
-                      dangerouslySetInnerHTML={{
-                        __html: product.desc,
+            <TableContainer>
+              <Table sx={{ minWidth: 300 }} stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell size="small">Sản phẩm</TableCell>
+                    <TableCell size="small">Mô tả</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {products.map((product) => (
+                    <TableRow
+                      key={product.id}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'background.neutral',
+                        },
+                        py: 1,
+                        px: 1,
+                        borderRadius: 1,
+                        cursor: 'pointer',
+                        border: `1px solid #f4f4f4`,
                       }}
-                      sx={{ maxHeight: 200, overflow: 'auto' }}
-                    />
-                  </Box>
-                </Stack>
-              ))}
-            </Stack>
+                      onClick={() => onSelected(product)}
+                    >
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>
+                        <Box width={1}>
+                          <Markdown value={product.desc} />
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
             <Pagination
               count={productsMeta?.totalPages || 0}
               page={page}
@@ -111,10 +132,10 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
             />
           </>
         )}
+        <ProductCreateDialog open={openForm.value} onClose={openForm.onFalse} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={dialogProps.onClose}>Hủy</Button>
-        <Button variant="contained">Chọn</Button>
+        <Button onClick={dialogProps.onClose}>Đóng</Button>
       </DialogActions>
     </Dialog>
   );

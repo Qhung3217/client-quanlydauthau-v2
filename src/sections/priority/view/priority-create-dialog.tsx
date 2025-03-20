@@ -31,7 +31,11 @@ export default function PriorityCreateDialog({ onClose, ...dialogProps }: Props)
       <DialogTitle>Tạo độ ưu tiên mới</DialogTitle>
 
       <DialogContent>
-        <PriorityCreateEditForm btnRef={submitRef} onSubmit={loading.onFalse} />
+        <PriorityCreateEditForm
+          btnRef={submitRef}
+          onSubmit={loading.onFalse}
+          onLoading={loading.setValue}
+        />
       </DialogContent>
 
       <DialogActions>
@@ -40,7 +44,6 @@ export default function PriorityCreateDialog({ onClose, ...dialogProps }: Props)
           loading={loading.value}
           onClick={() => {
             submitRef.current?.click();
-            loading.onTrue();
           }}
           variant="contained"
         >

@@ -35,7 +35,7 @@ export default function ProductDetailsDialog({ product, onClose, ...dialogProps 
         <Typography variant="h4">{product?.name}</Typography>
         <Box sx={{ mt: 1 }}>
           <Typography variant="subtitle1" sx={{ color: 'primary.darker' }}>
-            Đặc tính cơ sở/đề xuất
+            Mô tả
           </Typography>
           <Markdown
             value={product?.desc}

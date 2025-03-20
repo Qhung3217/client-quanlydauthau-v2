@@ -38,6 +38,7 @@ export default function PriorityEditDialog({ currentRecord, onClose, ...dialogPr
           btnRef={submitRef}
           onSubmit={loading.onFalse}
           currentRecord={currentRecord}
+          onLoading={loading.setValue}
         />
       </DialogContent>
 
@@ -47,7 +48,6 @@ export default function PriorityEditDialog({ currentRecord, onClose, ...dialogPr
           loading={loading.value}
           onClick={() => {
             submitRef.current?.click();
-            loading.onTrue();
           }}
           variant="contained"
         >

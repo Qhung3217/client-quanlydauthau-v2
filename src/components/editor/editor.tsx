@@ -34,7 +34,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>((props, ref) => {
     editable = true,
     fullItem = false,
     value: content = '',
-    placeholder = 'Write something awesome...',
+    placeholder = 'Mô tả...',
     ...other
   } = props;
 
@@ -79,10 +79,17 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>((props, ref) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (editor?.isEmpty && content !== '<p></p>') {
-        editor.commands.setContent(content);
+      // if (editor?.isEmpty && content !== '<p></p>') {
+      //   editor.commands.setContent(content);
+      // }
+      if (!editor) return;
+
+      const currentContent = editor.getHTML();
+      // Chỉ cập nhật nếu nội dung mới khác với nội dung hiện tại
+      if (content !== currentContent) {
+        editor.commands.setContent(content || '<p></p>');
       }
-    }, 100);
+    }, 200);
     return () => clearTimeout(timer);
   }, [content, editor]);
 

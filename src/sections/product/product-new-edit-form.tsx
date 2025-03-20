@@ -32,7 +32,7 @@ export const NewProductSchema = zod.object({
   name: zod.string().min(1, { message: 'Tên sản phẩm là bắt buộc!' }),
 
   //
-  desc: zod.string().min(1, { message: 'Đặc tính cơ sở/đề xuất là bắt buộc!' }),
+  desc: zod.string().min(1, { message: 'Mô tả là bắt buộc!' }),
 });
 
 // ----------------------------------------------------------------------
@@ -40,9 +40,18 @@ export const NewProductSchema = zod.object({
 type Props = {
   currentRecord?: Product;
   loading?: boolean;
+  btnRef?: React.RefObject<HTMLButtonElement>;
+  onSubmit?: () => void;
+  onLoading?: (loading: boolean) => void;
 };
 
-export function ProductNewEditForm({ currentRecord, loading }: Props) {
+export function ProductNewEditForm({
+  currentRecord,
+  loading,
+  btnRef,
+  onSubmit: emitSubmit,
+  onLoading,
+}: Props) {
   const router = useRouter();
 
   const checkingCode = useBoolean();
@@ -75,6 +84,7 @@ export function ProductNewEditForm({ currentRecord, loading }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      onLoading?.(true);
       if (!isEdit) {
         await createProduct(data);
 
@@ -86,8 +96,11 @@ export function ProductNewEditForm({ currentRecord, loading }: Props) {
         router.push(paths.product.root);
       }
       reset();
+      emitSubmit?.();
     } catch (error: any) {
       console.error(error);
+    } finally {
+      onLoading?.(false);
     }
   });
 
@@ -102,7 +115,7 @@ export function ProductNewEditForm({ currentRecord, loading }: Props) {
           <Field.Text name="name" size="small" disabled={loading} />
         </BlockField>
 
-        <BlockField label="Đặc tính cơ sở/đề xuất" required>
+        <BlockField label="Mô tả" required>
           <Field.Editor name="desc" />
         </BlockField>
       </Stack>
@@ -118,16 +131,27 @@ export function ProductNewEditForm({ currentRecord, loading }: Props) {
         alignItems: 'center',
       }}
     >
-      <LoadingButton
-        type="submit"
-        variant="contained"
-        size="large"
-        loading={isSubmitting || loading}
-        disabled={loading || checkingCode.value}
-        sx={{ ml: 'auto' }}
-      >
-        {!isEdit ? 'Thêm sản phẩm' : 'Lưu thay đổi'}
-      </LoadingButton>
+      {btnRef !== undefined ? (
+        <button
+          ref={btnRef}
+          type="submit"
+          onClick={(event) => event.stopPropagation()}
+          style={{ display: 'none' }}
+        >
+          submit
+        </button>
+      ) : (
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          size="large"
+          loading={isSubmitting || loading}
+          disabled={loading || checkingCode.value}
+          sx={{ ml: 'auto' }}
+        >
+          {!isEdit ? 'Thêm sản phẩm' : 'Lưu thay đổi'}
+        </LoadingButton>
+      )}
     </Box>
   );
   return (
