@@ -1,10 +1,6 @@
 import type { ProjectStatus } from 'src/types/project';
 
-import { usePathname } from 'next/navigation';
-
 import { Tab, Tabs } from '@mui/material';
-
-import { paths } from 'src/routes/paths';
 
 import { PROJECT_STATUS } from 'src/constants/project';
 
@@ -14,8 +10,6 @@ type Props = {
   onChange: (tab: ProjectStatusTab) => void;
 };
 export default function ProjectStatusTab({ status, onChange }: Props) {
-  const pathname = usePathname();
-  const isHomePage = pathname === paths.root;
   return (
     <Tabs
       value={status}
@@ -27,6 +21,7 @@ export default function ProjectStatusTab({ status, onChange }: Props) {
         backgroundColor: 'background.neutral',
 
         width: 'fit-content',
+        maxWidth: 1,
         borderRadius: 1,
         minHeight: 40,
         boxShadow: (theme) => `inset 0px 0px 1px 1px rgba(145 158 171 / 0.2)`,
