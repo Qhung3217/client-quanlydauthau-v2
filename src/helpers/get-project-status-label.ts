@@ -18,17 +18,17 @@ export const getProjectStatusConfig = (value: string): ProjectStatusConfigReturn
       return {
         color: 'info',
         label: 'Đã duyệt',
-        desc: 'Dự án đã được duyệt và đang được nhận báo giá',
+        desc: 'Dự án đã được duyệt và đang được nhận dự toán',
       };
-    case 'QUOTED':
-      return {
-        color: 'info',
-        label: 'Đã duyệt báo giá',
-        desc: 'Chủ dự án đã duyệt báo giá',
-        otherProps: {
-          variant: 'filled',
-        },
-      };
+    // case 'QUOTED':
+    //   return {
+    //     color: 'info',
+    //     label: 'Đã duyệt báo giá',
+    //     desc: 'Chủ dự án đã duyệt báo giá',
+    //     otherProps: {
+    //       variant: 'filled',
+    //     },
+    //   };
     case 'CANCELED':
       return {
         color: 'error',
@@ -44,7 +44,7 @@ export const getProjectStatusConfig = (value: string): ProjectStatusConfigReturn
     case 'EDIT_REQUESTED':
       return {
         color: 'warning',
-        label: 'Yêu cầu chỉnh sửa',
+        label: 'Yêu cầu điều chỉnh',
         otherProps: {
           variant: 'filled',
         },
@@ -53,6 +53,7 @@ export const getProjectStatusConfig = (value: string): ProjectStatusConfigReturn
       return {
         color: 'success',
         label: 'Đã duyệt dự toán',
+        desc: 'Dự án đã được duyệt dự toán',
         otherProps: {
           variant: 'filled',
         },

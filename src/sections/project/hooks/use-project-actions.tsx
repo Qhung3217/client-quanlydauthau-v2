@@ -83,7 +83,7 @@ export default function useProjectActions() {
       isProcessing.onTrue();
       await requestEditProject(projectSelected.id);
       toast.success(
-        `Đã gửi yêu cầu chỉnh sửa dự án ${shortenTextInMiddle(projectSelected.name, 30)} .`
+        `Đã gửi Yêu cầu điều chỉnh dự án ${shortenTextInMiddle(projectSelected.name, 30)} .`
       );
     } catch {
       toast.error('Đã có lỗi xảy ra.');
@@ -151,10 +151,10 @@ export default function useProjectActions() {
             open={confirming.value}
             onClose={onClose}
             closeAfterTransition
-            title="Gửi yêu cầu chỉnh sửa?"
+            title="Gửi Yêu cầu điều chỉnh?"
             content={
               <>
-                Xác nhận <u>gửi yêu cầu chỉnh sửa</u> <strong>{projectSelected?.name}</strong>? Lưu
+                Xác nhận <u>gửi Yêu cầu điều chỉnh</u> <strong>{projectSelected?.name}</strong>? Lưu
                 ý, thao này không thể hoàn tác.
               </>
             }

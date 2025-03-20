@@ -250,14 +250,14 @@ export default function ProjectItem({
             <Typography variant="body2">
               <strong>Địa điểm:</strong> {project.address}
             </Typography>
-            {/* <Typography variant="body2">
-              <strong>Thời điểm đóng thầu:</strong> {fDate(project.estDeadline)}
-            </Typography> */}
             <Typography variant="body2">
               <strong>Hạn chót dự toán: </strong>
               <Typography component="span" sx={{ color: "red", fontWeight: "bold" }}>
                 {fDate(project.estDeadline)}
               </Typography>
+            </Typography>
+            <Typography variant="body2">
+              <strong> Người tạo: </strong> {project.creator.name} {project.creator?.company?.name && `(${project.creator?.company?.name})`}
             </Typography>
           </Stack>
         </Stack>

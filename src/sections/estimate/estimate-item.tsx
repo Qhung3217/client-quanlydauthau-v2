@@ -1,4 +1,5 @@
 import type { CardProps } from '@mui/material';
+import type { Project } from 'src/types/project';
 import type { Estimate } from 'src/types/estimate';
 
 import { usePopover } from 'minimal-shared/hooks';
@@ -17,6 +18,7 @@ import useEstimateActionPermit from './hooks/use-estimate-action-permit';
 
 type Props = CardProps & {
   estimate: Estimate;
+  project: Project;
   detailsClick?: (id: string) => void;
   editClick?: (id: string) => void;
   deleteClick?: (id: string) => void;
@@ -26,6 +28,7 @@ type Props = CardProps & {
 };
 export default function EstimateItem({
   estimate,
+  project,
   detailsClick,
   deleteClick,
   editClick,
@@ -161,11 +164,11 @@ export default function EstimateItem({
           </Typography>
 
           <Typography variant="caption" sx={{}}>
-            <strong> Mã dự án:</strong> #{estimate.project.code}
+            <strong> Mã dự án:</strong> #{project.code}
           </Typography>
 
           <Typography variant="caption" sx={{}}>
-            <strong> Dự án: </strong> {estimate.project.name}
+            <strong> Dự án: </strong> {project.name}
           </Typography>
 
           <Typography variant="caption" sx={{}}>

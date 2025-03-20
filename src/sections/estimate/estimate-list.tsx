@@ -50,6 +50,7 @@ export default function EstimateList() {
       <EstimateItem
         key={estimate.id}
         estimate={estimate}
+        project={estimate.project}
         detailsClick={() => {
           setEstimateIdView(estimate.id);
           openDetails.onTrue();

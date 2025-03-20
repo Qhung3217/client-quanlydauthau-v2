@@ -128,7 +128,7 @@ export function ProjectNewEditForm({ currentRecord, loading }: Props) {
         });
 
         toast.success('Đã cập nhật dự án thành công !');
-        router.push(paths.product.root);
+        router.push(paths.project.details(currentRecord.id));
       }
       reset();
     } catch (error: any) {

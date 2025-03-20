@@ -1,5 +1,6 @@
 
-import type { Estimate, EstimateDetails } from "src/types/estimate";
+import type { Estimate } from "src/types/estimate";
+import type { ProjectDetails } from "src/types/project";
 
 import { useState } from "react";
 import { useBoolean } from "minimal-shared/hooks";
@@ -16,10 +17,10 @@ import EstimateItem from "../estimate/estimate-item";
 import EstimateDialog from "../estimate/estimate-dialog";
 
 type Props = CardProps & {
-  estimates: EstimateDetails[]
+  project: ProjectDetails
 }
 
-export default function ProjectEstimateList({ estimates, sx, ...other }: Props) {
+export default function ProjectEstimateList({ project, sx, ...other }: Props) {
   const openDetails = useBoolean();
 
   const [estimateIdView, setEstimateIdView] = useState<string>('');
@@ -33,9 +34,10 @@ export default function ProjectEstimateList({ estimates, sx, ...other }: Props) 
   const isAdmin = !!APPROVE_ESTIMATE || !!CANCEL_ESTIMATE || !!REQUEST_EDIT_ESTIMATE;
 
   const renderList = () =>
-    estimates.map((estimate: Estimate | any) => (
+    project.estimates.map((estimate: Estimate | any) => (
       <EstimateItem
         key={estimate.id}
+        project={project}
         estimate={estimate}
           detailsClick={() => {
           setEstimateIdView(estimate.id);
@@ -62,7 +64,7 @@ export default function ProjectEstimateList({ estimates, sx, ...other }: Props) 
 
       <Stack sx={{ mt: 2 }} />
 
-      {estimates.length > 0 ?
+      {project.estimates.length > 0 ?
         <Box
           sx={{
             gap: 3,
