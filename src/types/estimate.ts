@@ -1,5 +1,5 @@
 import type { Creator } from './user';
-import type { Project } from './project';
+import type { Project, ProjectEstimate } from './project';
 
 export type EstimateStatus = 'PENDING' | 'EDIT_REQUESTED' | 'APPROVED' | 'CANCELED';
 
@@ -18,7 +18,7 @@ export type EstimateDetails = {
   id: string;
   name: string;
   status: EstimateStatus;
-  project: Project;
+  project: ProjectEstimate;
   creator: Creator;
   productEstimates: {
     id: string;
