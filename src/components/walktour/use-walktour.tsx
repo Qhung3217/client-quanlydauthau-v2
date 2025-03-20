@@ -12,6 +12,14 @@ export function useWalktour({ steps, defaultRun }: UseWalktourProps): UseWalktou
 
   const [run, setRun] = useState(!!defaultRun);
 
+  const jsonFirstVisit = localStorage.getItem('first-visit');
+
+  const isFirstVisit = jsonFirstVisit ? JSON.parse(jsonFirstVisit) : true;
+
+  if (!isFirstVisit && run !== isFirstVisit) {
+    setRun(false);
+  }
+
   const setHelpers = (storeHelpers: StoreHelpers) => {
     helpers.current = storeHelpers;
   };
@@ -23,6 +31,7 @@ export function useWalktour({ steps, defaultRun }: UseWalktourProps): UseWalktou
 
     if (finishedStatuses.includes(status)) {
       setRun(false);
+      localStorage.setItem('first-visit', 'false');
     }
   };
 

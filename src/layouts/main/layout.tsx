@@ -90,8 +90,8 @@ export function MainLayout({
         placement: 'left-start',
         content: (
           <>
-           <Typography sx={{ color: 'text.secondary' }}>
-             Bạn có thể đăng tải dự án mới, quản lý dự án đã tạo, xem thông tin chi tiết của dự án.
+            <Typography sx={{ color: 'text.secondary' }}>
+              Bạn có thể đăng tải dự án mới, quản lý dự án đã tạo, xem thông tin chi tiết của dự án.
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
               Bạn có thể duyệt dứ án, hủy dự án nếu được cấp quyền.
@@ -116,7 +116,8 @@ export function MainLayout({
         content: (
           <Stack spacing={3}>
             <Typography sx={{ color: 'text.secondary' }}>
-              Tại đây bạn có thể tạo sản phẩm của mình và sử dụng cho việc thêm nhanh sản phẩm vào dự toán.
+              Tại đây bạn có thể tạo sản phẩm của mình và sử dụng cho việc thêm nhanh sản phẩm vào
+              dự toán.
             </Typography>
           </Stack>
         ),
@@ -136,16 +137,15 @@ export function MainLayout({
         content: (
           <Stack spacing={2}>
             <Typography sx={{ color: 'text.secondary' }}>
-              Tại đây bạn có thể thêm độ ưu tiên để phân loại mức độ quan trọng của dự án. Có thể tùy chỉnh màu sắc, tên độ ưu tiên.
+              Tại đây bạn có thể thêm độ ưu tiên để phân loại mức độ quan trọng của dự án. Có thể
+              tùy chỉnh màu sắc, tên độ ưu tiên.
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-              Ví dụ:
-            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>Ví dụ:</Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <Label color="error">Cao</Label>
               <Label color="warning">Trung bình</Label>
               <Label color="info">Thấp</Label>
-           </Box>
+            </Box>
           </Stack>
         ),
       },
@@ -164,8 +164,8 @@ export function MainLayout({
         content: (
           <Stack spacing={2}>
             <Typography sx={{ color: 'text.secondary' }}>
-              Tại đây bạn có thể thêm người dùng mới và phân quyền cho họ.
-              Những tài khoản được phân quyền chỉ được thao tác các chức năng trong phạm vi cho phép.
+              Tại đây bạn có thể thêm người dùng mới và phân quyền cho họ. Những tài khoản được phân
+              quyền chỉ được thao tác các chức năng trong phạm vi cho phép.
             </Typography>
           </Stack>
         ),
@@ -205,13 +205,13 @@ export function MainLayout({
         content: (
           <Stack spacing={2}>
             <Typography sx={{ color: 'text.secondary' }}>
-              Bạn có thể thêm mới quyền hạn hoặc phân quyền cho nhóm người dùng tại đây.
-              Những người dùng được phân quyền chỉ được thao tác các chức năng trong phạm vi cho phép.
+              Bạn có thể thêm mới quyền hạn hoặc phân quyền cho nhóm người dùng tại đây. Những người
+              dùng được phân quyền chỉ được thao tác các chức năng trong phạm vi cho phép.
             </Typography>
           </Stack>
         ),
       },
-       {
+      {
         target: '#account-button',
         title: 'Hồ sơ của bạn',
         placement: 'right',
