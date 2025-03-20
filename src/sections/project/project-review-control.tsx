@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
+import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Step, Paper, Button, Stepper, Tooltip, StepLabel, Typography } from '@mui/material';
 
 import { PUBLIC_PROJECT_STATUS } from 'src/constants/project';
@@ -59,6 +60,8 @@ export default function ProjectReviewControl({ project }: Props) {
 
   const openDialogConfirm = useBoolean();
 
+  const processing = useBoolean();
+
   const { approvePermit, rejectPermit, requestEditPermit } = useProjectActionPermit(project.status);
 
   const projectStatusRender = () => (
@@ -106,21 +109,34 @@ export default function ProjectReviewControl({ project }: Props) {
     </Box>
   );
 
-  const handleConfirmAction = () => {
+  const handleConfirmAction = async () => {
     try {
-      if (selectedAction === 'APPROVED') approveProject(project.id);
+      processing.onTrue()
+      switch (selectedAction) {
+        case 'APPROVED':
+          await approveProject(project.id);
+          toast.success('Cập nhật thành công');
+          break;
+        case 'CANCELED':
+          await rejectProject(project.id);
+          toast.success('Cập nhật thành công');
+          break;
+        case 'EDIT_REQUESTED':
+          await requestEditProject(project.id);
+          toast.success('Cập nhật thành công');
+          break;
 
-      if (selectedAction === 'CANCELED') rejectProject(project.id);
+        default:
+          toast.error('Đã có lỗi xảy ra.');
+          break;
+      }
 
-      // if (selectedAction === 'COMPLETED') completeProject(project.id);
-
-      if (selectedAction === 'EDIT_REQUESTED') requestEditProject(project.id);
-
-      toast.success('Cập nhật thành công');
       openDialogConfirm.onFalse();
     } catch (error: any) {
       toast.error(error.message);
       console.log(error);
+    } finally {
+      processing.onFalse();
     }
   };
 
@@ -278,9 +294,8 @@ export default function ProjectReviewControl({ project }: Props) {
           </>
         }
         action={
-          <Button variant="contained" onClick={handleConfirmAction}>
-            Xác nhận
-          </Button>
+          <LoadingButton loading={processing.value} variant="contained" onClick={handleConfirmAction}>            Xác nhận
+          </LoadingButton>
         }
       />
     </Paper>
