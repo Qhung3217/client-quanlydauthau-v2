@@ -17,6 +17,8 @@ import { Label } from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
 import { Walktour, useWalktour } from 'src/components/walktour';
 
+import TicketFab from 'src/sections/ticket/ticket-fab';
+
 import { NavMobile } from './nav-mobile';
 import { NavVertical } from './nav-vertical';
 import { layoutClasses } from '../core/classes';
@@ -350,7 +352,7 @@ export function MainLayout({
       ]}
     >
       {renderMain()}
-
+      <TicketFab />
       <Walktour
         run={walktour.run}
         steps={walktour.steps}

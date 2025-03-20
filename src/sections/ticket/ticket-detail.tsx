@@ -19,6 +19,9 @@ import {
   CircularProgress,
 } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
+
 import { fDateTime } from 'src/utils/format-time';
 import { attachServerUrl } from 'src/utils/attach-server-url';
 
@@ -96,7 +99,7 @@ export function TicketDetails({ ticket, isEmpty, error, loading }: Props) {
     }
   };
 
-  const { ticketComments } = useGetTicketComments(ticket.id);
+  const { ticketComments, ticketCommentsLoading } = useGetTicketComments(ticket.id);
 
   if (error) {
     return (
@@ -111,18 +114,35 @@ export function TicketDetails({ ticket, isEmpty, error, loading }: Props) {
 
   const renderSubject = () => (
     <>
-      <Typography
-        variant="subtitle2"
-        sx={[
-          (theme) => ({
-            ...theme.mixins.maxLine({ line: 2 }),
-            flex: '1 1 auto',
-          }),
-        ]}
+      <Stack direction="row" alignItems="center">
+        <Typography
+          variant="subtitle2"
+          sx={[
+            (theme) => ({
+              ...theme.mixins.maxLine({ line: 2 }),
+              flex: '1 1 auto',
+            }),
+          ]}
+        >
+          Re: #{ticket?.code} - {ticket?.title}
+        </Typography>
+        <IconButton
+          size="small"
+          LinkComponent={RouterLink}
+          href={paths.project.details(ticket.project.id)}
+          title="Đi đến dự án này"
+          sx={{ ml: 0.5 }}
+        >
+          <Iconify icon="lucide:external-link" sx={{ width: 14, height: 14 }} />
+        </IconButton>
+      </Stack>
+      <Stack
+        spacing={0.5}
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ ml: 'auto' }}
       >
-        Re: #{ticket?.code} - {ticket?.title}
-      </Typography>
-      <Stack spacing={0.5} flexDirection="row" alignItems="center" justifyContent="space-between">
         <Typography variant="caption" noWrap sx={{ color: 'text.disabled' }}>
           {fDateTime(ticket?.createdAt)}
         </Typography>
@@ -148,7 +168,7 @@ export function TicketDetails({ ticket, isEmpty, error, loading }: Props) {
                   <MenuItem
                     key={status}
                     onClick={() => handleTicketStatusUpdate(status)}
-                    sx={{ py: 1 }}
+                    sx={{ py: 1, color: `${config.color}.main` }}
                   >
                     {config.label}
                   </MenuItem>
@@ -200,11 +220,13 @@ export function TicketDetails({ ticket, isEmpty, error, loading }: Props) {
           }}
         />
       ))}
-      <Fade in timeout={500}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}>
-          <CircularProgress />
-        </Box>
-      </Fade>
+      {ticketCommentsLoading && (
+        <Fade in timeout={500}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}>
+            <CircularProgress />
+          </Box>
+        </Fade>
+      )}
     </Box>
   );
 
@@ -331,6 +353,7 @@ export function TicketDetails({ ticket, isEmpty, error, loading }: Props) {
       >
         {renderContent()}
       </Box>
+
       <Stack spacing={2} sx={{ flexShrink: 0, p: 2 }}>
         {ticket.status !== 'CLOSED' ? (
           renderEditor()

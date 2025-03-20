@@ -1,4 +1,5 @@
 import type { Creator } from './user';
+import type { Project } from './project';
 
 export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
 
@@ -20,5 +21,6 @@ export type Ticket = {
   lastCommentAt: Date;
   lastComment: string;
   creator: Creator;
+  project: Omit<Project, '_count'>;
   assignees: Creator[];
 };
