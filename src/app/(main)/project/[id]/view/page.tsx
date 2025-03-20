@@ -8,7 +8,7 @@ import { MainContent } from 'src/layouts/main';
 import { useGetProject } from 'src/actions/project';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
-import ProjectEstimateCreateView from 'src/sections/estimate/view/project-estimate-create-view';
+import ProjectEstimateView from 'src/sections/estimate/view/project-estimate-view';
 
 import { RoleBasedGuard } from 'src/auth/guard';
 import { useAuthContext } from 'src/auth/hooks';
@@ -33,11 +33,11 @@ export default function Page({ params: { id } }: Props) {
     );
   return (
     <RoleBasedGuard
-      acceptRoles={[PERMISSION_ENUM.CREATE_ESTIMATE]}
+      acceptRoles={[PERMISSION_ENUM.VIEW_ESTIMATE]}
       currentRole={user?.permissions}
       hasContent
     >
-      <ProjectEstimateCreateView project={project!} loading={projectLoading} />
+      <ProjectEstimateView project={project!} loading={projectLoading} />
     </RoleBasedGuard>
   );
 }

@@ -46,6 +46,7 @@ export const paths = {
     new: `/project/new`,
     edit: (id: any) => `/project/${id}/edit`,
     estimate: (id: any) => `/project/${id}/estimate`,
+    view_estimate: (id: any) => `/project/${id}/view`,
     details: (id: any) => `/project/${id}`,
   },
   priority: {

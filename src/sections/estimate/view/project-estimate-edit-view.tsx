@@ -4,7 +4,7 @@ import type { ProductEstimateSchemaType } from 'src/sections/estimate/product-es
 import { useState, useEffect } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
-import { Paper, Stack, Button, Typography, CircularProgress } from '@mui/material';
+import { Stack, Button, CircularProgress } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -12,6 +12,7 @@ import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
+import ProjectItem from 'src/sections/project/project-item';
 import ProductEstimateCreateEditForm from 'src/sections/estimate/product-estimate-create-edit-form';
 
 import ProductEstimatedList from '../product-estimated-list';
@@ -19,7 +20,7 @@ import EstimateCreateEditDialog from '../estimate-create-dialog';
 import ProductEstimateEditDialog from '../product-estimate-edit-dialog';
 
 type Props = {
-  estimate: EstimateDetails | undefined;
+  estimate: EstimateDetails;
   loading: boolean;
 };
 export default function ProjectEstimateEditView({ estimate, loading }: Props) {
@@ -84,21 +85,7 @@ export default function ProjectEstimateEditView({ estimate, loading }: Props) {
         }
       />
       <Stack direction="column" spacing={2}>
-        <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h5"> Giới thiệu chung về dự án</Typography>
-          <Typography>
-            - <strong>Dự án: </strong> {project?.name}
-          </Typography>
-          <Typography>
-            - <strong>Bên mời thầu: </strong> {project?.inviter?.name}
-          </Typography>
-          <Typography>
-            - <strong>Chủ đầu từ: </strong> {project?.investor?.name}
-          </Typography>
-          <Typography>
-            - <strong>Địa điểm: </strong> {project?.address}
-          </Typography>
-        </Paper>
+        <ProjectItem project={project} />
 
         <ProductEstimatedList
           productEsts={productEsts}

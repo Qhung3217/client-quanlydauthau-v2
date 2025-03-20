@@ -93,7 +93,7 @@ export default function ProjectItem({
                 menuActions.onClose();
               }}
               component={RouterLink}
-              href={paths.estimate.details(project.id)}
+              href={paths.project.estimate(project.id)}
             >
               <Iconify icon="mdi:paper-edit-outline" sx={{ color: 'info.darker' }} />
               Nhập dự toán

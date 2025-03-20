@@ -2,8 +2,8 @@
 
 import type { SWRConfiguration } from 'swr';
 import type { IReqSearchParams } from 'src/types/request';
-import type { Project, ProjectStatus } from 'src/types/project';
 import type { IApiListResponse, IApiGetOneResponse } from 'src/types/response';
+import type { Project, ProjectStatus, ProjectDetails } from 'src/types/project';
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
@@ -65,7 +65,7 @@ export function useGetProject(id: string) {
     error,
     isValidating,
     mutate: APIMutate,
-  } = useSWR<IApiGetOneResponse<Project>>(url, fetcher, {
+  } = useSWR<IApiGetOneResponse<ProjectDetails>>(url, fetcher, {
     revalidateOnMount: true,
     revalidateIfStale: true,
   });

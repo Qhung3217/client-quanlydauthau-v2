@@ -1,3 +1,4 @@
+import type { Creator } from './user';
 import type { Project } from './project';
 
 export type EstimateStatus = 'PENDING' | 'EDIT_REQUESTED' | 'APPROVED' | 'CANCELED';
@@ -10,6 +11,7 @@ export type Estimate = {
   _count: {
     productEstimates: number;
   };
+  creator: Creator;
 };
 
 export type EstimateDetails = {
@@ -17,6 +19,7 @@ export type EstimateDetails = {
   name: string;
   status: EstimateStatus;
   project: Project;
+  creator: Creator;
   productEstimates: {
     id: string;
     name: string;

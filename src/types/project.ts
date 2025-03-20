@@ -1,6 +1,7 @@
 import type { Creator } from './user';
 import type { Company } from './company';
 import type { Priority } from './priority';
+import type { EstimateDetails } from './estimate';
 
 export type ProjectStatus =
   | 'PENDING'
@@ -22,20 +23,15 @@ export type Project = {
   createdAt: string;
   inviter: Company;
   investor: Company;
-  estimates?: Array<{
-    id: string;
-    status: string;
-    projectId: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    creatorId: string;
-    updaterId: any;
-  }>;
+
   estimators: Creator[];
   priority?: Priority;
   creator: Creator;
   _count: {
     estimates: number;
   };
+};
+
+export type ProjectDetails = Project & {
+  estimates: EstimateDetails[];
 };

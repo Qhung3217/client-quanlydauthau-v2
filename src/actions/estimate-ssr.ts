@@ -39,6 +39,8 @@ export async function createEstimate(payload: CreatePayload) {
     },
     false
   );
+
+  mutate((key) => Array.isArray(key) && key[0] === endpoints.project.list, undefined, true);
 }
 
 // ----------------------------------------------------------------------
