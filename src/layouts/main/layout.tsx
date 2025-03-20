@@ -11,6 +11,8 @@ import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import { Stack, Typography } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+
 import { Label } from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
 import { Walktour, useWalktour } from 'src/components/walktour';
@@ -69,6 +71,7 @@ export function MainLayout({
 
   const walktour = useWalktour({
     defaultRun: true,
+
     steps: [
       {
         target: 'body',
@@ -82,7 +85,7 @@ export function MainLayout({
         ),
       },
       {
-        target: `a[href="/project/"]`,
+        target: `a[href="${paths.project.root}/"]`,
         title: 'Chức năng quản lý dự án',
         placement: 'left-start',
         content: (
@@ -97,7 +100,7 @@ export function MainLayout({
         ),
       },
       {
-        target: 'a[href="/estimate/"]',
+        target: `a[href="${paths.estimate.root}/"]`,
         title: 'Chức năng quản lý dự toán',
         placement: 'bottom',
         content: (
@@ -107,7 +110,7 @@ export function MainLayout({
         ),
       },
       {
-        target: 'a[href="/product/"]',
+        target: `a[href="${paths.product.root}/"]`,
         title: 'Chức năng quản lý sản phẩm',
         placement: 'left',
         content: (
@@ -147,7 +150,7 @@ export function MainLayout({
         ),
       },
       {
-        target: 'a[href="/user/"]',
+        target: `a[href="${paths.user.root}/"]`,
         title: 'Quản lý người dùng',
         placement: 'left',
         styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
@@ -168,7 +171,7 @@ export function MainLayout({
         ),
       },
       {
-        target: 'a[href="/organization/"]',
+        target: `a[href="${paths.organization.root}/"]`,
         title: 'Quản lý thông tin đơn vị',
         placement: 'left',
         styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
@@ -188,7 +191,7 @@ export function MainLayout({
         ),
       },
       {
-        target: 'a[href="/role/"]',
+        target: `a[href="${paths.role.root}/"]`,
         title: 'Quản lý phân quyền',
         placement: 'left',
         styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
@@ -353,6 +356,7 @@ export function MainLayout({
         steps={walktour.steps}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
+        disableScrolling
       />
     </LayoutSection>
   );
