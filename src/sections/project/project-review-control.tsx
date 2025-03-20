@@ -1,4 +1,4 @@
-import type { Project } from 'src/types/project';
+import type { ProjectDetails } from 'src/types/project';
 
 import { toast } from 'sonner';
 import { useState } from 'react';
@@ -15,6 +15,7 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
+import { exportProjectToExcel } from '../../helpers/project-excel';
 import useProjectActionPermit from './hooks/use-project-action-permit';
 
 const getDialogContent = (action: string) => {
@@ -46,7 +47,7 @@ const getDialogContent = (action: string) => {
 };
 
 type Props = {
-  project: Project;
+  project: ProjectDetails;
 };
 export default function ProjectReviewControl({ project }: Props) {
   const [selectedAction, setSelectedAction] = useState<string>('');
@@ -117,6 +118,11 @@ export default function ProjectReviewControl({ project }: Props) {
     setSelectedAction(action);
     openDialogConfirm.onTrue();
   };
+
+  const handleExportExcel = () => {
+    exportProjectToExcel(project)
+  }
+
   return (
     <Paper
       sx={{
@@ -166,6 +172,7 @@ export default function ProjectReviewControl({ project }: Props) {
               Duyệt dự án
             </Button>
           )}
+
           {requestEditPermit && (
             <Button
               variant="contained"
@@ -182,17 +189,6 @@ export default function ProjectReviewControl({ project }: Props) {
             </Button>
           )}
 
-          {/* {COMPLETE_PERMIT && ['QUOTED'].includes(project.status) && !project.isEditable && (
-             <Button
-               variant="contained"
-               color="success"
-               startIcon={<Iconify icon="material-symbols:done-all" width={24} />}
-               onClick={() => handleAction('COMPLETED')}
-             >
-               Duyệt hoàn thành
-             </Button>
-           )} */}
-
           {rejectPermit && (
             <Button
               variant="contained"
@@ -204,11 +200,21 @@ export default function ProjectReviewControl({ project }: Props) {
             </Button>
           )}
 
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Iconify icon="material-symbols:file-export-outline-rounded" width={24} />}
+            onClick={handleExportExcel}
+          >
+            Xuất Excel dự án & dự toán
+          </Button>
+
           {project.status === 'CANCELED' && (
             <Typography variant="h6" color="error" align="center">
               Dự án này đã bị hủy không thể thao tác!
             </Typography>
           )}
+
           {project.status === 'COMPLETED' && (
             <Typography variant="h6" color="info" align="center">
               Dự án này đã hoàn thành không thể thao tác!
