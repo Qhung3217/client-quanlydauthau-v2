@@ -47,6 +47,7 @@ export function AccountButton({ photoURL, displayName, name, roleName, sx, ...ot
       whileHover={varHover(1.04)}
       transition={transitionTap()}
       aria-label="Account button"
+      id="account-button"
       sx={[
         {
           p: 0,
