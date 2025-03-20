@@ -121,7 +121,7 @@ export function EstimateCreateEditForm({
   const renderDetails = () => (
     <Paper>
       <Stack spacing={3}>
-        <BlockField label="Tên dự toán" required>
+        <BlockField label="Tiêu đề" required>
           <Field.Text name="name" size="small" disabled={loading} />
         </BlockField>
       </Stack>

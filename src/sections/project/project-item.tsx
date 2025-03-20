@@ -254,7 +254,10 @@ export default function ProjectItem({
               <strong>Thời điểm đóng thầu:</strong> {fDate(project.estDeadline)}
             </Typography> */}
             <Typography variant="body2">
-              <strong>Hạn đóng dự toán:</strong> {fDate(project.estDeadline)}
+              <strong>Hạn chót dự toán: </strong>
+              <Typography component="span" sx={{ color: "red", fontWeight: "bold" }}>
+                {fDate(project.estDeadline)}
+              </Typography>
             </Typography>
           </Stack>
         </Stack>

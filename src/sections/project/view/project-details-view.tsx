@@ -1,8 +1,8 @@
 'use client';
 
-import type { Project } from 'src/types/project';
+import type { ProjectDetails } from 'src/types/project';
 
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -10,13 +10,14 @@ import { MainContent } from 'src/layouts/main';
 
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
-import ProjectTableInfo from '../project-table-info';
+import ProjectItem from '../project-item';
+import ProjectEstimateList from '../project-estimate-list';
 import ProjectReviewControl from '../project-review-control';
 import useProjectActions from '../hooks/use-project-actions';
 import useProjectActionPermit from '../hooks/use-project-action-permit';
 
 type Props = {
-  project: Project;
+  project: ProjectDetails;
   loading: boolean;
 };
 
@@ -30,7 +31,7 @@ export default function ProjectDetailsView({ project, loading }: Props) {
 
   if (loading) return null;
   return (
-    <MainContent maxWidth={false}>
+    <MainContent >
       <CustomBreadcrumbs
         heading={project.name || 'Dự án'}
         links={[{ name: 'Tất cả dự án', href: paths.project.root }, { name: `#${project.code}` }]}
@@ -70,22 +71,18 @@ export default function ProjectDetailsView({ project, loading }: Props) {
         //   </ButtonGroup>
         // }
       />
-      <ProjectReviewControl project={project} />
+      <Stack spacing={3}>
+        <ProjectReviewControl project={project} />
 
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: 'repeat(1,1fr)',
-            md: 'repeat(1,1fr)',
-          },
-          gap: 2,
-        }}
-      >
-        <ProjectTableInfo project={project} />
-      </Box>
+        <ProjectItem
+          project={project}
+        />
+
+        <ProjectEstimateList estimates={project.estimates}/>
+      </Stack>
 
       {renderConfirmDialog()}
+
     </MainContent>
   );
 }

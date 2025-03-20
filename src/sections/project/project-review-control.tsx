@@ -133,7 +133,6 @@ export default function ProjectReviewControl({ project }: Props) {
       sx={{
         flex: 1,
         p: 2,
-        mb: 3,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
