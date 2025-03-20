@@ -123,4 +123,8 @@ export const endpoints = {
     reject: (id: any) => `/estimate/${id}/cancel`,
     request_edit: (id: any) => `/estimate/${id}/request-edit`,
   },
+  profile: {
+    change_password: '/user/change-my-password',
+    update_profile: '/user/me',
+  },
 };
