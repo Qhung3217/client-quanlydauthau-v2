@@ -6,6 +6,7 @@ import type { EstimatesRes } from './estimate';
 
 // ----------------------------------------------------------------------
 const ENDPOINT = endpoints.estimate;
+const PROJECT_ENDPOINT = endpoints.project;
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +41,11 @@ export async function createEstimate(payload: CreatePayload) {
     false
   );
 
-  mutate((key) => Array.isArray(key) && key[0] === endpoints.project.list, undefined, true);
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
+  );
 }
 
 // ----------------------------------------------------------------------
@@ -57,7 +62,13 @@ export async function updateEstimate(id: string, payload: UpdatePayload) {
    * Work in local
    */
 
-  mutate((key) => Array.isArray(key) && key[0] === ENDPOINT.list, undefined, true);
+
+
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
+  );
 }
 
 // ----------------------------------------------------------------------
@@ -84,6 +95,12 @@ export async function deleteEstimate(id: string) {
       };
     },
     false
+  );
+
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
   );
 }
 // ----------------------------------------------------------------------
@@ -113,6 +130,12 @@ export async function deleteEstimates(ids: string[]) {
     },
     false
   );
+
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
+  );
 }
 // ----------------------------------------------------------------------
 
@@ -121,13 +144,13 @@ export async function approveEstimate(id: string) {
    * Work on server
    */
 
-  await axios.patch(ENDPOINT.approve(id));
+  const response = await axios.patch(ENDPOINT.approve(id));
 
   /**
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
     undefined,
     true
   );
@@ -139,16 +162,17 @@ export async function rejectEstimate(id: string) {
    * Work on server
    */
 
-  await axios.patch(ENDPOINT.reject(id));
+  const response = await axios.patch(ENDPOINT.reject(id));
 
   /**
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
     undefined,
     true
   );
+
 }
 // ----------------------------------------------------------------------
 
@@ -157,14 +181,16 @@ export async function requestEditEstimate(id: string) {
    * Work on server
    */
 
-  await axios.patch(ENDPOINT.request_edit(id));
+  const response = await axios.patch(ENDPOINT.request_edit(id));
 
   /**
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
     undefined,
     true
   );
+
+
 }
