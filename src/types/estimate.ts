@@ -11,6 +11,7 @@ export type Estimate = {
   _count: {
     productEstimates: number;
   };
+  createdAt: string;
   creator: Creator;
 };
 

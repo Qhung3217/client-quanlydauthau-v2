@@ -5,6 +5,8 @@ import { usePopover } from 'minimal-shared/hooks';
 
 import { Box, Card, MenuItem, MenuList, IconButton, Typography } from '@mui/material';
 
+import { fDate } from 'src/utils/format-time';
+
 import { getEstimateStatusLabel } from 'src/helpers/get-estimate-status-label';
 
 import { Label } from 'src/components/label';
@@ -145,7 +147,7 @@ export default function EstimateItem({
           </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Typography
             variant="h6"
             sx={[
@@ -164,6 +166,14 @@ export default function EstimateItem({
 
           <Typography variant="caption" sx={{}}>
             <strong> Dự án: </strong> {estimate.project.name}
+          </Typography>
+
+          <Typography variant="caption" sx={{}}>
+            <strong> Người tạo: </strong> {estimate.creator.name} {estimate.creator?.company?.name && `(${estimate.creator?.company?.name})`}
+          </Typography>
+
+          <Typography variant="caption" sx={{}}>
+            <strong> Ngày tạo: </strong> {fDate(estimate.createdAt)}
           </Typography>
         </Box>
 

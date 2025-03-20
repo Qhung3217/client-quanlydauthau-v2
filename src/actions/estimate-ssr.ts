@@ -6,6 +6,7 @@ import type { EstimatesRes } from './estimate';
 
 // ----------------------------------------------------------------------
 const ENDPOINT = endpoints.estimate;
+const PROJECT_ENDPOINT = endpoints.project;
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +41,11 @@ export async function createEstimate(payload: CreatePayload) {
     false
   );
 
-  mutate((key) => Array.isArray(key) && key[0] === endpoints.project.list, undefined, true);
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
+  );
 }
 
 // ----------------------------------------------------------------------
@@ -57,7 +62,11 @@ export async function updateEstimate(id: string, payload: UpdatePayload) {
    * Work in local
    */
 
-  mutate((key) => Array.isArray(key) && key[0] === ENDPOINT.list, undefined, true);
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
+  );
 }
 
 // ----------------------------------------------------------------------
@@ -84,6 +93,12 @@ export async function deleteEstimate(id: string) {
       };
     },
     false
+  );
+
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
   );
 }
 // ----------------------------------------------------------------------
@@ -113,6 +128,12 @@ export async function deleteEstimates(ids: string[]) {
     },
     false
   );
+
+  mutate(
+    (key) => (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    undefined,
+    true
+  );
 }
 // ----------------------------------------------------------------------
 
@@ -127,7 +148,7 @@ export async function approveEstimate(id: string) {
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (typeof key === 'string' && key.startsWith(PROJECT_ENDPOINT.list)),
     undefined,
     true
   );
@@ -145,10 +166,11 @@ export async function rejectEstimate(id: string) {
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (typeof key === 'string' && key.startsWith(PROJECT_ENDPOINT.list)),
     undefined,
     true
   );
+
 }
 // ----------------------------------------------------------------------
 
@@ -163,8 +185,10 @@ export async function requestEditEstimate(id: string) {
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (typeof key === 'string' && key.startsWith(PROJECT_ENDPOINT.list)),
     undefined,
     true
   );
+
+
 }

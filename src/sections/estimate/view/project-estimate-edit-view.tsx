@@ -37,6 +37,8 @@ export default function ProjectEstimateEditView({ estimate, loading }: Props) {
 
   const openEstimateForm = useBoolean();
 
+  console.log(9999, productEsts);
+
   useEffect(() => {
     setProductEsts(estimate?.productEstimates || []);
   }, [estimate]);
@@ -85,7 +87,14 @@ export default function ProjectEstimateEditView({ estimate, loading }: Props) {
         }
       />
       <Stack direction="column" spacing={2}>
-        <ProjectItem project={project} />
+        <ProjectItem
+          project={{
+            ...project,
+            _count: {
+              estimates: 1
+            },
+            estimators: []
+          }} />
 
         <ProductEstimatedList
           productEsts={productEsts}

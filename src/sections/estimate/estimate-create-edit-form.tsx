@@ -73,10 +73,11 @@ export function EstimateCreateEditForm({
     if (isEdit)
       return {
         ...currentRecord,
+        productEstimates,
         projectId: currentRecord.project.id,
       };
     return undefined;
-  }, [currentRecord, isEdit]);
+  }, [currentRecord, isEdit, productEstimates]);
 
   const methods = useForm<EstimateSchemaType>({
     resolver: zodResolver(EstimateSchema),
@@ -108,7 +109,7 @@ export function EstimateCreateEditForm({
       }
       emitSubmit?.();
       reset();
-      router.push(paths.project.root);
+      router.push(paths.project.details(projectId));
     } catch (error: any) {
       console.error(error);
 
@@ -121,7 +122,7 @@ export function EstimateCreateEditForm({
   const renderDetails = () => (
     <Paper>
       <Stack spacing={3}>
-        <BlockField label="Tên dự toán" required>
+        <BlockField label="Tiêu đề" required>
           <Field.Text name="name" size="small" disabled={loading} />
         </BlockField>
       </Stack>
