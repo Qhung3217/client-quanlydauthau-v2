@@ -1,6 +1,7 @@
 import type { CardProps } from '@mui/material';
 import type { Project } from 'src/types/project';
 
+import { useRouter } from 'next/navigation';
 import { usePopover } from 'minimal-shared/hooks';
 
 import { Box, Card, Link, Stack, MenuItem, MenuList, IconButton, Typography } from '@mui/material';
@@ -39,6 +40,8 @@ export default function ProjectItem({
   sx,
   ...other
 }: Props) {
+  const router = useRouter();
+
   const menuActions = usePopover();
 
   const {
@@ -161,9 +164,16 @@ export default function ProjectItem({
             p: 2,
             boxShadow: 'none',
             position: 'relative',
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: 'background.neutral',
+            },
           },
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
+        onClick={() => {
+          router.push(paths.project.details(project.id));
+        }}
         {...other}
       >
         {!!project?.priority && <PriorityTag priority={project.priority} showText />}
@@ -258,6 +268,7 @@ export default function ProjectItem({
               bottom: 4,
               right: 8,
             }}
+            onClick={(event) => event.stopPropagation()}
           >
             {(editClick || deleteClick || approveClick || rejectClick) &&
               (editPermit ||

@@ -79,7 +79,7 @@ export default function EstimateList() {
         sx={{
           gap: 3,
           display: 'grid',
-          gridTemplateColumns: 'repeat(1, 1fr)',
+          gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
         }}
       >
         {estimatesLoading && !estimatesEmpty ? renderLoading() : renderList()}

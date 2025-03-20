@@ -159,7 +159,11 @@ export default function EstimateItem({
           </Typography>
 
           <Typography variant="caption" sx={{}}>
-            Dự án: {estimate.project.name}
+            <strong> Mã dự án:</strong> #{estimate.project.code}
+          </Typography>
+
+          <Typography variant="caption" sx={{}}>
+            <strong> Dự án: </strong> {estimate.project.name}
           </Typography>
         </Box>
 
@@ -172,7 +176,9 @@ export default function EstimateItem({
               position: 'absolute',
               bottom: 4,
               right: 8,
+              zIndex: 2,
             }}
+            onClick={(event) => event.stopPropagation()}
           >
             {hasAction && hasPermitAction && (
               <IconButton
