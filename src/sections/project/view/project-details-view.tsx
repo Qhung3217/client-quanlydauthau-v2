@@ -78,7 +78,7 @@ export default function ProjectDetailsView({ project, loading }: Props) {
           project={project}
         />
 
-        <ProjectEstimateList estimates={project.estimates}/>
+        <ProjectEstimateList project={project}/>
       </Stack>
 
       {renderConfirmDialog()}
