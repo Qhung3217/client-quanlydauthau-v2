@@ -9,8 +9,11 @@ import { useBoolean } from 'minimal-shared/hooks';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
+import { Stack, Typography } from '@mui/material';
 
+import { Label } from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
+import { Walktour, useWalktour } from 'src/components/walktour';
 
 import { NavMobile } from './nav-mobile';
 import { NavVertical } from './nav-vertical';
@@ -63,6 +66,173 @@ export function MainLayout({
 
   const isNavMini = settings.state.navLayout === 'mini';
   const isNavVertical = isNavMini || settings.state.navLayout === 'vertical';
+
+  const walktour = useWalktour({
+    defaultRun: true,
+    steps: [
+      {
+        target: 'body',
+        title: `Hãy bắt đầu cuộc hành trình của chúng ta!`,
+        placement: 'center',
+        hideCloseButton: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            Chào mừng bạn đến với phần mềm đấu thầu, cùng đi qua sơ lược những tính năng chính nhé!
+          </Typography>
+        ),
+      },
+      {
+        target: `a[href="/project/"]`,
+        title: 'Chức năng quản lý dự án',
+        placement: 'left-start',
+        content: (
+          <>
+           <Typography sx={{ color: 'text.secondary' }}>
+             Bạn có thể đăng tải dự án mới, quản lý dự án đã tạo, xem thông tin chi tiết của dự án.
+            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Bạn có thể duyệt dứ án, hủy dự án nếu được cấp quyền.
+            </Typography>
+          </>
+        ),
+      },
+      {
+        target: 'a[href="/estimate/"]',
+        title: 'Chức năng quản lý dự toán',
+        placement: 'bottom',
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            Ở đây bạn có thể xem lại hoặc điều chỉnh các dự toán của mình.
+          </Typography>
+        ),
+      },
+      {
+        target: 'a[href="/product/"]',
+        title: 'Chức năng quản lý sản phẩm',
+        placement: 'left',
+        content: (
+          <Stack spacing={3}>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Tại đây bạn có thể tạo sản phẩm của mình và sử dụng cho việc thêm nhanh sản phẩm vào dự toán.
+            </Typography>
+          </Stack>
+        ),
+      },
+      {
+        target: 'a[href="/priority/"]',
+        title: 'Quản lý độ ưu tiên',
+        placement: 'left',
+        styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
+        slotProps: {
+          root: {
+            sx: {
+              width: 480,
+            },
+          },
+        },
+        content: (
+          <Stack spacing={2}>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Tại đây bạn có thể thêm độ ưu tiên để phân loại mức độ quan trọng của dự án. Có thể tùy chỉnh màu sắc, tên độ ưu tiên.
+            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Ví dụ:
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Label color="error">Cao</Label>
+              <Label color="warning">Trung bình</Label>
+              <Label color="info">Thấp</Label>
+           </Box>
+          </Stack>
+        ),
+      },
+      {
+        target: 'a[href="/user/"]',
+        title: 'Quản lý người dùng',
+        placement: 'left',
+        styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
+        slotProps: {
+          root: {
+            sx: {
+              width: 480,
+            },
+          },
+        },
+        content: (
+          <Stack spacing={2}>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Tại đây bạn có thể thêm người dùng mới và phân quyền cho họ.
+              Những tài khoản được phân quyền chỉ được thao tác các chức năng trong phạm vi cho phép.
+            </Typography>
+          </Stack>
+        ),
+      },
+      {
+        target: 'a[href="/organization/"]',
+        title: 'Quản lý thông tin đơn vị',
+        placement: 'left',
+        styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
+        slotProps: {
+          root: {
+            sx: {
+              width: 480,
+            },
+          },
+        },
+        content: (
+          <Stack spacing={2}>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Bạn có thể xem danh sách các đơn vị tại đây.
+            </Typography>
+          </Stack>
+        ),
+      },
+      {
+        target: 'a[href="/role/"]',
+        title: 'Quản lý phân quyền',
+        placement: 'left',
+        styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
+        slotProps: {
+          root: {
+            sx: {
+              width: 480,
+            },
+          },
+        },
+        content: (
+          <Stack spacing={2}>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Bạn có thể thêm mới quyền hạn hoặc phân quyền cho nhóm người dùng tại đây.
+              Những người dùng được phân quyền chỉ được thao tác các chức năng trong phạm vi cho phép.
+            </Typography>
+          </Stack>
+        ),
+      },
+       {
+        target: '#account-button',
+        title: 'Hồ sơ của bạn',
+        placement: 'right',
+        styles: { options: { arrowColor: theme.vars.palette.grey[800] } },
+        slotProps: {
+          root: {
+            sx: {
+              width: 480,
+            },
+          },
+        },
+        content: (
+          <Stack spacing={1}>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Xem lại hoặc điều chỉnh thông tin cá nhân tại đây.
+            </Typography>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Bạn có thể đổi mật khẩu hoặc đăng xuất khỏi hệ thống.
+            </Typography>
+          </Stack>
+        ),
+      },
+    ],
+  });
 
   const renderHeader = () => {
     const headerSlotProps: HeaderSectionProps['slotProps'] = {
@@ -177,6 +347,13 @@ export function MainLayout({
       ]}
     >
       {renderMain()}
+
+      <Walktour
+        run={walktour.run}
+        steps={walktour.steps}
+        callback={walktour.onCallback}
+        getHelpers={walktour.setHelpers}
+      />
     </LayoutSection>
   );
 }
