@@ -62,8 +62,6 @@ export async function updateEstimate(id: string, payload: UpdatePayload) {
    * Work in local
    */
 
-
-
   mutate(
     (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
     undefined,
@@ -144,13 +142,13 @@ export async function approveEstimate(id: string) {
    * Work on server
    */
 
-  const response = await axios.patch(ENDPOINT.approve(id));
+  await axios.patch(ENDPOINT.approve(id));
 
   /**
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (typeof key === 'string' && key.startsWith(PROJECT_ENDPOINT.list)),
     undefined,
     true
   );
@@ -162,13 +160,13 @@ export async function rejectEstimate(id: string) {
    * Work on server
    */
 
-  const response = await axios.patch(ENDPOINT.reject(id));
+  await axios.patch(ENDPOINT.reject(id));
 
   /**
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (typeof key === 'string' && key.startsWith(PROJECT_ENDPOINT.list)),
     undefined,
     true
   );
@@ -181,13 +179,13 @@ export async function requestEditEstimate(id: string) {
    * Work on server
    */
 
-  const response = await axios.patch(ENDPOINT.request_edit(id));
+  await axios.patch(ENDPOINT.request_edit(id));
 
   /**
    * Work in local
    */
   mutate(
-    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (Array.isArray(key) && key[0] === PROJECT_ENDPOINT.list),
+    (key) => (Array.isArray(key) && key[0] === ENDPOINT.list) || key === ENDPOINT.details(id) || (typeof key === 'string' && key.startsWith(PROJECT_ENDPOINT.list)),
     undefined,
     true
   );
