@@ -1,10 +1,9 @@
 import type { ButtonProps } from '@mui/material/Button';
 
+import { toast } from 'sonner';
 import { useCallback } from 'react';
 
 import Button from '@mui/material/Button';
-
-import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { signOut } from 'src/auth/context/jwt/action';
@@ -16,7 +15,6 @@ type Props = ButtonProps & {
 };
 
 export function SignOutButton({ onClose, sx, ...other }: Props) {
-  const router = useRouter();
 
   const { checkUserSession } = useAuthContext();
 
@@ -26,11 +24,12 @@ export function SignOutButton({ onClose, sx, ...other }: Props) {
       await checkUserSession?.();
 
       onClose?.();
-      router.refresh();
     } catch (error) {
       console.error(error);
+      toast.error('Unable to logout!');
     }
-  }, [checkUserSession, onClose, router]);
+  }, [checkUserSession, onClose]);
+
 
   return (
     <Button

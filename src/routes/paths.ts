@@ -59,4 +59,8 @@ export const paths = {
     estimate: (id: any) => `/estimate/${id}/estimate`,
     details: (id: any) => `/estimate/${id}`,
   },
+  profile: {
+    change_password: `/profile/change-password`,
+    me: `/profile/me`,
+  },
 };
