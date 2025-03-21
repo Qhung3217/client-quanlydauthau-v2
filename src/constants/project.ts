@@ -15,7 +15,7 @@ export const PUBLIC_PROJECT_STATUS: ProjectStatus[] = [
   'APPROVED',
   'BUDGET_APPROVED',
   // 'QUOTED',
-  'COMPLETED',
+  // 'COMPLETED',
 ];
 
 export const PROJECT_STATUS_OBJ: { [k in ProjectStatus]: ProjectStatus } = {
