@@ -75,7 +75,7 @@ function Group({
       hasChildren.setValue(!!childrenCount);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items]);
+  }, [items, currentRole]);
 
   const renderContent = () => (
     <NavUl sx={{ gap: 'var(--nav-item-gap)' }} ref={ulRef}>

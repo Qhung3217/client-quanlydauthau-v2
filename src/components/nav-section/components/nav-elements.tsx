@@ -1,3 +1,4 @@
+import React from 'react';
 import { mergeClasses } from 'minimal-shared/utils';
 
 import { styled } from '@mui/material/styles';
@@ -28,6 +29,8 @@ export const NavLi = styled(
 
 type NavUlProps = React.ComponentProps<'ul'>;
 
-export const NavUl = styled((props: NavUlProps) => (
-  <ul {...props} className={mergeClasses([navSectionClasses.ul, props.className])} />
-))(() => ({ display: 'flex', flexDirection: 'column' }));
+export const NavUl = styled(
+  React.forwardRef<HTMLUListElement, NavUlProps>((props, ref) => (
+    <ul {...props} ref={ref} className={mergeClasses([navSectionClasses.ul, props.className])} />
+  ))
+)(() => ({ display: 'flex', flexDirection: 'column' }));
