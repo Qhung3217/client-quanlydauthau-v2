@@ -19,6 +19,8 @@ import { Walktour, useWalktour } from 'src/components/walktour';
 
 import TicketFab from 'src/sections/ticket/ticket-fab';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 import { NavMobile } from './nav-mobile';
 import { NavVertical } from './nav-vertical';
 import { layoutClasses } from '../core/classes';
@@ -58,6 +60,8 @@ export function MainLayout({
   layoutQuery = 'lg',
 }: MainLayoutProps) {
   const theme = useTheme();
+
+  const { user } = useAuthContext();
 
   const settings = useSettingsContext();
 
@@ -266,6 +270,7 @@ export function MainLayout({
             open={open}
             onClose={onClose}
             cssVars={navVars.section}
+            currentRole={user?.permissions}
             sx={{
               backgroundColor: '#fbfcfe',
             }}
@@ -301,6 +306,7 @@ export function MainLayout({
       sx={{
         backgroundColor: '#fbfcfe',
       }}
+      currentRole={user?.permissions}
       onToggleNav={() =>
         settings.setField(
           'navLayout',

@@ -78,7 +78,7 @@ function Group({
   }, [items]);
 
   const renderContent = () => (
-    <NavUl sx={{ gap: 'var(--nav-item-gap)' }}>
+    <NavUl sx={{ gap: 'var(--nav-item-gap)' }} ref={ulRef}>
       {items.map((list) => (
         <NavList
           key={list.title}
