@@ -18,9 +18,12 @@ import {
 } from '@mui/material';
 
 import { useGetProjects } from 'src/actions/project';
+import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
+
+import { useCheckPermission } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +46,10 @@ export function TicketToolbar({
   hideFilterProject,
   ...other
 }: Props) {
+  const { SEND_TICKET } = useCheckPermission({
+    SEND_TICKET: PERMISSION_ENUM.SEND_TICKET,
+  });
+
   const openProjectMenu = usePopover();
 
   const { projects, projectsLoading, projectsEmpty } = useGetProjects({
@@ -76,20 +83,22 @@ export function TicketToolbar({
           fullWidth
           size="small"
         />
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={onToggleCompose}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: 40,
-            minWidth: 40,
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-        </Button>
+        {SEND_TICKET && (
+          <Button
+            color="inherit"
+            variant="contained"
+            onClick={onToggleCompose}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 40,
+              minWidth: 40,
+            }}
+          >
+            <Iconify icon="solar:pen-bold" />
+          </Button>
+        )}
       </Box>
       {!hideFilterProject && (
         <Box>

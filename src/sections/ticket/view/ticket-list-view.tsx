@@ -10,6 +10,9 @@ import { useBoolean } from 'minimal-shared/hooks';
 import { Box, Paper, Drawer } from '@mui/material';
 
 import { useGetTickets } from 'src/actions/ticket';
+import { PERMISSION_ENUM } from 'src/constants/permission';
+
+import { useCheckPermission } from 'src/auth/hooks';
 
 import { TicketList } from '../ticket-list';
 import { TicketDetails } from '../ticket-detail';
@@ -22,9 +25,17 @@ type Props = {
 };
 export default function TicketListView({ projectId: filterProjectId, sx }: Props) {
   const { assignee, project, openCompose: openComposeFromContext, resetState } = useTicketContext();
+
+  const { VIEW_TICKET } = useCheckPermission({
+    VIEW_TICKET: PERMISSION_ENUM.VIEW_TICKET,
+  });
+
   const [ticketSelected, setTicketSelected] = useState<Ticket | null>(null);
+
   const [keywordSearch, setKeywordSearch] = useState('');
+
   const [page, setPage] = useState(1);
+
   const [projectId, setProjectId] = useState('');
 
   const { tickets, ticketsMeta, ticketsLoading, ticketsEmpty } = useGetTickets({
@@ -48,7 +59,7 @@ export default function TicketListView({ projectId: filterProjectId, sx }: Props
   const handleChangePage = (event: any, value: SetStateAction<number>) => {
     setPage(value);
   };
-
+  if (!VIEW_TICKET) return null;
   return (
     <Paper
       sx={{

@@ -52,6 +52,7 @@ type Props = {
 
 export function TicketCompose({ onCloseCompose, open, emailOrPhone, project }: Props) {
   const theme = useTheme();
+
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
 
   const fullScreen = useBoolean();
