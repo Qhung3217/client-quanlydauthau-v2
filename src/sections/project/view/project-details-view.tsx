@@ -11,6 +11,7 @@ import { MainContent } from 'src/layouts/main';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 import ProjectItem from '../project-item';
+import ProjectDetailsSkeleton from '../project-skeleton';
 import ProjectEstimateList from '../project-estimate-list';
 import ProjectReviewControl from '../project-review-control';
 import useProjectActions from '../hooks/use-project-actions';
@@ -21,12 +22,18 @@ type Props = {
 };
 
 export default function ProjectDetailsView({ project, loading }: Props) {
-  const {  renderConfirmDialog } =
-    useProjectActions();
+  const { renderConfirmDialog } = useProjectActions();
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <MainContent>
+        <ProjectDetailsSkeleton />
+      </MainContent>
+    );
+  }
+
   return (
-    <MainContent >
+    <MainContent>
       <CustomBreadcrumbs
         heading={project.name || 'Dự án'}
         links={[{ name: 'Tất cả dự án', href: paths.project.root }, { name: `#${project.code}` }]}
@@ -35,15 +42,12 @@ export default function ProjectDetailsView({ project, loading }: Props) {
       <Stack spacing={3}>
         <ProjectReviewControl project={project} />
 
-        <ProjectItem
-          project={project}
-        />
+        <ProjectItem project={project} />
 
-        <ProjectEstimateList project={project}/>
+        <ProjectEstimateList project={project} />
       </Stack>
 
       {renderConfirmDialog()}
-
     </MainContent>
   );
 }

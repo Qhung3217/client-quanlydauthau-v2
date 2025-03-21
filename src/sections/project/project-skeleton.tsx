@@ -1,7 +1,7 @@
+
 import type { BoxProps } from '@mui/material/Box';
 
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
+import { Box, Grid, Stack, Skeleton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -99,26 +99,76 @@ export function ProjectListSkeleton({
 
 // ----------------------------------------------------------------------
 
-export function PostDetailsSkeleton({ sx, ...other }: BoxProps) {
-  return (
-    <Box sx={sx} {...other}>
-      <Skeleton variant="rectangular" sx={{ height: 480 }} />
 
-      <Box sx={{ width: 1, maxWidth: 720, mx: 'auto' }}>
-        <Box
-          sx={{
-            my: 8,
-            gap: 1,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Skeleton height={10} />
-          <Skeleton height={10} sx={{ width: 0.9 }} />
-          <Skeleton height={10} sx={{ width: 0.8 }} />
-        </Box>
-        <Skeleton sx={{ height: 720, mb: 8 }} />
+export default function ProjectDetailsSkeleton() {
+  return (
+    <Box sx={{ p: 3 }}>
+      {/* Tiêu đề dự án */}
+      <Skeleton variant="text" sx={{ fontSize: 32, width: '30%' }} />
+      <Skeleton variant="text" sx={{ width: '15%' }} />
+
+      {/* Thanh trạng thái tiến trình */}
+      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+        <Skeleton variant="circular" width={24} height={24} />
+        <Skeleton variant="circular" width={24} height={24} />
+        <Skeleton variant="circular" width={24} height={24} />
+        <Skeleton variant="circular" width={24} height={24} />
+      </Stack>
+
+      {/* Các nút thao tác */}
+      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+        <Skeleton variant="rectangular" width={120} height={40} />
+        <Skeleton variant="rectangular" width={180} height={40} />
+      </Stack>
+
+      {/* Thông tin dự án */}
+      <Box
+        sx={{
+          mt: 4,
+          p: 3,
+          borderRadius: 2,
+          bgcolor: 'background.paper',
+          border: (theme) => `solid 1px ${theme.vars.palette.divider}`,
+        }}
+      >
+        <Skeleton variant="text" sx={{ width: '20%', height: 30 }} />
+        <Skeleton variant="text" sx={{ width: '50%' }} />
+        <Skeleton variant="text" sx={{ width: '40%' }} />
+        <Skeleton variant="text" sx={{ width: '30%' }} />
+        <Skeleton variant="text" sx={{ width: '50%', color: 'red' }} />
+      </Box>
+
+      {/* Danh sách dự toán */}
+      <Box
+        sx={{
+          mt: 4,
+          p: 3,
+          borderRadius: 2,
+          bgcolor: 'background.paper',
+          border: (theme) => `solid 1px ${theme.vars.palette.divider}`,
+        }}
+      >
+        <Skeleton variant="text" sx={{ width: '20%', height: 30 }} />
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          {[...Array(2)].map((_, index) => (
+            <Grid item xs={12} key={index}>
+              <Box
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  bgcolor: 'background.paper',
+                  border: (theme) => `solid 1px ${theme.vars.palette.divider}`,
+                }}
+              >
+                <Skeleton variant="text" sx={{ width: '30%' }} />
+                <Skeleton variant="text" sx={{ width: '50%' }} />
+                <Skeleton variant="text" sx={{ width: '40%' }} />
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </Box>
   );
 }
+
