@@ -15,7 +15,6 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
-import { exportProjectToExcel } from '../../helpers/project-excel';
 import useProjectActionPermit from './hooks/use-project-action-permit';
 
 const getDialogContent = (action: string) => {
@@ -33,8 +32,7 @@ const getDialogContent = (action: string) => {
     case 'EDIT_REQUESTED':
       return {
         message: 'Bạn có chắc chắn muốn Yêu cầu điều chỉnh dự án này?',
-        subtitle:
-          'Sau khi xác nhận, dự án có thể được điều chỉnh.',
+        subtitle: 'Sau khi xác nhận, dự án có thể được điều chỉnh.',
       };
     case 'COMPLETED':
       return {
@@ -63,20 +61,13 @@ export default function ProjectReviewControl({ project }: Props) {
 
   const projectStatusRender = () => (
     <Box>
-      <Stepper
-        activeStep={PUBLIC_PROJECT_STATUS.indexOf(project.status)}
-        alternativeLabel
-      >
+      <Stepper activeStep={PUBLIC_PROJECT_STATUS.indexOf(project.status)} alternativeLabel>
         {PUBLIC_PROJECT_STATUS.map((status) => {
           const config = getProjectStatusConfig(status);
           return (
             <Step key={status}>
-              <Tooltip
-                title={config.desc}
-              >
-                <StepLabel>
-                  {config.label}
-                </StepLabel>
+              <Tooltip title={config.desc}>
+                <StepLabel>{config.label}</StepLabel>
               </Tooltip>
             </Step>
           );
@@ -87,7 +78,7 @@ export default function ProjectReviewControl({ project }: Props) {
 
   const handleConfirmAction = async () => {
     try {
-      processing.onTrue()
+      processing.onTrue();
       switch (selectedAction) {
         case 'APPROVED':
           await approveProject(project.id);
@@ -119,10 +110,6 @@ export default function ProjectReviewControl({ project }: Props) {
     setSelectedAction(action);
     openDialogConfirm.onTrue();
   };
-
-  const handleExportExcel = () => {
-    exportProjectToExcel(project)
-  }
 
   return (
     <Paper
@@ -182,9 +169,7 @@ export default function ProjectReviewControl({ project }: Props) {
               startIcon={
                 <Iconify icon="material-symbols:edit-outline-sharp" width={24} color="white" />
               }
-              onClick={() =>
-                handleAction('EDIT_REQUESTED')
-              }
+              onClick={() => handleAction('EDIT_REQUESTED')}
             >
               Yêu cầu điều chỉnh
             </Button>
@@ -238,7 +223,11 @@ export default function ProjectReviewControl({ project }: Props) {
           </>
         }
         action={
-          <LoadingButton loading={processing.value} variant="contained" onClick={handleConfirmAction}>
+          <LoadingButton
+            loading={processing.value}
+            variant="contained"
+            onClick={handleConfirmAction}
+          >
             Xác nhận
           </LoadingButton>
         }

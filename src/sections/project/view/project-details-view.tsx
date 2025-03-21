@@ -2,13 +2,17 @@
 
 import type { ProjectDetails } from 'src/types/project';
 
-import { Stack } from '@mui/material';
+import { Box, Stack, Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
 import { MainContent } from 'src/layouts/main';
+import { exportProjectToExcel } from 'src/helpers/project-excel';
 
+import { Iconify } from 'src/components/iconify';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
+
+import TicketListView from 'src/sections/ticket/view/ticket-list-view';
 
 import ProjectItem from '../project-item';
 import ProjectEstimateList from '../project-estimate-list';
@@ -21,29 +25,69 @@ type Props = {
 };
 
 export default function ProjectDetailsView({ project, loading }: Props) {
-  const {  renderConfirmDialog } =
-    useProjectActions();
+  const { renderConfirmDialog } = useProjectActions();
+
+  const handleExportExcel = () => {
+    exportProjectToExcel(project);
+  };
 
   if (loading) return null;
+
   return (
-    <MainContent >
+    <MainContent>
       <CustomBreadcrumbs
         heading={project.name || 'Dự án'}
         links={[{ name: 'Tất cả dự án', href: paths.project.root }, { name: `#${project.code}` }]}
         sx={{ mb: { xs: 3, md: 5 } }}
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Iconify icon="material-symbols:file-export-outline-rounded" width={24} />}
+            onClick={handleExportExcel}
+          >
+            Xuất Excel
+          </Button>
+        }
       />
       <Stack spacing={3}>
         <ProjectReviewControl project={project} />
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'repeat(1,1fr)',
+              md: 'repeat(2,1fr)',
+            },
+          }}
+        >
+          <Stack spacing={3}>
+            <ProjectItem project={project} />
 
-        <ProjectItem
-          project={project}
-        />
+            <ProjectEstimateList
+              project={project}
+              sx={{
+                '& #estimate-list': {
+                  gridTemplateColumns: 'repeat(1,1fr)',
+                },
+              }}
+            />
+          </Stack>
 
-        <ProjectEstimateList project={project}/>
+          <Box>
+            <TicketListView
+              projectId={project.id}
+              sx={{
+                '& #ticket-searchbar': {
+                  pt: 0,
+                },
+              }}
+            />
+          </Box>
+        </Box>
       </Stack>
 
       {renderConfirmDialog()}
-
     </MainContent>
   );
 }

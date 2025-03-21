@@ -14,6 +14,7 @@ import { attachServerUrl } from 'src/utils/attach-server-url';
 import { getTicketStatusConfig } from 'src/helpers/get-ticket-status-config';
 
 import { Label } from 'src/components/label';
+import { TextMaxLine } from 'src/components/text-max-line';
 
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -63,8 +64,16 @@ export function TicketItem({ ticket, selected, sx, ...other }: Props) {
           </Avatar>
         )}
         <ListItemText
-          primary={ticket.code + ' - ' + ticket.title}
-          primaryTypographyProps={{ noWrap: true, component: 'span', variant: 'subtitle2' }}
+          primary={
+            <>
+              <Typography variant="caption" sx={{ fontSize: 11 }}>
+                {ticket.code}
+              </Typography>
+              <TextMaxLine line={2} variant="subtitle1">
+                {ticket.title}
+              </TextMaxLine>
+            </>
+          }
           secondary={ticket.lastComment}
           secondaryTypographyProps={{
             noWrap: true,

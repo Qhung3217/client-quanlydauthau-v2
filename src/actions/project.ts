@@ -17,6 +17,7 @@ const swrOptions: SWRConfiguration = {
   revalidateIfStale: false,
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
+  revalidateOnMount: true,
 };
 
 // ----------------------------------------------------------------------
@@ -26,9 +27,12 @@ export function useGetProjects(
   params?: IReqSearchParams & {
     statuses?: ProjectStatus;
     isMyProjects?: boolean;
+    isNotFetch?: boolean;
   }
 ) {
-  const url = [ENDPOINT.list, { params }];
+  const isNotFetch = params?.isNotFetch;
+
+  const url = isNotFetch ? null : [ENDPOINT.list, { params }];
 
   const {
     data,

@@ -22,7 +22,11 @@ const swrOptions: SWRConfiguration = {
 // ----------------------------------------------------------------------
 export type TicketRes = IApiListResponse<Ticket[]>;
 
-export function useGetTickets(params?: IReqSearchParams) {
+export function useGetTickets(
+  params?: IReqSearchParams & {
+    projectId?: string;
+  }
+) {
   const url = [ENDPOINT.list, { params }];
 
   const {

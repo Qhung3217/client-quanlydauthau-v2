@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 import { mergeClasses } from 'minimal-shared/utils';
 
@@ -62,6 +63,20 @@ function Group({
 }: NavGroupProps) {
   const groupOpen = useBoolean(true);
 
+  const hasChildren = useBoolean(true);
+
+  const ulRef = useRef<HTMLUListElement | null>(null);
+
+  useEffect(() => {
+    const element = ulRef.current;
+
+    if (element) {
+      const childrenCount = element.children.length;
+      hasChildren.setValue(!!childrenCount);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
+
   const renderContent = () => (
     <NavUl sx={{ gap: 'var(--nav-item-gap)' }}>
       {items.map((list) => (
@@ -80,7 +95,7 @@ function Group({
 
   return (
     <NavLi>
-      {subheader ? (
+      {subheader && hasChildren.value ? (
         <>
           <NavSubheader
             data-title={subheader}

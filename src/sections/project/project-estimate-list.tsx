@@ -1,16 +1,17 @@
+import type { Estimate } from 'src/types/estimate';
+import type { ProjectDetails } from 'src/types/project';
 
-import type { Estimate } from "src/types/estimate";
-import type { ProjectDetails } from "src/types/project";
+import { useState } from 'react';
+import { useBoolean } from 'minimal-shared/hooks';
 
-import { useState } from "react";
-import { useBoolean } from "minimal-shared/hooks";
+import { Box, Card, Stack, Typography, type CardProps } from '@mui/material';
 
 import { Box, Card, Stack, Button, Typography, type CardProps } from "@mui/material";
 
 import { paths } from "src/routes/paths";
 import { RouterLink } from "src/routes/components";
 
-import { PERMISSION_ENUM } from "src/constants/permission";
+import { EmptyContent } from 'src/components/empty-content';
 
 import { Iconify } from "src/components/iconify";
 import { EmptyContent } from "src/components/empty-content";
@@ -22,8 +23,8 @@ import EstimateDialog from "../estimate/estimate-dialog";
 import useProjectActionPermit from "./hooks/use-project-action-permit";
 
 type Props = CardProps & {
-  project: ProjectDetails
-}
+  project: ProjectDetails;
+};
 
 export default function ProjectEstimateList({ project, sx, ...other }: Props) {
   const openDetails = useBoolean();
@@ -49,7 +50,7 @@ export default function ProjectEstimateList({ project, sx, ...other }: Props) {
         key={estimate.id}
         project={project}
         estimate={estimate}
-          detailsClick={() => {
+        detailsClick={() => {
           setEstimateIdView(estimate.id);
           openDetails.onTrue();
         }}
@@ -70,12 +71,13 @@ export default function ProjectEstimateList({ project, sx, ...other }: Props) {
       ]}
       {...other}
     >
-      <Typography fontWeight="bold">{ isAdmin ? "Danh sách dự toán" : "Dự toán"}</Typography>
+      <Typography fontWeight="bold">{isAdmin ? 'Danh sách dự toán' : 'Dự toán'}</Typography>
 
       <Stack sx={{ mt: 2 }} />
 
-      {project.estimates.length > 0 ?
+      {project.estimates.length > 0 ? (
         <Box
+          id="estimate-list"
           sx={{
             gap: 3,
             display: 'grid',

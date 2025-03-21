@@ -3,18 +3,16 @@ import type { Ticket } from 'src/types/ticket';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import { Button, Pagination } from '@mui/material';
-import InputAdornment from '@mui/material/InputAdornment';
+import { Pagination } from '@mui/material';
 
 import useDebounceCallback from 'src/hooks/use-debounce-callback';
 
 import { CONFIG } from 'src/global-config';
 
-import { Iconify } from 'src/components/iconify';
 import { EmptyContent } from 'src/components/empty-content';
 
 import { TicketItem } from './ticket-item';
+import { TicketToolbar } from './ticket-toolbar';
 import { TicketItemSkeleton } from './ticket-nav-skeleton';
 
 // ----------------------------------------------------------------------
@@ -25,11 +23,14 @@ type Props = {
   tickets: Ticket[];
   selectedTicketId: string;
   onClickTicket: (ticket: Ticket) => void;
+  keyword: string;
   setKeywordSearch: (keyword: string) => void;
   page: number;
   totalPages: number;
   handlePageChange: (event: ChangeEvent<unknown>, value: number) => void;
   onToggleCompose: () => void;
+  projectId: string;
+  setProjectId: (projectId: string) => void;
 };
 
 export function TicketList({
@@ -37,17 +38,20 @@ export function TicketList({
   loading,
   tickets,
   onClickTicket,
+  keyword,
   selectedTicketId,
   setKeywordSearch,
   page,
   totalPages,
   handlePageChange,
   onToggleCompose,
+  projectId,
+  setProjectId,
 }: Props) {
   const debouncedSetKeyword = useDebounceCallback((value: string) => setKeywordSearch(value), 500);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSetKeyword(event.target.value);
+  const handleChange = (value: string) => {
+    debouncedSetKeyword(value);
   };
 
   const renderLoading = () => (
@@ -110,42 +114,20 @@ export function TicketList({
     );
 
   const renderSearchBar = () => (
-    <Box sx={{ display: 'flex', flex: 1, gap: 1, mt: 1 }}>
-      <TextField
-        placeholder="Tìm kiếm mã, tiêu đề ticket..."
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-              </InputAdornment>
-            ),
-          },
-        }}
-        onChange={handleChange}
-        fullWidth
-        size="small"
-      />
-      <Button
-        color="inherit"
-        variant="contained"
-        onClick={onToggleCompose}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: 40,
-          minWidth: 40,
-        }}
-      >
-        <Iconify icon="solar:pen-bold" />
-      </Button>
-    </Box>
+    <TicketToolbar
+      setKeywordSearch={handleChange}
+      keyword={keyword}
+      projectId={projectId}
+      setProjectId={setProjectId}
+      onToggleCompose={onToggleCompose}
+    />
   );
 
   const renderContent = () => (
     <>
-      <Stack sx={{ p: 2 }}>{renderSearchBar()}</Stack>
+      <Stack sx={{ p: 2 }} id="ticket-searchbar">
+        {renderSearchBar()}
+      </Stack>
 
       {loading ? renderLoading() : renderList()}
     </>

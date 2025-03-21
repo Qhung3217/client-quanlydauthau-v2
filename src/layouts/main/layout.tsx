@@ -25,7 +25,6 @@ import { layoutClasses } from '../core/classes';
 import { _account } from '../nav-config-account';
 import { mainNavData } from '../nav-config-main';
 import { MainSection } from '../core/main-section';
-import { Searchbar } from '../components/searchbar';
 import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
@@ -275,9 +274,6 @@ export function MainLayout({
       ),
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.75 } }}>
-          {/** @slot Searchbar */}
-          <Searchbar data={navData} />
-
           {/** @slot Account drawer */}
           <AccountDrawer data={_account} />
         </Box>

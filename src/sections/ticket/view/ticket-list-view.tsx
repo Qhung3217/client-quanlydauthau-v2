@@ -1,34 +1,35 @@
 'use client';
 
 import type { SetStateAction } from 'react';
+import type { SxProps } from '@mui/material';
 import type { Ticket } from 'src/types/ticket';
 
 import { useState, useCallback } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
-import { Box, Drawer } from '@mui/material';
+import { Box, Paper, Drawer } from '@mui/material';
 
 import { useGetTickets } from 'src/actions/ticket';
 
-import { TicketList } from './ticket-list';
-import { TicketDetails } from './ticket-detail';
-import { TicketCompose } from './ticket-compose';
+import { TicketList } from '../ticket-list';
+import { TicketDetails } from '../ticket-detail';
+import { TicketCompose } from '../ticket-compose';
 
 type Props = {
-  open: boolean;
-  onClose: () => void;
+  projectId?: string;
+  sx?: SxProps;
 };
-export default function TicketListDrawer({ open, onClose }: Props) {
+export default function TicketListView({ projectId: filterProjectId, sx }: Props) {
   const [ticketSelected, setTicketSelected] = useState<Ticket | null>(null);
   const [keywordSearch, setKeywordSearch] = useState('');
-  const [projectId, setProjectId] = useState('');
   const [page, setPage] = useState(1);
+  const [projectId, setProjectId] = useState('');
 
   const { tickets, ticketsMeta, ticketsLoading, ticketsEmpty } = useGetTickets({
     page,
     perPage: 10,
     keyword: keywordSearch,
-    projectId,
+    projectId: filterProjectId,
   });
 
   const openCompose = useBoolean();
@@ -45,37 +46,12 @@ export default function TicketListDrawer({ open, onClose }: Props) {
     setPage(value);
   };
 
-  //   useEffect(() => {
-  //     if (!selectedTicketId && firstTicketId) {
-  //       handleClickTicket(firstTicketId);
-  //     }
-  //   }, [firstTicketId, handleClickTicket, selectedTicketId]);
-
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      PaperProps={{
-        sx: {
-          height: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-          maxWidth: 500,
-          width: '90%',
-        },
-      }}
-      ModalProps={{
-        sx: {
-          zIndex: 'var(--layout-nav-zIndex)',
-        },
-      }}
-      slotProps={{
-        backdrop: {
-          sx: {
-            backgroundColor: 'transparent',
-          },
-        },
+    <Paper
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        ...sx,
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}>
@@ -115,6 +91,6 @@ export default function TicketListDrawer({ open, onClose }: Props) {
         {ticketSelected && <TicketDetails ticket={ticketSelected} />}
       </Drawer>
       <TicketCompose open={openCompose.value} onCloseCompose={openCompose.onFalse} />
-    </Drawer>
+    </Paper>
   );
 }

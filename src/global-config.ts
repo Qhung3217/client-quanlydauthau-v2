@@ -30,7 +30,7 @@ export const CONFIG: ConfigValue = {
   serverUrl: process.env.NEXT_PUBLIC_SERVER_URL ?? '',
   assetsDir: process.env.NEXT_PUBLIC_ASSETS_DIR ?? '',
   isStaticExport: JSON.parse(`${process.env.BUILD_STATIC_EXPORT}`),
-  xApiKey: process.env.NEXT_X_API_KEY ?? '',
+  xApiKey: process.env.NEXT_PUBLIC_X_API_KEY ?? '',
   /**
    * Auth
    * @method jwt

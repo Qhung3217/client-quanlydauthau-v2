@@ -4,7 +4,7 @@ import type { Estimate } from 'src/types/estimate';
 
 import { usePopover } from 'minimal-shared/hooks';
 
-import { Box, Card, MenuItem, MenuList, IconButton, Typography } from '@mui/material';
+import { Box, Card, Stack, MenuItem, MenuList, IconButton, Typography } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 
@@ -163,21 +163,41 @@ export default function EstimateItem({
             {estimate.name}
           </Typography>
 
-          <Typography variant="caption" sx={{}}>
-            <strong> Mã dự án:</strong> #{project.code}
-          </Typography>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: 'repeat(1,1fr)',
+                md: 'repeat(2,1fr)',
+              },
+            }}
+          >
+            <Stack spacing={1}>
+              <Typography variant="caption" sx={{}}>
+                <strong> Mã dự án:</strong> #{project.code}
+              </Typography>
 
-          <Typography variant="caption" sx={{}}>
-            <strong> Dự án: </strong> {project.name}
-          </Typography>
+              <Typography variant="caption" sx={{}}>
+                <strong> Dự án: </strong> {project.name}
+              </Typography>
 
-          <Typography variant="caption" sx={{}}>
-            <strong> Người tạo: </strong> {estimate.creator.name} {estimate.creator?.company?.name && `(${estimate.creator?.company?.name})`}
-          </Typography>
-
-          <Typography variant="caption" sx={{}}>
-            <strong> Ngày tạo: </strong> {fDate(estimate.createdAt)}
-          </Typography>
+              <Typography variant="caption" sx={{}}>
+                <strong> Ngày tạo: </strong> {fDate(estimate.createdAt)}
+              </Typography>
+            </Stack>
+            <Stack spacing={1}>
+              <Typography variant="caption" sx={{}}>
+                <strong> Người tạo: </strong> {estimate.creator.name}{' '}
+                {estimate.creator?.company?.name && `(${estimate.creator?.company?.name})`}
+              </Typography>
+              <Typography variant="caption" sx={{}}>
+                <strong> Email: </strong> {estimate.creator.email}
+              </Typography>
+              <Typography variant="caption" sx={{}}>
+                <strong> Số điện thoại: </strong> {estimate.creator.phone}
+              </Typography>
+            </Stack>
+          </Box>
         </Box>
 
         {(editClick || deleteClick || approveClick || rejectClick) && (

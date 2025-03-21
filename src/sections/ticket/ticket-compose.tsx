@@ -1,3 +1,6 @@
+import type { Project } from 'src/types/project';
+import type { FilterOptionsState } from '@mui/material';
+
 import { z as zod } from 'zod';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
@@ -14,8 +17,10 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { ListItem, ListItemText } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import { useGetProjects } from 'src/actions/project';
 import { createTicket } from 'src/actions/ticket-ssr';
 
 import { Iconify } from 'src/components/iconify';
@@ -26,20 +31,25 @@ import BlockField from 'src/components/hook-form/block-field';
 
 const POSITION = 20;
 
-type Props = {
-  onCloseCompose: () => void;
-};
-
 export type NewTicketSchemaType = zod.infer<typeof NewTicketSchema>;
 
 export const NewTicketSchema = zod.object({
   content: zod.string().min(1, 'Nội dung là bắt buộc!'),
   title: zod.string().min(1, 'Tiêu đề là bắt buộc!'),
   assignee: zod.string().min(1, 'Người nhận là bắt buộc!'),
+  projectId: zod.any().refine((value) => !!value, 'Dự án là bắt buộc!'),
   type: zod.string().min(1, 'Loại là bắt buộc!'),
 });
+// ----------------------------------------------------------------------
 
-export function TicketCompose({ onCloseCompose }: Props) {
+type Props = {
+  onCloseCompose: () => void;
+  open: boolean;
+  emailOrPhone?: string;
+  project?: Project;
+};
+
+export function TicketCompose({ onCloseCompose, open, emailOrPhone, project }: Props) {
   const theme = useTheme();
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -48,7 +58,8 @@ export function TicketCompose({ onCloseCompose }: Props) {
   const defaultValues: NewTicketSchemaType = {
     title: '',
     content: '',
-    assignee: '',
+    assignee: emailOrPhone ?? '',
+    projectId: project ?? null,
     type: 'PROJECT',
   };
 
@@ -88,6 +99,8 @@ export function TicketCompose({ onCloseCompose }: Props) {
       document.body.style.overflow = '';
     };
   }, [fullScreen.value]);
+
+  if (!open) return null;
 
   return (
     <Portal>
@@ -136,6 +149,9 @@ export function TicketCompose({ onCloseCompose }: Props) {
           </Box>
 
           <Stack spacing={2} flexGrow={1} sx={{ p: 2, flex: '1 1 auto', overflow: 'hidden' }}>
+            <BlockField label="Ticket cho dự án" required>
+              <ProjectAutocomplete />
+            </BlockField>
             <BlockField label="Email hoặc số điện thoại người nhận" required>
               <Field.Text name="assignee" size="small" placeholder="abc@gmail.com" />
             </BlockField>
@@ -171,5 +187,40 @@ export function TicketCompose({ onCloseCompose }: Props) {
         </Form>
       </Paper>
     </Portal>
+  );
+}
+
+function ProjectAutocomplete() {
+  const { projects, projectsLoading } = useGetProjects({
+    perPage: Number.MAX_SAFE_INTEGER,
+  });
+
+  // Custom filter - tìm kiếm cả code và name
+  const filterOptions = (options: Project[], state: FilterOptionsState<Project>): Project[] => {
+    const input = state.inputValue.toLowerCase();
+    return options.filter((option) =>
+      `#${option.code} ${option.name}`.toLowerCase().includes(input)
+    );
+  };
+
+  return (
+    <Field.Autocomplete
+      size="small"
+      options={projects}
+      loading={projectsLoading}
+      filterOptions={filterOptions}
+      getOptionLabel={(option) => `${option.code} - ${option.name}`}
+      name="projectId"
+      renderOption={(props: React.HTMLAttributes<HTMLLIElement>, option: Project) => (
+        <ListItem {...props} key={option.id}>
+          <ListItemText
+            primary={'#' + option.code}
+            secondary={option.name}
+            primaryTypographyProps={{ fontWeight: 600 }}
+          />
+        </ListItem>
+      )}
+      isOptionEqualToValue={(option, value) => option.id === value?.id}
+    />
   );
 }
