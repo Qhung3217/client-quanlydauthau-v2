@@ -16,6 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { useGetEstimate } from 'src/actions/estimate';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
+import { Iconify } from 'src/components/iconify';
 import { EmptyContent } from 'src/components/empty-content';
 
 import { useCheckPermission } from 'src/auth/hooks';
@@ -164,6 +165,7 @@ export default function EstimateDialog({ open, onClose, estimateId }: Props) {
                   href={paths.estimate.edit(estimate.id)}
                   variant="contained"
                   color="warning"
+                  startIcon={ <Iconify width={24} icon="material-symbols:edit-outline" />}
                 >
                   Điều chỉnh
                 </Button>
@@ -179,6 +181,7 @@ export default function EstimateDialog({ open, onClose, estimateId }: Props) {
               <Button
                 color="primary"
                 variant="contained"
+                startIcon={ <Iconify width={24} icon="material-symbols:order-approve-outline" />}
                 onClick={() => onApprove({ id: estimate?.id, name: estimate?.name })}
               >
                 Duyệt dự toán
@@ -188,6 +191,7 @@ export default function EstimateDialog({ open, onClose, estimateId }: Props) {
               <Button
                 color="warning"
                 variant="contained"
+                startIcon={ <Iconify width={24} icon="material-symbols:edit-outline" />}
                 onClick={() => onRequestEdit({ id: estimate?.id, name: estimate?.name })}
               >
                 Yêu cầu điều chỉnh
@@ -198,6 +202,7 @@ export default function EstimateDialog({ open, onClose, estimateId }: Props) {
                 color="error"
                 variant="contained"
                 onClick={() => onReject({ id: estimate?.id, name: estimate?.name })}
+                startIcon={ <Iconify width={24} icon="material-symbols:cancel" />}
               >
                 Hủy dự toán
               </Button>

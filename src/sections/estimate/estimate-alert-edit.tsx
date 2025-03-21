@@ -10,6 +10,8 @@ import {
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { Iconify } from 'src/components/iconify';
+
 type Props = {
   id: string;
 };
@@ -32,8 +34,9 @@ export default function EstimateAlertEdit({ id }: Props) {
         <Button
           LinkComponent={RouterLink}
           href={paths.estimate.edit(id)}
-          variant="contained"
+          variant="soft"
           color="warning"
+          startIcon={ <Iconify width={24} icon="material-symbols:edit-outline" />}
         >
           Điều chỉnh
         </Button>
