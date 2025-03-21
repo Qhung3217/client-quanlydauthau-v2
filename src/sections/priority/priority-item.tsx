@@ -27,20 +27,22 @@ export default function PriorityItem({ priority, onEdit, onDelete }: Props) {
   });
   return (
     <Card sx={{ height: 80, borderRadius: 1, py: 1, px: 2, position: 'relative' }}>
-      <PriorityTag priority={priority.color} />
+      <PriorityTag priority={priority} />
       <Typography>{priority.name}</Typography>
-      <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
-        <IconButton
-          size="small"
-          onClick={(event) => {
-            popover.onOpen(event);
+      {(UPDATE_PERMIT || DELETE_PERMIT) && (
+        <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+          <IconButton
+            size="small"
+            onClick={(event) => {
+              popover.onOpen(event);
 
-            event.stopPropagation();
-          }}
-        >
-          <Iconify icon="mdi:dots-vertical" />
-        </IconButton>
-      </Box>
+              event.stopPropagation();
+            }}
+          >
+            <Iconify icon="mdi:dots-vertical" />
+          </IconButton>
+        </Box>
+      )}
       <Menu
         disableRestoreFocus
         disableEnforceFocus
