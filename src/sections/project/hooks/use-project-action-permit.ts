@@ -13,6 +13,7 @@ export default function useProjectActionPermit(status: string) {
     REQUEST_EDIT_PERMIT,
     CREATE_ESTIMATE_PERMIT,
     VIEW_ESTIMATE_PERMIT,
+    EXPORT_EXCEL_PROJECT
   } = useCheckPermission({
     EDIT_PERMIT: PERMISSION_ENUM.UPDATE_PROJECT,
     DELETE_PERMIT: PERMISSION_ENUM.DELETE_PROJECT,
@@ -21,6 +22,7 @@ export default function useProjectActionPermit(status: string) {
     REQUEST_EDIT_PERMIT: PERMISSION_ENUM.REQUEST_EDIT_PROJECT,
     CREATE_ESTIMATE_PERMIT: PERMISSION_ENUM.CREATE_ESTIMATE,
     VIEW_ESTIMATE_PERMIT: PERMISSION_ENUM.VIEW_ESTIMATE,
+    EXPORT_EXCEL_PROJECT: PERMISSION_ENUM.EXPORT_EXCEL_PROJECT,
   });
 
   const editPermit = EDIT_PERMIT && status === 'EDIT_REQUESTED';
@@ -35,6 +37,9 @@ export default function useProjectActionPermit(status: string) {
 
   const createEstimatePermit = CREATE_ESTIMATE_PERMIT && status === 'APPROVED';
 
+  const exportExcelProjectPermit = EXPORT_EXCEL_PROJECT &&
+    (status !== 'PENDING' && status !== 'EDIT_REQUESTED' && status !== 'CANCELED');
+
   const viewEstimatePermit = VIEW_ESTIMATE_PERMIT;
 
   return {
@@ -45,5 +50,6 @@ export default function useProjectActionPermit(status: string) {
     requestEditPermit,
     createEstimatePermit,
     viewEstimatePermit,
+    exportExcelProjectPermit
   };
 }
