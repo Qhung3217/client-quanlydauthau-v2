@@ -60,7 +60,7 @@ export const exportProjectToExcel = async (project: ProjectDetails) => {
       // Chuyển HTML sang text giữ định dạng
       const description = htmlToText(product.desc || "", {
         preserveNewlines: true,
-      });
+      }).replace(/^- /gm, "• ");
 
       const row = worksheet.addRow([count, product.name, description]);
 

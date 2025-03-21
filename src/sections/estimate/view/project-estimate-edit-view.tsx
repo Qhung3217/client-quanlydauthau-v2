@@ -10,6 +10,7 @@ import { paths } from 'src/routes/paths';
 
 import { MainContent } from 'src/layouts/main';
 
+import { Iconify } from 'src/components/iconify';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 import ProjectItem from 'src/sections/project/project-item';
@@ -81,7 +82,12 @@ export default function ProjectEstimateEditView({ estimate, loading }: Props) {
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
         action={
-          <Button variant="soft" color="warning" onClick={openEstimateForm.onTrue}>
+          <Button
+            variant="soft"
+            color="warning"
+            onClick={openEstimateForm.onTrue}
+            startIcon={<Iconify width={24} icon="material-symbols:send-outline" />}
+          >
             Gửi điều chỉnh
           </Button>
         }

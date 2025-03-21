@@ -8,6 +8,8 @@ import { useBoolean } from 'minimal-shared/hooks';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
+import { Iconify } from 'src/components/iconify';
+
 import { EstimateCreateEditForm } from './estimate-create-edit-form';
 
 import type { ProductEstimateSchemaType } from './product-estimate-create-edit-form';
@@ -63,9 +65,10 @@ export default function EstimateCreateEditDialog({
             submitRef.current?.click();
             onClose();
           }}
-          variant="contained"
+          variant="soft"
           loading={loading.value}
           color={isEdit ? 'warning' : 'primary'}
+          startIcon={ <Iconify width={24} icon="material-symbols:send-outline" />}
         >
           {isEdit ? 'Gửi điều chỉnh' : 'Gửi dự toán'}
         </LoadingButton>
