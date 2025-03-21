@@ -45,7 +45,7 @@ export default function EstimateItem({
     rejectEstimatePermit,
     approveEstimatePermit,
     requestEditEstimatePermit,
-  } = useEstimateActionPermit(estimate.status);
+  } = useEstimateActionPermit(estimate.status, project.status);
 
   const hasPermitAction =
     updateEstimatePermit ||

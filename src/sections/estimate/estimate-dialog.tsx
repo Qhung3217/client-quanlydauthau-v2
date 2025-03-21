@@ -46,7 +46,7 @@ export default function EstimateDialog({ open, onClose, estimateId }: Props) {
     rejectEstimatePermit,
     approveEstimatePermit,
     requestEditEstimatePermit,
-  } = useEstimateActionPermit(estimate?.status as any);
+  } = useEstimateActionPermit(estimate?.status as any, estimate?.project?.status as any);
 
   const showRequestEditDialog = estimate?.status === 'EDIT_REQUESTED' && UPDATE_PERMIT;
 

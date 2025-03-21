@@ -1,10 +1,12 @@
 'use client';
 
+import type { ProjectStatus } from 'src/types/project';
+
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
 import { useCheckPermission } from 'src/auth/hooks';
 
-export default function useProjectActionPermit(status: string) {
+export default function useProjectActionPermit(status: ProjectStatus) {
   const {
     DELETE_PERMIT,
     EDIT_PERMIT,
@@ -37,8 +39,12 @@ export default function useProjectActionPermit(status: string) {
 
   const createEstimatePermit = CREATE_ESTIMATE_PERMIT && status === 'APPROVED';
 
-  const exportExcelProjectPermit = EXPORT_EXCEL_PROJECT &&
-    (status !== 'PENDING' && status !== 'EDIT_REQUESTED' && status !== 'CANCELED');
+  const exportExcelProjectPermit =
+    EXPORT_EXCEL_PROJECT &&
+    (
+      status !== 'PENDING'
+      && (status == 'BUDGET_APPROVED' || status == 'COMPLETED' || status == 'QUOTED')
+    );
 
   const viewEstimatePermit = VIEW_ESTIMATE_PERMIT;
 

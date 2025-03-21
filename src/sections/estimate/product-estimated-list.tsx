@@ -128,15 +128,3 @@ export default function ProductEstimatedList({
     </Paper>
   );
 }
-// <ProductEstimateItem
-//               key={`${product}-${index}`}
-//               product={product}
-//               onClick={() => onSelected(product, index)}
-//               onRemove={() => onRemove(index)}
-//               sx={{
-//                 ...(selectedIndex === index && {
-//                   backgroundColor: '#f6f6f6',
-//                   borderColor: 'primary.main',
-//                 }),
-//               }}
-//             />
