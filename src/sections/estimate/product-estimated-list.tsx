@@ -67,12 +67,12 @@ export default function ProductEstimatedList({
         emptyPanel()
       ) : (
         <TableContainer sx={{ flex: '1 1 0' }}>
-          <Table sx={{ minWidth: 300 }} stickyHeader>
+          <Table sx={{ minWidth: 300, minHeight: 1 }} stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell>STT</TableCell>
                 <TableCell>Sản phẩm</TableCell>
-                <TableCell>Mô tả</TableCell>
+                <TableCell sx={{ width: 300 }}>Mô tả</TableCell>
                 {(onSelected || onRemove) && (
                   <TableCell sx={{ width: 100 }} align="right">
                     ---
