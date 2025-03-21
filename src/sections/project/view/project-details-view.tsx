@@ -13,9 +13,10 @@ import { Iconify } from 'src/components/iconify';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 import TicketListView from 'src/sections/ticket/view/ticket-list-view';
-import { TicketProvider } from 'src/sections/ticket/context/ticket-provider';
+import { useTicketContext } from 'src/sections/ticket/context/use-ticket-context';
 
 import ProjectItem from '../project-item';
+import ProjectDetailsSkeleton from '../project-skeleton';
 import ProjectEstimateList from '../project-estimate-list';
 import ProjectReviewControl from '../project-review-control';
 import useProjectActions from '../hooks/use-project-actions';
@@ -26,73 +27,82 @@ type Props = {
 };
 
 export default function ProjectDetailsView({ project, loading }: Props) {
+  const { setField, project: projectContext } = useTicketContext();
+
   const { renderConfirmDialog } = useProjectActions();
 
   const handleExportExcel = () => {
     exportProjectToExcel(project);
   };
 
-  if (loading) return null;
+  if (loading)
+    return (
+      <MainContent>
+        <ProjectDetailsSkeleton />
+      </MainContent>
+    );
+
+  if (projectContext !== project) {
+    setField('project', project);
+  }
 
   return (
     <MainContent>
-      <TicketProvider>
-        <CustomBreadcrumbs
-          heading={project.name || 'Dự án'}
-          links={[{ name: 'Tất cả dự án', href: paths.project.root }, { name: `#${project.code}` }]}
-          sx={{ mb: { xs: 3, md: 5 } }}
-          action={
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<Iconify icon="material-symbols:file-export-outline-rounded" width={24} />}
-              onClick={handleExportExcel}
-            >
-              Xuất Excel
-            </Button>
-          }
-        />
-        <Stack spacing={3}>
-          <ProjectReviewControl project={project} />
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: 'repeat(1,1fr)',
-                md: 'repeat(2,1fr)',
-              },
-            }}
+      <CustomBreadcrumbs
+        heading={project.name || 'Dự án'}
+        links={[{ name: 'Tất cả dự án', href: paths.project.root }, { name: `#${project.code}` }]}
+        sx={{ mb: { xs: 3, md: 5 } }}
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Iconify icon="material-symbols:file-export-outline-rounded" width={24} />}
+            onClick={handleExportExcel}
           >
-            <Stack spacing={3}>
-              <ProjectItem project={project} />
+            Xuất Excel
+          </Button>
+        }
+      />
+      <Stack spacing={3}>
+        <ProjectReviewControl project={project} />
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'repeat(1,1fr)',
+              md: 'repeat(2,1fr)',
+            },
+          }}
+        >
+          <Stack spacing={3}>
+            <ProjectItem project={project} />
 
-              <ProjectEstimateList
-                project={project}
-                sx={{
-                  '& #estimate-list': {
-                    gridTemplateColumns: 'repeat(1,1fr)',
-                  },
-                }}
-              />
-            </Stack>
+            <ProjectEstimateList
+              project={project}
+              sx={{
+                '& #estimate-list': {
+                  gridTemplateColumns: 'repeat(1,1fr)',
+                },
+              }}
+            />
+          </Stack>
 
-            <Box>
-              <TicketListView
-                projectId={project.id}
-                sx={{
-                  '& #ticket-searchbar': {
-                    pt: 0,
-                  },
-                  '& ul': {
-                    height: 'unset',
-                  },
-                }}
-              />
-            </Box>
+          <Box>
+            <TicketListView
+              projectId={project.id}
+              sx={{
+                '& #ticket-searchbar': {
+                  pt: 0,
+                },
+                '& ul': {
+                  height: 'unset',
+                },
+              }}
+            />
           </Box>
-        </Stack>
-        {renderConfirmDialog()}
-      </TicketProvider>
+        </Box>
+      </Stack>
+      {renderConfirmDialog()}
     </MainContent>
   );
 }

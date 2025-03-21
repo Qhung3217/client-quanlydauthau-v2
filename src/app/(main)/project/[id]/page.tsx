@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { useGetProject } from 'src/actions/project';
 import { PERMISSION_ENUM } from 'src/constants/permission';
 
+import { TicketProvider } from 'src/sections/ticket/context/ticket-provider';
 import ProjectDetailsView from 'src/sections/project/view/project-details-view';
 
 import { RoleBasedGuard } from 'src/auth/guard';
@@ -26,7 +27,9 @@ export default function Page({ params: { id } }: Props) {
       currentRole={user?.permissions}
       hasContent
     >
-      <ProjectDetailsView project={project!} loading={projectLoading} />
+      <TicketProvider>
+        <ProjectDetailsView project={project!} loading={projectLoading} />
+      </TicketProvider>
     </RoleBasedGuard>
   );
 }
