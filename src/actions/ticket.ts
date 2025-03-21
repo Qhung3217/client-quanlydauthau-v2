@@ -25,9 +25,12 @@ export type TicketRes = IApiListResponse<Ticket[]>;
 export function useGetTickets(
   params?: IReqSearchParams & {
     projectId?: string;
+    notFetch?: boolean;
   }
 ) {
-  const url = [ENDPOINT.list, { params }];
+  const isNotFetch = !!params?.notFetch;
+
+  const url = isNotFetch ? null : [ENDPOINT.list, { params }];
 
   const {
     data,

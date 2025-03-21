@@ -22,6 +22,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { useGetProjects } from 'src/actions/project';
 import { createTicket } from 'src/actions/ticket-ssr';
+import { TICKET_TYPE_OBJ } from 'src/constants/ticket';
 
 import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
@@ -60,7 +61,7 @@ export function TicketCompose({ onCloseCompose, open, emailOrPhone, project }: P
     content: '',
     assignee: emailOrPhone ?? '',
     projectId: project ?? null,
-    type: 'PROJECT',
+    type: TICKET_TYPE_OBJ.PROJECT,
   };
 
   const methods = useForm<NewTicketSchemaType>({
@@ -74,9 +75,19 @@ export function TicketCompose({ onCloseCompose, open, emailOrPhone, project }: P
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data: any) => {
+  useEffect(() => {
+    reset({
+      assignee: emailOrPhone,
+      projectId: project,
+      type: TICKET_TYPE_OBJ.PROJECT,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailOrPhone, project]);
+
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      await createTicket(data);
+      await createTicket({ ...data, projectId: data.projectId.id });
 
       toast.success('Gửi ticket thành công');
 

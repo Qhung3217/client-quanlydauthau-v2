@@ -30,6 +30,7 @@ type Props = BoxProps & {
   projectId: string;
   setProjectId: (projectId: string) => void;
   onToggleCompose: () => void;
+  hideFilterProject?: boolean;
 };
 
 export function TicketToolbar({
@@ -39,13 +40,14 @@ export function TicketToolbar({
   projectId,
   onToggleCompose,
   setProjectId,
+  hideFilterProject,
   ...other
 }: Props) {
   const openProjectMenu = usePopover();
 
   const { projects, projectsLoading, projectsEmpty } = useGetProjects({
     perPage: Number.MAX_SAFE_INTEGER,
-    isNotFetch: !openProjectMenu.open,
+    isNotFetch: !openProjectMenu.open || hideFilterProject,
   });
 
   const projectValue = useMemo(() => {
@@ -89,26 +91,28 @@ export function TicketToolbar({
           <Iconify icon="solar:pen-bold" />
         </Button>
       </Box>
-      <Box>
-        <Label
-          onClick={openProjectMenu.onOpen}
-          sx={{ cursor: 'pointer' }}
-          color={projectId ? 'info' : 'default'}
-        >
-          {projectValue as any}
-          {!projectId ? (
-            <Iconify icon="raphael:arrowdown" />
-          ) : (
-            <IconButton
-              size="small"
-              sx={{ color: 'error.main', p: 0.5 }}
-              onClick={() => setProjectId('')}
-            >
-              <Iconify icon="carbon:close-filled" sx={{ width: 12, height: 12 }} />
-            </IconButton>
-          )}
-        </Label>
-      </Box>
+      {!hideFilterProject && (
+        <Box>
+          <Label
+            onClick={openProjectMenu.onOpen}
+            sx={{ cursor: 'pointer' }}
+            color={projectId ? 'info' : 'default'}
+          >
+            {projectValue as any}
+            {!projectId ? (
+              <Iconify icon="raphael:arrowdown" />
+            ) : (
+              <IconButton
+                size="small"
+                sx={{ color: 'error.main', p: 0.5 }}
+                onClick={() => setProjectId('')}
+              >
+                <Iconify icon="carbon:close-filled" sx={{ width: 12, height: 12 }} />
+              </IconButton>
+            )}
+          </Label>
+        </Box>
+      )}
       <Menu
         open={openProjectMenu.open}
         anchorEl={openProjectMenu.anchorEl}

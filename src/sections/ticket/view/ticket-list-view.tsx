@@ -14,12 +14,14 @@ import { useGetTickets } from 'src/actions/ticket';
 import { TicketList } from '../ticket-list';
 import { TicketDetails } from '../ticket-detail';
 import { TicketCompose } from '../ticket-compose';
+import { useTicketContext } from '../context/use-ticket-context';
 
 type Props = {
   projectId?: string;
   sx?: SxProps;
 };
 export default function TicketListView({ projectId: filterProjectId, sx }: Props) {
+  const { assignee, project, openCompose: openComposeFromContext, resetState } = useTicketContext();
   const [ticketSelected, setTicketSelected] = useState<Ticket | null>(null);
   const [keywordSearch, setKeywordSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -30,6 +32,7 @@ export default function TicketListView({ projectId: filterProjectId, sx }: Props
     perPage: 10,
     keyword: keywordSearch,
     projectId: filterProjectId,
+    notFetch: !filterProjectId,
   });
 
   const openCompose = useBoolean();
@@ -49,12 +52,10 @@ export default function TicketListView({ projectId: filterProjectId, sx }: Props
   return (
     <Paper
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
         ...sx,
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}>
+      <Box>
         <TicketList
           tickets={tickets}
           isEmpty={ticketsEmpty}
@@ -67,8 +68,9 @@ export default function TicketListView({ projectId: filterProjectId, sx }: Props
           totalPages={ticketsMeta?.totalPages ?? 0}
           handlePageChange={handleChangePage}
           onToggleCompose={openCompose.onToggle}
-          projectId={projectId}
+          projectId={filterProjectId || ''}
           setProjectId={setProjectId}
+          hideFilterProject
         />
       </Box>
       <Drawer
@@ -90,7 +92,16 @@ export default function TicketListView({ projectId: filterProjectId, sx }: Props
       >
         {ticketSelected && <TicketDetails ticket={ticketSelected} />}
       </Drawer>
-      <TicketCompose open={openCompose.value} onCloseCompose={openCompose.onFalse} />
+      <TicketCompose
+        open={openCompose.value || openComposeFromContext}
+        onCloseCompose={() => {
+          openCompose.onFalse();
+
+          resetState();
+        }}
+        project={project || undefined}
+        emailOrPhone={assignee}
+      />
     </Paper>
   );
 }

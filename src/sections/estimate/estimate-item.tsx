@@ -8,11 +8,14 @@ import { Box, Card, Stack, MenuItem, MenuList, IconButton, Typography } from '@m
 
 import { fDate } from 'src/utils/format-time';
 
+import { PERMISSION_ENUM } from 'src/constants/permission';
 import { getEstimateStatusLabel } from 'src/helpers/get-estimate-status-label';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
+
+import { useCheckPermission } from 'src/auth/hooks';
 
 import useEstimateActionPermit from './hooks/use-estimate-action-permit';
 
@@ -25,6 +28,7 @@ type Props = CardProps & {
   approveClick?: (id: string) => void;
   rejectClick?: (id: string) => void;
   requestEditClick?: (id: string) => void;
+  ticketClick?: (project: Project, assignee: string) => void;
 };
 export default function EstimateItem({
   estimate,
@@ -35,10 +39,15 @@ export default function EstimateItem({
   approveClick,
   rejectClick,
   requestEditClick,
+  ticketClick,
   sx,
   ...other
 }: Props) {
   const menuActions = usePopover();
+
+  const { SEND_PERMIT } = useCheckPermission({
+    SEND_PERMIT: PERMISSION_ENUM.SEND_TICKET,
+  });
 
   const {
     updateEstimatePermit,
@@ -199,6 +208,25 @@ export default function EstimateItem({
             </Stack>
           </Box>
         </Box>
+        {SEND_PERMIT && ticketClick && (
+          <IconButton
+            sx={{
+              position: 'absolute',
+              top: 4,
+              right: 8,
+              color: 'info.dark',
+            }}
+            size="small"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              ticketClick(project, estimate.creator.phone);
+            }}
+            title={`Gửi ticket cho ${estimate.creator.name}`}
+          >
+            <Iconify icon="mingcute:send-fill" />
+          </IconButton>
+        )}
 
         {(editClick || deleteClick || approveClick || rejectClick) && (
           <Box

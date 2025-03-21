@@ -4,7 +4,7 @@ import type { DialogProps } from '@mui/material';
 import type { Product } from 'src/types/product';
 
 import { useState } from 'react';
-import { useBoolean, useDebounce } from 'minimal-shared/hooks';
+import { useBoolean, useDebounce, useLocalStorage } from 'minimal-shared/hooks';
 
 import {
   Box,
@@ -41,6 +41,8 @@ export default function ProductSelectDialog({ onSelected, ...dialogProps }: Prop
   const [page, setPage] = useState(1);
 
   const [inputText, setInputValue] = useState('');
+
+  const { state, setField } = useLocalStorage('product-select');
 
   const inputValueDebounce = useDebounce(inputText, 500);
 

@@ -45,7 +45,11 @@ export default function UserAutocomplete({ name, ...others }: Props) {
             sx={{ width: 40, height: 40, mr: 1 }}
           />
           <Box>
-            <Typography variant="body1">{option.name}</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+              {option.name}
+            </Typography>
+            <Typography variant="body2">{option.role.name}</Typography>
+            <Typography variant="body2">{option.phone}</Typography>
           </Box>
         </Box>
       )}

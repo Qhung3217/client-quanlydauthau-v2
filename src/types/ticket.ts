@@ -3,6 +3,8 @@ import type { Project } from './project';
 
 export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
 
+export type TicketType = 'PROJECT' | 'OTHER';
+
 export type TicketComment = {
   id: string;
   content: string;
@@ -13,7 +15,7 @@ export type TicketComment = {
 
 export type Ticket = {
   id: string;
-  type: string;
+  type: TicketType;
   code: string;
   status: TicketStatus;
   title: string;

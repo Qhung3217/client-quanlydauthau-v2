@@ -31,6 +31,7 @@ type Props = {
   onToggleCompose: () => void;
   projectId: string;
   setProjectId: (projectId: string) => void;
+  hideFilterProject?: boolean;
 };
 
 export function TicketList({
@@ -47,6 +48,7 @@ export function TicketList({
   onToggleCompose,
   projectId,
   setProjectId,
+  hideFilterProject,
 }: Props) {
   const debouncedSetKeyword = useDebounceCallback((value: string) => setKeywordSearch(value), 500);
 
@@ -120,6 +122,7 @@ export function TicketList({
       projectId={projectId}
       setProjectId={setProjectId}
       onToggleCompose={onToggleCompose}
+      hideFilterProject={hideFilterProject}
     />
   );
 

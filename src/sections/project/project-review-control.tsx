@@ -56,8 +56,8 @@ export default function ProjectReviewControl({ project }: Props) {
 
   const processing = useBoolean();
 
-  const { approvePermit, rejectPermit, requestEditPermit, exportExcelProjectPermit }
-    = useProjectActionPermit(project.status);
+  const { approvePermit, rejectPermit, requestEditPermit, exportExcelProjectPermit } =
+    useProjectActionPermit(project.status);
 
   const projectStatusRender = () => (
     <Box>
@@ -183,16 +183,6 @@ export default function ProjectReviewControl({ project }: Props) {
               onClick={() => handleAction('CANCELED')}
             >
               Hủy dự án
-            </Button>
-          )}
-
-          {exportExcelProjectPermit && (<Button
-              variant="contained"
-              color="primary"
-              startIcon={<Iconify icon="material-symbols:file-export-outline-rounded" width={24} />}
-              onClick={handleExportExcel}
-            >
-              Xuất Excel dự án & dự toán
             </Button>
           )}
 
